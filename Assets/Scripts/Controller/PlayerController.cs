@@ -13,9 +13,15 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private NavMeshAgent agent;
 
+    /// <summary>
+    /// 动画控制器
+    /// </summary>
+    private Animator animator;
+
     private void Awake()
     {
         agent = this.GetComponent<NavMeshAgent>();
+        animator = this.GetComponent<Animator>();
     }
 
     private void Start()
@@ -24,6 +30,18 @@ public class PlayerController : MonoBehaviour
         MouseManager.Instance.OnMouseClicked += MoveToTargetPos;
     }
 
+    private void Update()
+    {
+        SwitchAnimation(); 
+    }
+
+    /// <summary>
+    /// 控制玩家动画切换
+    /// </summary>
+    private void SwitchAnimation()
+    {
+        animator.SetFloat("Speed", agent.velocity.sqrMagnitude);
+    }
 
     /// <summary>
     /// 移动到目标点
@@ -31,6 +49,7 @@ public class PlayerController : MonoBehaviour
     /// <param name="targetpos"></param>
     private void MoveToTargetPos(Vector3 targetpos)
     {
+        
         agent.destination = targetpos;
     }
 }
