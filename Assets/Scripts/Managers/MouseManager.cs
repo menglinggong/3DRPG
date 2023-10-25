@@ -38,6 +38,11 @@ public class MouseManager : MonoBehaviour
     public event Action<Vector3> OnMouseClicked;
 
     /// <summary>
+    /// 点击敌人事件
+    /// </summary>
+    public event Action<GameObject> OnEnemyClicked;
+
+    /// <summary>
     /// 射线
     /// </summary>
     RaycastHit hitInfo;
@@ -93,6 +98,8 @@ public class MouseManager : MonoBehaviour
         {
             if (hitInfo.collider.gameObject.CompareTag("Ground"))
                 OnMouseClicked?.Invoke(hitInfo.point);
+            else if (hitInfo.collider.gameObject.CompareTag("Enemy"))
+                OnEnemyClicked?.Invoke(hitInfo.collider.gameObject);
         }
     }
 }
