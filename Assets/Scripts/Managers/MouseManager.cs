@@ -71,14 +71,15 @@ public class MouseManager : MonoBehaviour
                 case "Ground":
                     Cursor.SetCursor(Target, new Vector2(16,16), CursorMode.Auto);
                     break;
-                //case "Enimy":
-                //    break;
-                //case "Doorway":
-                //    break;
-                //case "Point":
-                //    break;
-                //default:
-                //    break;
+                case "Enemy":
+                    Cursor.SetCursor(Attack, new Vector2(16, 16), CursorMode.Auto);
+                    break;
+                    //case "Doorway":
+                    //    break;
+                    //case "Point":
+                    //    break;
+                    //default:
+                    //    break;
             }
         }
     }
