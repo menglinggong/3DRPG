@@ -110,7 +110,7 @@ public class PlayerController : MonoBehaviour
         //玩家转向面对敌人
         transform.LookAt(enemyTarget.transform);
 
-        //离敌人距离大于攻击距离，移动（攻击距离暂定为1）
+        //TODO:离敌人距离大于攻击距离，移动（攻击距离暂定为1）
         while(Vector3.Distance(this.transform.position, enemyTarget.transform.position) > 1)
         {
             agent.destination = enemyTarget.transform.position;
@@ -125,7 +125,7 @@ public class PlayerController : MonoBehaviour
         {
             //3.播放攻击动画
             animator.SetTrigger("Attack");
-            //4.重置冷却时间（目前冷却时间固定为0.5s）
+            //4.TODO:重置冷却时间（目前冷却时间固定为0.5s）
             lastAttackTime = 0.5f;
         }
     }

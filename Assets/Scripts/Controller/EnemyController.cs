@@ -16,7 +16,13 @@ public class EnemyController : MonoBehaviour
     /// <summary>
     /// 敌人状态
     /// </summary>
-    public EnemyStates Enemy_State;
+    private EnemyStates enemy_State;
+
+    /// <summary>
+    /// 搜寻半径
+    /// </summary>
+    [Header("Basic Settings")]
+    public float SightRadius;
 
     private void Awake()
     {
@@ -33,7 +39,14 @@ public class EnemyController : MonoBehaviour
     /// </summary>
     void SwitchEnemyState()
     {
-        switch(Enemy_State)
+        //寻找玩家，并追击
+        if(FoundPlayer())
+        {
+            enemy_State = EnemyStates.CHASE;
+            Debug.Log("found player!!");
+        }
+
+        switch (enemy_State)
         {
             case EnemyStates.GUARD:
                 break;
@@ -44,6 +57,22 @@ public class EnemyController : MonoBehaviour
             case EnemyStates.DEAD:
                 break;
         }
+    }
+
+    /// <summary>
+    /// 在搜寻半径内搜索玩家
+    /// </summary>
+    /// <returns></returns>
+    private bool FoundPlayer()
+    {
+        //使用Physics.OverlapSphere方法，原理就是以敌人位置为原点，构建一个半径为搜寻值的球体，判断球体内的所有碰撞体是否有玩家
+        //注意：使用layer限制时，写法为1<<LayerMask.NameToLayer("Player")，表示只检测层级为Player的碰撞体
+        Collider[] colliders = Physics.OverlapSphere(transform.position, SightRadius, 1<<LayerMask.NameToLayer("Player"));
+
+        if (colliders == null || colliders.Length == 0)
+            return false;
+
+        return true;
     }
 }
 
