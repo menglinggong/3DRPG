@@ -45,6 +45,11 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private float lastAttackTime;
 
+    /// <summary>
+    /// 是否死亡
+    /// </summary>
+    private bool isDie = false;
+
     #endregion
 
 
@@ -54,6 +59,7 @@ public class PlayerController : MonoBehaviour
         agent = this.GetComponent<NavMeshAgent>();
         animator = this.GetComponent<Animator>();
         characterStats = this.GetComponent<CharacterStats>();
+        //characterStats.CurrentHealth = characterStats.MaxHealth;
     }
 
     private void Start()
@@ -63,6 +69,12 @@ public class PlayerController : MonoBehaviour
         MouseManager.Instance.OnEnemyClicked += EventAttack;
     }
 
+    private void OnDestroy()
+    {
+        MouseManager.Instance.OnMouseClicked -= MoveToTargetPos;
+        MouseManager.Instance.OnEnemyClicked -= EventAttack;
+    }
+
     private void Update()
     {
         SwitchAnimation(); 
@@ -70,6 +82,15 @@ public class PlayerController : MonoBehaviour
         //计算攻击间隔时间
         if(lastAttackTime > 0)
             lastAttackTime -= Time.deltaTime;
+
+        if(characterStats.CurrentHealth <= 0 && !isDie)
+        {
+            isDie = true;
+            agent.enabled = false;
+            animator.SetTrigger("Die");
+
+            Destroy(this.gameObject, 2);
+        }
     }
 
     /// <summary>

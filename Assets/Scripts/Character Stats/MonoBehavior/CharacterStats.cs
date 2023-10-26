@@ -176,6 +176,7 @@ public class CharacterStats : MonoBehaviour
     /// <summary>
     /// 是否暴击
     /// </summary>
+    [HideInInspector]
     public bool IsCritical;
 
     /// <summary>
@@ -201,13 +202,18 @@ public class CharacterStats : MonoBehaviour
         //以免造成负值
         target.CurrentHealth = Mathf.Max(target.CurrentHealth - damage, 0);
 
+        if(IsCritical)
+        {
+            //暴击播放目标的受到伤害动画
+            target.GetComponent<Animator>().SetTrigger("GetHurt");
+        }
+
         Debug.Log(target.gameObject.name + "---" + target.CurrentHealth);
 
         //TODO：更新界面血条
         //TODO：如果是玩家，杀怪后增加经验
         //TODO：死亡
     }
-
 
     /// <summary>
     /// 计算实际能够造成的伤害（未减去目标的实际防御值）

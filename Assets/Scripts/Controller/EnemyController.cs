@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -25,6 +26,11 @@ public class EnemyController : MonoBehaviour
     /// 敌人的数值
     /// </summary>
     private CharacterStats characterStats;
+
+    /// <summary>
+    /// 敌人的碰撞器
+    /// </summary>
+    private Collider collider;
 
     #endregion
 
@@ -54,6 +60,11 @@ public class EnemyController : MonoBehaviour
     /// 敌人初始位置
     /// </summary>
     private Vector3 enemyStartPoint;
+
+    /// <summary>
+    /// 初始朝向
+    /// </summary>
+    private Quaternion enemyStartQuaternion;
 
     /// <summary>
     /// 搜寻半径
@@ -94,6 +105,7 @@ public class EnemyController : MonoBehaviour
     bool isWalk;
     bool isChase;
     bool isFollow;
+    bool isDie = false;
 
     #endregion
 
@@ -102,6 +114,8 @@ public class EnemyController : MonoBehaviour
         agent = this.GetComponent<NavMeshAgent>();
         animator = this.GetComponent<Animator>();
         characterStats = this.GetComponent<CharacterStats>();
+        characterStats.CurrentHealth = characterStats.MaxHealth;
+        collider = this.GetComponent<Collider>();
         speed = agent.speed;
     }
 
@@ -110,6 +124,7 @@ public class EnemyController : MonoBehaviour
         enemy_State = IsGuard ? EnemyStates.GUARD : EnemyStates.PATROL;
         //设置敌人初始位置与巡逻位置
         enemyStartPoint = this.transform.position;
+        enemyStartQuaternion = this.transform.rotation;
         GetNewWayPoint();
     }
 
@@ -140,13 +155,46 @@ public class EnemyController : MonoBehaviour
     /// </summary>
     void SwitchEnemyState()
     {
+        if (characterStats.CurrentHealth <= 0)
+        {
+            enemy_State = EnemyStates.DEAD;
+        }
+
         bool isFoundPlayer = FoundPlayer();
 
         switch (enemy_State)
         {
             case EnemyStates.GUARD:
+
+                isChase = false;
                 //设置守卫时，敌人的速度为追击时的一半，使用乘法的消耗比除法小
                 agent.speed = speed * 0.5f;
+
+                if (isFoundPlayer)
+                {
+                    enemy_State = EnemyStates.CHASE;
+                }
+                else
+                {
+                    //如果当前位置不是初始位置，则回到初始位置，此方法与Vector3.Distance作用一样，但开销更小
+                    if (Vector3.SqrMagnitude(transform.position - enemyStartPoint) > agent.stoppingDistance)
+                    {
+                        isWalk = true;
+                        agent.isStopped = false;
+                        agent.destination = enemyStartPoint;
+                    }
+                    else
+                    {
+                        isWalk = false;
+                        
+                        if(this.transform.rotation != enemyStartQuaternion)
+                        {
+                            //回到初始朝向
+                            this.transform.rotation = Quaternion.Lerp(this.transform.rotation, enemyStartQuaternion, 0.01f);
+                        }
+                    }
+                }
+
                 break;
             case EnemyStates.PATROL:
 
@@ -182,6 +230,7 @@ public class EnemyController : MonoBehaviour
                     {
                         //移动到巡逻点
                         isWalk = true;
+                        agent.isStopped = false;
                         agent.destination = wayPoint;
                     }
                 }
@@ -236,6 +285,15 @@ public class EnemyController : MonoBehaviour
 
                 break;
             case EnemyStates.DEAD:
+
+                agent.enabled = false;
+                collider.enabled = false;
+
+                isDie = true;
+                //播放死亡动画
+                animator.SetTrigger("Die");
+                //销毁该物体
+                Destroy(gameObject, 2f);
                 break;
         }
     }
@@ -255,6 +313,9 @@ public class EnemyController : MonoBehaviour
         if (colliders == null || colliders.Length == 0)
             return false;
         //若找到玩家，则给攻击目标赋值
+        if (colliders[0].gameObject.GetComponent<CharacterStats>().CurrentHealth <= 0)
+            return false;
+
         attackTarget = colliders[0].gameObject;
         return true;
     }
@@ -311,7 +372,7 @@ public class EnemyController : MonoBehaviour
     /// <returns></returns>
     private bool TargetInAttackRange()
     {
-        if (attackTarget != null)
+        if (attackTarget != null && attackTarget.GetComponent<CharacterStats>().CurrentHealth > 0)
             return Vector3.Distance(attackTarget.transform.position, this.transform.position) <= characterStats.AttackRange;
 
         return false;
