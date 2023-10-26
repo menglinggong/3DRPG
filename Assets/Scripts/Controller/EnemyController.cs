@@ -289,15 +289,21 @@ public class EnemyController : MonoBehaviour
         transform.LookAt(attackTarget.transform);
 
         //若暴击了则播放暴击动画，否则播放普通攻击动画
-        if (characterStats.IsCritical)
-            animator.SetTrigger("CriticalAttack");
-        else
-            animator.SetTrigger("Attack");
+        animator.SetBool("CriticalAttack", characterStats.IsCritical);
+        animator.SetTrigger("Attack");
 
         //重置计时
         lastAttackTime = characterStats.CoolDown;
     }
 
+    /// <summary>
+    /// 造成伤害，在播放动画时调用
+    /// </summary>
+    public void Hit()
+    {
+        if(TargetInAttackRange())
+            characterStats.TakeDamage(characterStats, attackTarget.GetComponent<CharacterStats>());
+    }
 
     /// <summary>
     /// 目标是否在攻击距离内

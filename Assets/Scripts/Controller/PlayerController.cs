@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// 玩家的数值
     /// </summary>
-    private CharacterStats playerStats;
+    private CharacterStats characterStats;
 
     #endregion
 
@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
     {
         agent = this.GetComponent<NavMeshAgent>();
         animator = this.GetComponent<Animator>();
-        playerStats = this.GetComponent<CharacterStats>();
+        characterStats = this.GetComponent<CharacterStats>();
     }
 
     private void Start()
@@ -123,11 +123,9 @@ public class PlayerController : MonoBehaviour
     {
         //使玩家可移动
         agent.isStopped = false;
-        //玩家转向面对敌人
-        transform.LookAt(enemyTarget.transform);
-
+        
         //离敌人距离大于攻击距离，移动
-        while(Vector3.Distance(this.transform.position, enemyTarget.transform.position) > playerStats.AttackRange)
+        while(Vector3.Distance(this.transform.position, enemyTarget.transform.position) > characterStats.AttackRange)
         {
             agent.destination = enemyTarget.transform.position;
             yield return null;
@@ -139,10 +137,33 @@ public class PlayerController : MonoBehaviour
         //2.计算攻击间隔时间
         if(lastAttackTime <= 0)
         {
-            //3.播放攻击动画
-            animator.SetTrigger("Attack");
-            //4.重置冷却时间
-            lastAttackTime = playerStats.CoolDown;
+            Attack();
         }
+    }
+
+    /// <summary>
+    /// 攻击
+    /// </summary>
+    private void Attack()
+    {
+        //判断是否暴击，Random.value的值是0~1的随机值
+        characterStats.IsCritical = UnityEngine.Random.value <= characterStats.CriticalChance;
+
+        transform.LookAt(enemyTarget.transform);
+
+        //若暴击了则播放暴击动画，否则播放普通攻击动画
+        animator.SetBool("CriticalAttack", characterStats.IsCritical);
+        animator.SetTrigger("Attack");
+
+        //重置计时
+        lastAttackTime = characterStats.CoolDown;
+    }
+
+    /// <summary>
+    /// 造成伤害，在播放动画时调用
+    /// </summary>
+    public void Hit()
+    {
+        characterStats.TakeDamage(characterStats, enemyTarget.GetComponent<CharacterStats>());
     }
 }
