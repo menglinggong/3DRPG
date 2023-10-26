@@ -59,7 +59,9 @@ public class PlayerController : MonoBehaviour
         agent = this.GetComponent<NavMeshAgent>();
         animator = this.GetComponent<Animator>();
         characterStats = this.GetComponent<CharacterStats>();
-        //characterStats.CurrentHealth = characterStats.MaxHealth;
+        characterStats.CurrentHealth = characterStats.MaxHealth;
+
+        GameManager.Instance.RigisterPlayer(characterStats);
     }
 
     private void Start()

@@ -9,24 +9,8 @@ using UnityEngine.EventSystems;
 /// <summary>
 /// 鼠标控制管理器
 /// </summary>
-public class MouseManager : MonoBehaviour
+public class MouseManager : ISingleton<MouseManager>
 {
-    /// <summary>
-    /// 单例
-    /// </summary>
-    private static MouseManager instance;
-
-    /// <summary>
-    /// 单例属性
-    /// </summary>
-    public static MouseManager Instance
-    {
-        get
-        {
-            return instance;
-        }
-    }
-
     /// <summary>
     /// 鼠标贴图，分别为手指，传送门，攻击，目标位置，箭头
     /// </summary>
@@ -46,14 +30,6 @@ public class MouseManager : MonoBehaviour
     /// 射线
     /// </summary>
     RaycastHit hitInfo;
-
-    private void Awake()
-    {
-        if (instance != null)
-            Destroy(this);
-
-        instance = this;
-    }
 
     private void Update()
     {
