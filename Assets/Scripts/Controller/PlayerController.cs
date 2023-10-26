@@ -90,8 +90,8 @@ public class PlayerController : MonoBehaviour
             isDie = true;
             agent.enabled = false;
             animator.SetTrigger("Die");
-
-            Destroy(this.gameObject, 2);
+            GameManager.Instance.NotifyObserver();
+            //Destroy(this.gameObject, 2);
         }
     }
 

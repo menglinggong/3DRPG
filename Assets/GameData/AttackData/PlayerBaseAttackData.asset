@@ -17,4 +17,4 @@ MonoBehaviour:
   MinDamage: 4
   MaxDamage: 6
   CriticalMultiplier: 2
-  CriticalChance: 0.5
+  CriticalChance: 0.2

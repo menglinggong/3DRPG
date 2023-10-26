@@ -8,7 +8,7 @@ using UnityEngine.AI;
 /// 敌人控制器
 /// </summary>
 [RequireComponent(typeof(NavMeshAgent))]
-public class EnemyController : MonoBehaviour
+public class EnemyController : MonoBehaviour, IEndGameObserver
 {
     #region 组件
 
@@ -109,6 +109,11 @@ public class EnemyController : MonoBehaviour
 
     #endregion
 
+    /// <summary>
+    /// 玩家是否死亡
+    /// </summary>
+    private bool isPlayerDie = false;
+
     private void Awake()
     {
         agent = this.GetComponent<NavMeshAgent>();
@@ -117,6 +122,16 @@ public class EnemyController : MonoBehaviour
         characterStats.CurrentHealth = characterStats.MaxHealth;
         collider = this.GetComponent<Collider>();
         speed = agent.speed;
+    }
+
+    private void OnEnable()
+    {
+        GameManager.Instance.AddEndGameObserver(this);
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.RemoveEndGameObserver(this);
     }
 
     private void Start()
@@ -135,6 +150,10 @@ public class EnemyController : MonoBehaviour
         {
             lastAttackTime -= Time.deltaTime;
         }
+
+        //玩家死亡，就不去切换敌人的状态了
+        if (isPlayerDie)
+            return;
 
         SwitchEnemyState();
         SwitchAnimation();
@@ -313,9 +332,6 @@ public class EnemyController : MonoBehaviour
         if (colliders == null || colliders.Length == 0)
             return false;
         //若找到玩家，则给攻击目标赋值
-        if (colliders[0].gameObject.GetComponent<CharacterStats>().CurrentHealth <= 0)
-            return false;
-
         attackTarget = colliders[0].gameObject;
         return true;
     }
@@ -372,7 +388,7 @@ public class EnemyController : MonoBehaviour
     /// <returns></returns>
     private bool TargetInAttackRange()
     {
-        if (attackTarget != null && attackTarget.GetComponent<CharacterStats>().CurrentHealth > 0)
+        if (attackTarget != null)
             return Vector3.Distance(attackTarget.transform.position, this.transform.position) <= characterStats.AttackRange;
 
         return false;
@@ -386,6 +402,20 @@ public class EnemyController : MonoBehaviour
         //绘制搜寻半径
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, SightRadius);
+    }
+
+    /// <summary>
+    /// 结束游戏的广播
+    /// </summary>
+    /// <exception cref="System.NotImplementedException"></exception>
+    public void EndNotify()
+    {
+        isPlayerDie = true;
+        animator.SetBool("Win", true);
+        isWalk = false;
+        isChase = false;
+        isFollow = false;
+        attackTarget = null;
     }
 }
 
