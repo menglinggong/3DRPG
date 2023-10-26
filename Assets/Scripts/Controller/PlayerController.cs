@@ -9,6 +9,8 @@ using UnityEngine.AI;
 /// </summary>
 public class PlayerController : MonoBehaviour
 {
+    #region 组件
+
     /// <summary>
     /// 导航
     /// </summary>
@@ -18,6 +20,15 @@ public class PlayerController : MonoBehaviour
     /// 动画控制器
     /// </summary>
     private Animator animator;
+
+    /// <summary>
+    /// 玩家的数值
+    /// </summary>
+    private CharacterStats playerStats;
+
+    #endregion
+
+    #region 玩家的基本参数
 
     /// <summary>
     /// 敌人
@@ -34,10 +45,15 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private float lastAttackTime;
 
+    #endregion
+
+
+
     private void Awake()
     {
         agent = this.GetComponent<NavMeshAgent>();
         animator = this.GetComponent<Animator>();
+        playerStats = this.GetComponent<CharacterStats>();
     }
 
     private void Start()
