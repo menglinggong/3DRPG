@@ -21,6 +21,11 @@ public class EnemyController : MonoBehaviour
     /// </summary>
     private Animator animator;
 
+    /// <summary>
+    /// 敌人的数值
+    /// </summary>
+    private CharacterStats characterStats;
+
     #endregion
 
     #region 敌人的基本参数
@@ -72,6 +77,11 @@ public class EnemyController : MonoBehaviour
     private float remainLookAroundTime;
 
     /// <summary>
+    /// 攻击的计时器
+    /// </summary>
+    private float lastAttackTime = 0;
+
+    /// <summary>
     /// 巡逻范围
     /// </summary>
     [Header("Patrol State")]
@@ -91,6 +101,7 @@ public class EnemyController : MonoBehaviour
     {
         agent = this.GetComponent<NavMeshAgent>();
         animator = this.GetComponent<Animator>();
+        characterStats = this.GetComponent<CharacterStats>();
         speed = agent.speed;
     }
 
@@ -104,6 +115,12 @@ public class EnemyController : MonoBehaviour
 
     private void Update()
     {
+        //攻击间隔计时
+        if (lastAttackTime > 0)
+        {
+            lastAttackTime -= Time.deltaTime;
+        }
+
         SwitchEnemyState();
         SwitchAnimation();
     }
@@ -172,8 +189,6 @@ public class EnemyController : MonoBehaviour
                 break;
             case EnemyStates.CHASE:
 
-                //TODO:在攻击范围内则攻击
-
                 //追击玩家
                 isWalk = false;
                 isChase = true;
@@ -198,9 +213,25 @@ public class EnemyController : MonoBehaviour
                 }
                 else
                 {
-                    //发现玩家，追击
-                    isFollow = true;
-                    agent.destination = attackTarget.transform.position;
+                    //在攻击范围内则攻击
+                    if(TargetInAttackRange())
+                    {
+                        isFollow = false;
+                        agent.isStopped = true;
+
+                        if(lastAttackTime <= 0)
+                        {
+                            //攻击
+                            Attack();
+                        }
+                    }
+                    else
+                    {
+                        //发现玩家，追击
+                        isFollow = true;
+                        agent.isStopped = false;
+                        agent.destination = attackTarget.transform.position;
+                    }
                 }
 
                 break;
@@ -245,6 +276,39 @@ public class EnemyController : MonoBehaviour
         NavMeshHit hit;
         //判断随机位置是否可移动，不可移动的话使用敌人当前位置
         wayPoint = NavMesh.SamplePosition(randomPos, out hit, PatrolRange, 1)? hit.position : transform.position;
+    }
+
+    /// <summary>
+    /// 攻击
+    /// </summary>
+    private void Attack()
+    {
+        //判断是否暴击，Random.value的值是0~1的随机值
+        characterStats.IsCritical = Random.value <= characterStats.CriticalChance;
+        
+        transform.LookAt(attackTarget.transform);
+
+        //若暴击了则播放暴击动画，否则播放普通攻击动画
+        if (characterStats.IsCritical)
+            animator.SetTrigger("CriticalAttack");
+        else
+            animator.SetTrigger("Attack");
+
+        //重置计时
+        lastAttackTime = characterStats.CoolDown;
+    }
+
+
+    /// <summary>
+    /// 目标是否在攻击距离内
+    /// </summary>
+    /// <returns></returns>
+    private bool TargetInAttackRange()
+    {
+        if (attackTarget != null)
+            return Vector3.Distance(attackTarget.transform.position, this.transform.position) <= characterStats.AttackRange;
+
+        return false;
     }
 
     /// <summary>

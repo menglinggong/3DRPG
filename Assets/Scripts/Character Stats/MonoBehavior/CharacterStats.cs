@@ -10,6 +10,13 @@ public class CharacterStats : MonoBehaviour
     public CharacterData_SO CharacterData;
 
     /// <summary>
+    /// 人物攻击数值对象
+    /// </summary>
+    public AttackData_SO AttackData;
+
+    #region 获取人物数值数据的属性
+
+    /// <summary>
     /// 最大生命值属性
     /// </summary>
     public float MaxHealth
@@ -25,7 +32,7 @@ public class CharacterStats : MonoBehaviour
     }
 
     /// <summary>
-    /// 最大生命值属性
+    /// 当前生命值属性
     /// </summary>
     public float CurrentHealth
     {
@@ -39,6 +46,9 @@ public class CharacterStats : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 基础防御值属性
+    /// </summary>
     public float BaseDefence
     {
         get
@@ -51,6 +61,9 @@ public class CharacterStats : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 当前防御值属性
+    /// </summary>
     public float CurrentDefence
     {
         get
@@ -62,4 +75,107 @@ public class CharacterStats : MonoBehaviour
             CharacterData.CurrentDefence = value;
         }
     }
+
+    #endregion
+
+    #region 获取人物攻击数值的属性
+
+    /// <summary>
+    /// 攻击距离
+    /// </summary>
+    public float AttackRange
+    {
+        get
+        {
+            return AttackData != null ? AttackData.AttackRange : 0;
+        }
+        set
+        {
+            AttackData.AttackRange = value;
+        }
+    }
+
+    /// <summary>
+    /// 技能冷却
+    /// </summary>
+    public float CoolDown
+    {
+        get
+        {
+            return AttackData != null ? AttackData.CoolDown : 0;
+        }
+        set
+        {
+            AttackData.CoolDown = value;
+        }
+    }
+
+    /// <summary>
+    /// 最小伤害值
+    /// </summary>
+    public float MinDamage
+    {
+        get
+        {
+            return AttackData != null ? AttackData.MinDamage : 0;
+        }
+        set
+        {
+            AttackData.MinDamage = value;
+        }
+    }
+
+    /// <summary>
+    /// 最大伤害值
+    /// </summary>
+    public float MaxDamage
+    {
+        get
+        {
+            return AttackData != null ? AttackData.MaxDamage : 0;
+        }
+        set
+        {
+            AttackData.MaxDamage = value;
+        }
+    }
+
+    /// <summary>
+    /// 暴击加成
+    /// </summary>
+    public float CriticalMultiplier
+    {
+        get
+        {
+            return AttackData != null ? AttackData.CriticalMultiplier : 0;
+        }
+        set
+        {
+            AttackData.CriticalMultiplier = value;
+        }
+    }
+
+    /// <summary>
+    /// 暴击率
+    /// </summary>
+    public float CriticalChance
+    {
+        get
+        {
+            return AttackData != null ? AttackData.CriticalChance : 0;
+        }
+        set
+        {
+            AttackData.CriticalChance = value;
+        }
+    }
+
+    #endregion
+
+    /// <summary>
+    /// 是否暴击
+    /// </summary>
+    public bool IsCritical;
+
+
 }
