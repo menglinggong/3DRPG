@@ -31,17 +31,6 @@ public class EnemyController : MonoBehaviour
     private EnemyStates enemy_State;
 
     /// <summary>
-    /// 敌人初始状态是否为站桩
-    /// </summary>
-    public bool IsGuard = true;
-
-    /// <summary>
-    /// 搜寻半径
-    /// </summary>
-    [Header("Basic Settings")]
-    public float SightRadius;
-
-    /// <summary>
     /// 敌人追击的初始速度
     /// </summary>
     private float speed;
@@ -50,6 +39,43 @@ public class EnemyController : MonoBehaviour
     /// 攻击目标
     /// </summary>
     private GameObject attackTarget;
+
+    /// <summary>
+    /// 巡逻点
+    /// </summary>
+    private Vector3 wayPoint;
+
+    /// <summary>
+    /// 敌人初始位置
+    /// </summary>
+    private Vector3 enemyStartPoint;
+
+    /// <summary>
+    /// 搜寻半径
+    /// </summary>
+    [Header("Basic Settings")]
+    public float SightRadius;
+
+    /// <summary>
+    /// 敌人初始状态是否为站桩
+    /// </summary>
+    public bool IsGuard = true;
+
+    /// <summary>
+    /// 到巡逻点后四处张望的时间
+    /// </summary>
+    public float LookAroundTime;
+
+    /// <summary>
+    /// 四处张望的计时器
+    /// </summary>
+    private float remainLookAroundTime;
+
+    /// <summary>
+    /// 巡逻范围
+    /// </summary>
+    [Header("Patrol State")]
+    public float PatrolRange;
 
     #endregion
 
@@ -66,6 +92,14 @@ public class EnemyController : MonoBehaviour
         agent = this.GetComponent<NavMeshAgent>();
         animator = this.GetComponent<Animator>();
         speed = agent.speed;
+    }
+
+    private void Start()
+    {
+        enemy_State = IsGuard ? EnemyStates.GUARD : EnemyStates.PATROL;
+        //设置敌人初始位置与巡逻位置
+        enemyStartPoint = this.transform.position;
+        GetNewWayPoint();
     }
 
     private void Update()
@@ -89,48 +123,83 @@ public class EnemyController : MonoBehaviour
     /// </summary>
     void SwitchEnemyState()
     {
-        //寻找玩家，并追击
-
         bool isFoundPlayer = FoundPlayer();
-        if (isFoundPlayer)
-        {
-            enemy_State = EnemyStates.CHASE;
-        }
 
         switch (enemy_State)
         {
             case EnemyStates.GUARD:
-                //设置守卫时，敌人的速度为追击时的一半
-                agent.speed = speed / 2f;
+                //设置守卫时，敌人的速度为追击时的一半，使用乘法的消耗比除法小
+                agent.speed = speed * 0.5f;
                 break;
             case EnemyStates.PATROL:
+
+                isChase = false;
                 //设置巡逻时，敌人的速度为追击时的一半
-                agent.speed = speed / 2f;
+                agent.speed = speed * 0.5f;
+
+                if (isFoundPlayer)
+                {
+                    enemy_State = EnemyStates.CHASE;
+                }
+                else
+                {
+                    //到巡逻点
+                    if (Vector3.Distance(transform.position, wayPoint) <= agent.stoppingDistance)
+                    {
+                        isWalk = false;
+
+                        //如果四处张望的时间到了
+                        if(remainLookAroundTime <= 0)
+                        {
+                            //获取下一个巡逻点
+                            GetNewWayPoint();
+                            
+                        }
+                        else
+                        {
+                            //敌人四处看看，同时计时
+                            remainLookAroundTime -= Time.deltaTime;
+                        }
+                    }
+                    else
+                    {
+                        //移动到巡逻点
+                        isWalk = true;
+                        agent.destination = wayPoint;
+                    }
+                }
 
                 break;
             case EnemyStates.CHASE:
-                //TODO:追击玩家
-                //TODO:玩家逃脱，回到上一个状态
-                //TODO:在攻击范围内则攻击
-                //TODO:配合动画
-                //设置追击时，敌人的速度正常
 
+                //TODO:在攻击范围内则攻击
+
+                //追击玩家
                 isWalk = false;
                 isChase = true;
-
+                //设置追击时，敌人的速度正常
                 agent.speed = speed;
 
                 if (!isFoundPlayer)
                 {
-                    enemy_State = IsGuard ? EnemyStates.GUARD : EnemyStates.PATROL;
                     isFollow = false;
-                    //丢失目标，立刻停止移动
-                    agent.destination = transform.position;
+
+                    if(remainLookAroundTime > 0)
+                    {
+                        //丢失目标，立刻停止移动，如果四处张望的计时未结束，等待四处张望
+                        agent.destination = transform.position;
+                        remainLookAroundTime -= Time.deltaTime;
+                    }
+                    else
+                    {
+                        //张望结束，回到上个状态
+                        enemy_State = IsGuard ? EnemyStates.GUARD : EnemyStates.PATROL;
+                    }
                 }
                 else
                 {
+                    //发现玩家，追击
                     isFollow = true;
-                    //TODO
                     agent.destination = attackTarget.transform.position;
                 }
 
@@ -159,6 +228,34 @@ public class EnemyController : MonoBehaviour
         return true;
     }
 
+    /// <summary>
+    /// 计算得到下一个随机巡逻点
+    /// </summary>
+    private void GetNewWayPoint()
+    {
+        //重新计时
+        remainLookAroundTime = LookAroundTime;
+
+        //得到随机的偏移值
+        float random_X = Random.Range(-PatrolRange, PatrolRange);
+        float ramdom_Z = Random.Range(-PatrolRange, PatrolRange);
+        //得到随机位置
+        Vector3 randomPos = new Vector3(enemyStartPoint.x + random_X, enemyStartPoint.y, enemyStartPoint.z + ramdom_Z);
+
+        NavMeshHit hit;
+        //判断随机位置是否可移动，不可移动的话使用敌人当前位置
+        wayPoint = NavMesh.SamplePosition(randomPos, out hit, PatrolRange, 1)? hit.position : transform.position;
+    }
+
+    /// <summary>
+    /// 选中该敌人时绘制Gizmos
+    /// </summary>
+    private void OnDrawGizmosSelected()
+    {
+        //绘制搜寻半径
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, SightRadius);
+    }
 }
 
 /// <summary>
