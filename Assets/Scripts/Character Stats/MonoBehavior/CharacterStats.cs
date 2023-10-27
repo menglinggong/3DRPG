@@ -109,6 +109,21 @@ public class CharacterStats : MonoBehaviour
     }
 
     /// <summary>
+    /// 技能距离
+    /// </summary>
+    public float SkillRange
+    {
+        get
+        {
+            return AttackData != null ? AttackData.SkillRange : 0;
+        }
+        set
+        {
+            AttackData.SkillRange = value;
+        }
+    }
+
+    /// <summary>
     /// 技能冷却
     /// </summary>
     public float CoolDown

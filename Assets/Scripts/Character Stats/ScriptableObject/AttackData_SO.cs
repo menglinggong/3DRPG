@@ -14,6 +14,11 @@ public class AttackData_SO : ScriptableObject
     public float AttackRange;
 
     /// <summary>
+    /// 技能攻击距离
+    /// </summary>
+    public float SkillRange;
+
+    /// <summary>
     /// 技能冷却时间
     /// </summary>
     public float CoolDown;

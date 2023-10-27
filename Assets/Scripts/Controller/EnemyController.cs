@@ -52,7 +52,7 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     /// <summary>
     /// 攻击目标
     /// </summary>
-    private GameObject attackTarget;
+    protected GameObject attackTarget;
 
     /// <summary>
     /// 巡逻点
@@ -289,7 +289,7 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
                 else
                 {
                     //在攻击范围内则攻击
-                    if(TargetInAttackRange())
+                    if(TargetInAttackRange() || TargetInSkillRange())
                     {
                         isFollow = false;
                         agent.isStopped = true;
@@ -372,10 +372,18 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
         
         transform.LookAt(attackTarget.transform);
 
-        //若暴击了则播放暴击动画，否则播放普通攻击动画
-        animator.SetBool("CriticalAttack", characterStats.IsCritical);
-        animator.SetTrigger("Attack");
+        if(TargetInAttackRange())
+        {
+            //若暴击了则播放暴击动画，否则播放普通攻击动画
+            animator.SetBool("CriticalAttack", characterStats.IsCritical);
+            animator.SetTrigger("Attack");
+        }
 
+        if(TargetInSkillRange())
+        {
+            animator.SetTrigger("Skill");
+        }
+       
         //重置计时
         lastAttackTime = characterStats.CoolDown;
     }
@@ -385,6 +393,7 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     /// </summary>
     public void Hit()
     {
+        //TODO:现在是玩家在攻击范围内就会受到攻击，需要修改，因为玩家可能在攻击范围内，但不在正面
         if(TargetInAttackRange())
             characterStats.TakeDamage(characterStats, attackTarget.GetComponent<CharacterStats>());
     }
@@ -397,6 +406,18 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     {
         if (attackTarget != null)
             return Vector3.Distance(attackTarget.transform.position, this.transform.position) <= characterStats.AttackRange;
+
+        return false;
+    }
+
+    /// <summary>
+    /// 目标是否在技能范围内
+    /// </summary>
+    /// <returns></returns>
+    private bool TargetInSkillRange()
+    {
+        if (attackTarget != null)
+            return Vector3.Distance(attackTarget.transform.position, this.transform.position) <= characterStats.SkillRange;
 
         return false;
     }

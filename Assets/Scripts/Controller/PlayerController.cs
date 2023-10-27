@@ -192,6 +192,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void Hit()
     {
-        characterStats.TakeDamage(characterStats, enemyTarget.GetComponent<CharacterStats>());
+        if(enemyTarget != null)
+            characterStats.TakeDamage(characterStats, enemyTarget.GetComponent<CharacterStats>());
     }
 }
