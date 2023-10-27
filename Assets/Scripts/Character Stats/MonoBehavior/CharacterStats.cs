@@ -6,13 +6,25 @@ using UnityEngine;
 public class CharacterStats : MonoBehaviour
 {
     /// <summary>
+    /// 人物数值对象模板
+    /// </summary>
+    public CharacterData_SO TemplateData;
+
+    /// <summary>
+    /// 人物攻击数值对象模板
+    /// </summary>
+    public AttackData_SO TemplateAttackData;
+
+    /// <summary>
     /// 人物数值对象
     /// </summary>
+    [HideInInspector]
     public CharacterData_SO CharacterData;
 
     /// <summary>
     /// 人物攻击数值对象
     /// </summary>
+    [HideInInspector]
     public AttackData_SO AttackData;
 
     #region 获取人物数值数据的属性
@@ -184,6 +196,15 @@ public class CharacterStats : MonoBehaviour
     /// </summary>
     public float Defence = 50;
 
+
+    private void Awake()
+    {
+        if(TemplateData != null)
+        {
+            CharacterData = Instantiate(TemplateData);
+            AttackData = Instantiate(TemplateAttackData);
+        }
+    }
 
     #region 人物受伤之类的方法
 

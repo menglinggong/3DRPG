@@ -59,13 +59,13 @@ public class PlayerController : MonoBehaviour
         agent = this.GetComponent<NavMeshAgent>();
         animator = this.GetComponent<Animator>();
         characterStats = this.GetComponent<CharacterStats>();
-        characterStats.CurrentHealth = characterStats.MaxHealth;
-
+        
         GameManager.Instance.RigisterPlayer(characterStats);
     }
 
     private void Start()
     {
+        characterStats.CurrentHealth = characterStats.MaxHealth;
         //事件绑定
         MouseManager.Instance.OnMouseClicked += MoveToTargetPos;
         MouseManager.Instance.OnEnemyClicked += EventAttack;
@@ -79,6 +79,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (isDie) return;
+
         SwitchAnimation(); 
 
         //计算攻击间隔时间
@@ -92,6 +94,9 @@ public class PlayerController : MonoBehaviour
             animator.SetTrigger("Die");
             GameManager.Instance.NotifyObserver();
             //Destroy(this.gameObject, 2);
+
+            MouseManager.Instance.OnMouseClicked -= MoveToTargetPos;
+            MouseManager.Instance.OnEnemyClicked -= EventAttack;
         }
     }
 

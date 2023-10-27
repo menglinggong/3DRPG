@@ -8,6 +8,9 @@ using UnityEngine.AI;
 /// 敌人控制器
 /// </summary>
 [RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(CharacterStats))]
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(BoxCollider))]
 public class EnemyController : MonoBehaviour, IEndGameObserver
 {
     #region 组件
@@ -119,19 +122,9 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
         agent = this.GetComponent<NavMeshAgent>();
         animator = this.GetComponent<Animator>();
         characterStats = this.GetComponent<CharacterStats>();
-        characterStats.CurrentHealth = characterStats.MaxHealth;
+        
         collider = this.GetComponent<Collider>();
         speed = agent.speed;
-    }
-
-    private void OnEnable()
-    {
-        GameManager.Instance.AddEndGameObserver(this);
-    }
-
-    private void OnDisable()
-    {
-        GameManager.Instance.RemoveEndGameObserver(this);
     }
 
     private void Start()
@@ -141,6 +134,20 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
         enemyStartPoint = this.transform.position;
         enemyStartQuaternion = this.transform.rotation;
         GetNewWayPoint();
+
+        GameManager.Instance.AddEndGameObserver(this);
+
+        characterStats.CurrentHealth = characterStats.MaxHealth;
+    }
+
+    //private void OnEnable()
+    //{
+    //    GameManager.Instance.AddEndGameObserver(this);
+    //}
+
+    private void OnDisable()
+    {
+        GameManager.Instance.RemoveEndGameObserver(this);
     }
 
     private void Update()
