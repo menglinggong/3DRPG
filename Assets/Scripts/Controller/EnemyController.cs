@@ -369,7 +369,7 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     {
         //判断是否暴击，Random.value的值是0~1的随机值
         characterStats.IsCritical = Random.value <= characterStats.CriticalChance;
-        
+        //TODO:转向玩家因该有个过程，不能立刻转
         transform.LookAt(attackTarget.transform);
 
         if(TargetInAttackRange())
@@ -393,8 +393,8 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     /// </summary>
     public void Hit()
     {
-        //TODO:现在是玩家在攻击范围内就会受到攻击，需要修改，因为玩家可能在攻击范围内，但不在正面
-        if(TargetInAttackRange())
+        //现在是玩家在攻击范围内就会受到攻击，需要修改，因为玩家可能在攻击范围内，但不在正面
+        if(TargetInAttackRange() && transform.IsFacingTarget(attackTarget.transform))
             characterStats.TakeDamage(characterStats, attackTarget.GetComponent<CharacterStats>());
     }
 
