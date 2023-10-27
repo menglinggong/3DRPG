@@ -92,6 +92,8 @@ public class Rock : MonoBehaviour
     /// <param name="collision"></param>
     private void OnCollisionEnter(Collision collision)
     {
+
+        //TODO:修改为玩家按下按钮进入防御模式，与按下按钮进行反击
         switch (rockState)
         {
             case RockStates.HitPlayer:
