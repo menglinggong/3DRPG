@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -74,6 +75,16 @@ public class Golem : EnemyController
     }
 
     /// <summary>
+    /// 计算石头的伤害
+    /// </summary>
+    private void CalculateRockDamage()
+    {
+        characterStats.IsCritical = Random.value <= characterStats.CriticalChance;
+
+        rock.GetComponent<Rock>().RockDamage = characterStats.GetRealDamage();
+    }
+
+    /// <summary>
     /// Animation event
     /// 投掷石头
     /// </summary>
@@ -83,6 +94,8 @@ public class Golem : EnemyController
         rock.transform.SetParent(null);
         go.Target = this.attackTarget;
         rock.GetComponent<Rigidbody>().isKinematic = false;
+
+        CalculateRockDamage();
         go.FlyToTarget();
     }
 

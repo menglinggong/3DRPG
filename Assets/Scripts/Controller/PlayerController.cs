@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// 敌人
     /// </summary>
-    private GameObject enemyTarget;
+    private GameObject attackTarget;
 
     /// <summary>
     /// 攻击的协程
@@ -125,7 +125,7 @@ public class PlayerController : MonoBehaviour
         //停止移动到敌人的协程
         if (AttackCoroutine != null)
             StopCoroutine(AttackCoroutine);
-        enemyTarget = null;
+        attackTarget = null;
 
         agent.stoppingDistance = stopDistance;
         agent.destination = targetpos;
@@ -140,7 +140,7 @@ public class PlayerController : MonoBehaviour
     {
         if(target != null)
         {
-            this.enemyTarget = target;
+            this.attackTarget = target;
 
             //停止移动到敌人的协程
             if (AttackCoroutine != null)
@@ -161,9 +161,9 @@ public class PlayerController : MonoBehaviour
         //设置玩家移动到攻击距离
         agent.stoppingDistance = characterStats.AttackRange;
         //离敌人距离大于攻击距离，移动
-        while (Vector3.Distance(this.transform.position, enemyTarget.transform.position) > characterStats.AttackRange)
+        while (Vector3.Distance(this.transform.position, attackTarget.transform.position) > characterStats.AttackRange)
         {
-            agent.destination = enemyTarget.transform.position;
+            agent.destination = attackTarget.transform.position;
             yield return null;
         }
 
@@ -185,7 +185,7 @@ public class PlayerController : MonoBehaviour
         //判断是否暴击，Random.value的值是0~1的随机值
         characterStats.IsCritical = UnityEngine.Random.value <= characterStats.CriticalChance;
 
-        transform.LookAt(enemyTarget.transform);
+        transform.LookAt(attackTarget.transform);
 
         //若暴击了则播放暴击动画，否则播放普通攻击动画
         animator.SetBool("CriticalAttack", characterStats.IsCritical);
@@ -200,7 +200,25 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void Hit()
     {
-        if(enemyTarget != null)
-            characterStats.TakeDamage(characterStats, enemyTarget.GetComponent<CharacterStats>());
+        if (attackTarget == null) return;
+
+        if (attackTarget.CompareTag("AttackAble"))
+        {
+            Rock rock = attackTarget.GetComponent<Rock>();
+            if(rock != null)
+            {
+                rock.rockState = RockStates.HitEnemy;
+                rock.RockDamage = characterStats.GetRealDamage();
+
+                //向石头施加一个往玩家前上方的力
+                rock.GetComponent<Rigidbody>().AddForce((this.transform.forward + Vector3.up).normalized * rock.HitPlayerForce, ForceMode.Impulse);
+            }
+        }
+        else
+        {
+            characterStats.TakeDamage(characterStats, attackTarget.GetComponent<CharacterStats>());
+        }
+
+        
     }
 }

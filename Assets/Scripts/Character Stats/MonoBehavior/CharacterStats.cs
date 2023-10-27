@@ -252,6 +252,21 @@ public class CharacterStats : MonoBehaviour
     }
 
     /// <summary>
+    /// 伤害
+    /// </summary>
+    /// <param name="damage"></param>
+    /// <param name="target"></param>
+    public void TakeDamage(float damage, CharacterStats target)
+    {
+        damage *= (target.Defence / (target.Defence + target.CurrentDefence));
+
+        //以免造成负值
+        target.CurrentHealth = Mathf.Max(target.CurrentHealth - damage, 0);
+
+        Debug.Log(target.gameObject.name + "---" + target.CurrentHealth);
+    }
+
+    /// <summary>
     /// 计算实际能够造成的伤害（未减去目标的实际防御值）
     /// </summary>
     /// <returns></returns>

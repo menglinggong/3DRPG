@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 2339982524037451341}
   m_Layer: 0
   m_Name: Rock
-  m_TagString: Untagged
+  m_TagString: AttackAble
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -149,4 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Force: 15
+  HitPlayerForce: 15
   Target: {fileID: 0}
+  rockState: 0
+  RockDamage: 0
