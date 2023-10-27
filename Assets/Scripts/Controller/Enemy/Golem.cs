@@ -14,6 +14,22 @@ public class Golem : EnemyController
     public float KickForce = 30;
 
     /// <summary>
+    /// 石头人手的部位
+    /// </summary>
+    public Transform Hand;
+
+    /// <summary>
+    /// 石头示例
+    /// </summary>
+    public GameObject RockPrefab;
+
+    /// <summary>
+    /// 创建出的石头
+    /// </summary>
+    private GameObject rock;
+
+    /// <summary>
+    /// Animation event
     /// 击退玩家
     /// </summary>
     public void KickOffAndHit()
@@ -34,4 +50,40 @@ public class Golem : EnemyController
             characterStats.TakeDamage(characterStats, attackTarget.GetComponent<CharacterStats>());
         }
     }
+
+    /// <summary>
+    /// Animation event
+    /// 创建石头
+    /// </summary>
+    public void CreateRock()
+    {
+        rock = ObjectPool.Instance.GetObject(RockPrefab.name);
+
+        if(rock == null )
+        {
+            rock = Instantiate(RockPrefab, Hand.position, Quaternion.identity);
+            rock.name = RockPrefab.name;
+        }
+
+        rock.SetActive(true);
+        rock.GetComponent<Rigidbody>().isKinematic = true;
+        rock.transform.SetParent(Hand, false);
+        rock.transform.localPosition = Vector3.zero;
+        rock.transform.localRotation = Quaternion.identity;
+        rock.transform.localScale = Vector3.one;
+    }
+
+    /// <summary>
+    /// Animation event
+    /// 投掷石头
+    /// </summary>
+    public void HurlRock()
+    {
+        Rock go = rock.GetComponent<Rock>();
+        rock.transform.SetParent(null);
+        go.Target = this.attackTarget;
+        rock.GetComponent<Rigidbody>().isKinematic = false;
+        go.FlyToTarget();
+    }
+
 }

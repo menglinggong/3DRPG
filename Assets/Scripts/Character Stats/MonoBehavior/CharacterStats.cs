@@ -238,7 +238,7 @@ public class CharacterStats : MonoBehaviour
         //以免造成负值
         target.CurrentHealth = Mathf.Max(target.CurrentHealth - damage, 0);
 
-        if(IsCritical)
+        if(attacker.IsCritical)
         {
             //暴击播放目标的受到伤害动画
             target.GetComponent<Animator>().SetTrigger("GetHurt");

@@ -50,6 +50,11 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private bool isDie = false;
 
+    /// <summary>
+    /// 玩家初始停止距离
+    /// </summary>
+    private float stopDistance;
+
     #endregion
 
 
@@ -66,6 +71,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         characterStats.CurrentHealth = characterStats.MaxHealth;
+        stopDistance = agent.stoppingDistance;
         //事件绑定
         MouseManager.Instance.OnMouseClicked += MoveToTargetPos;
         MouseManager.Instance.OnEnemyClicked += EventAttack;
@@ -121,6 +127,7 @@ public class PlayerController : MonoBehaviour
             StopCoroutine(AttackCoroutine);
         enemyTarget = null;
 
+        agent.stoppingDistance = stopDistance;
         agent.destination = targetpos;
     }
 
@@ -151,9 +158,10 @@ public class PlayerController : MonoBehaviour
     {
         //使玩家可移动
         agent.isStopped = false;
-        
+        //设置玩家移动到攻击距离
+        agent.stoppingDistance = characterStats.AttackRange;
         //离敌人距离大于攻击距离，移动
-        while(Vector3.Distance(this.transform.position, enemyTarget.transform.position) > characterStats.AttackRange)
+        while (Vector3.Distance(this.transform.position, enemyTarget.transform.position) > characterStats.AttackRange)
         {
             agent.destination = enemyTarget.transform.position;
             yield return null;
