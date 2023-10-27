@@ -28,7 +28,7 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     /// <summary>
     /// 敌人的数值
     /// </summary>
-    private CharacterStats characterStats;
+    protected CharacterStats characterStats;
 
     /// <summary>
     /// 敌人的碰撞器
@@ -81,11 +81,6 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     public bool IsGuard = true;
 
     /// <summary>
-    /// 到巡逻点后四处张望的时间
-    /// </summary>
-    public float LookAroundTime;
-
-    /// <summary>
     /// 四处张望的计时器
     /// </summary>
     private float remainLookAroundTime;
@@ -100,6 +95,11 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     /// </summary>
     [Header("Patrol State")]
     public float PatrolRange;
+
+    /// <summary>
+    /// 到巡逻点后四处张望的时间
+    /// </summary>
+    public float LookAroundTime;
 
     #endregion
 
@@ -402,7 +402,7 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     /// 目标是否在攻击距离内
     /// </summary>
     /// <returns></returns>
-    private bool TargetInAttackRange()
+    public bool TargetInAttackRange()
     {
         if (attackTarget != null)
             return Vector3.Distance(attackTarget.transform.position, this.transform.position) <= characterStats.AttackRange;
@@ -414,7 +414,7 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     /// 目标是否在技能范围内
     /// </summary>
     /// <returns></returns>
-    private bool TargetInSkillRange()
+    public bool TargetInSkillRange()
     {
         if (attackTarget != null)
             return Vector3.Distance(attackTarget.transform.position, this.transform.position) <= characterStats.SkillRange;

@@ -19,7 +19,7 @@ public class Grunt : EnemyController
     /// </summary>
     public void KickOff()
     {
-        if(attackTarget != null)
+        if (TargetInAttackRange() && transform.IsFacingTarget(attackTarget.transform))
         {
             this.transform.LookAt(attackTarget.transform);
 
