@@ -206,8 +206,20 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
                     if (Vector3.SqrMagnitude(transform.position - enemyStartPoint) > agent.stoppingDistance)
                     {
                         isWalk = true;
-                        agent.isStopped = false;
-                        agent.destination = enemyStartPoint;
+                        
+                        //如果四处张望的时间到了
+                        if (remainLookAroundTime <= 0)
+                        {
+                            agent.isStopped = false;
+                            agent.destination = enemyStartPoint;
+                            remainLookAroundTime = LookAroundTime;
+
+                        }
+                        else
+                        {
+                            //敌人四处看看，同时计时
+                            remainLookAroundTime -= Time.deltaTime;
+                        }
                     }
                     else
                     {
@@ -215,8 +227,19 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
                         
                         if(this.transform.rotation != enemyStartQuaternion)
                         {
-                            //回到初始朝向
-                            this.transform.rotation = Quaternion.Lerp(this.transform.rotation, enemyStartQuaternion, 0.01f);
+                            if (remainLookAroundTime <= 0)
+                            {
+                                //回到初始朝向
+                                this.transform.rotation = Quaternion.Lerp(this.transform.rotation, enemyStartQuaternion, 1f);
+                                remainLookAroundTime = LookAroundTime;
+                            }
+                            else
+                            {
+                                //敌人四处看看，同时计时
+                                remainLookAroundTime -= Time.deltaTime;
+                            }
+
+                            
                         }
                     }
                 }

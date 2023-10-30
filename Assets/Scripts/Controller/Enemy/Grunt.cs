@@ -31,7 +31,8 @@ public class Grunt : EnemyController
             targetAgent.velocity = dir * KickForce;
 
             //≤•∑≈ÕÊº“—£‘Œ∂Øª≠
-            attackTarget.GetComponent<Animator>().SetTrigger("Dizzy");
+            if (!attackTarget.GetComponent<CharacterStats>().IsDefence)
+                attackTarget.GetComponent<Animator>().SetTrigger("Dizzy");
         }
     }
 }

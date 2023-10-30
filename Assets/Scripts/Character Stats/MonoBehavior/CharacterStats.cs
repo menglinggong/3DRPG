@@ -211,6 +211,11 @@ public class CharacterStats : MonoBehaviour
     /// </summary>
     public float Defence = 50;
 
+    /// <summary>
+    /// 是否防御状态
+    /// </summary>
+    public bool IsDefence = false;
+
 
     private void Awake()
     {
@@ -233,14 +238,16 @@ public class CharacterStats : MonoBehaviour
         //目标的防御值可抵消部分伤害，使用该公式，无论目标的防御值是多少，都会造成伤害，
         //只是防御值越高，伤害越小，防御值为0，造成100%伤害
         //这种公式会存在极值效果，即防御值越大，抵消伤害的插值越小
-        float damage = attacker.GetRealDamage() * (target.Defence / (target.Defence + target.CurrentDefence));
+        //添加是否防御状态，防御状态下，受到伤害减半
+        float damage = attacker.GetRealDamage() * (target.Defence / (target.Defence + target.CurrentDefence)) * (target.IsDefence ? 0.5f : 1); 
 
         //以免造成负值
         target.CurrentHealth = Mathf.Max(target.CurrentHealth - damage, 0);
 
-        if(attacker.IsCritical)
+        //攻击者暴击且目标未防御
+        if(attacker.IsCritical && !target.IsDefence)
         {
-            //暴击播放目标的受到伤害动画
+            //暴击且目标未防御，播放目标的受到伤害动画
             target.GetComponent<Animator>().SetTrigger("GetHurt");
         }
 
@@ -258,7 +265,7 @@ public class CharacterStats : MonoBehaviour
     /// <param name="target"></param>
     public void TakeDamage(float damage, CharacterStats target)
     {
-        damage *= (target.Defence / (target.Defence + target.CurrentDefence));
+        damage *= ((target.Defence / (target.Defence + target.CurrentDefence)) * (target.IsDefence ? 0.5f : 1));
 
         //以免造成负值
         target.CurrentHealth = Mathf.Max(target.CurrentHealth - damage, 0);

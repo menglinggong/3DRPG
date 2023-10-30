@@ -24,6 +24,11 @@ public class Rock : MonoBehaviour
     private Rigidbody rigidbody;
 
     /// <summary>
+    /// 石头破碎的粒子特效
+    /// </summary>
+    public GameObject RockBreakEffect;
+
+    /// <summary>
     /// 石头飞出时被施加的力
     /// </summary>
     public float Force;
@@ -42,7 +47,7 @@ public class Rock : MonoBehaviour
     /// <summary>
     /// 石头的状态
     /// </summary>
-    [HideInInspector]
+    //[HideInInspector]
     public RockStates rockState = RockStates.HitPlayer;
 
     /// <summary>
@@ -66,10 +71,10 @@ public class Rock : MonoBehaviour
         rockState = RockStates.HitPlayer;
     }
 
+
     private void FixedUpdate()
     {
-        //TODO:解决石头在石头人手中时，速度为0
-        if(rigidbody.velocity.sqrMagnitude < 0.1f)
+        if(rigidbody.velocity.sqrMagnitude < 0.1f && !rigidbody.isKinematic)
         {
             rockState = RockStates.HitNothing;
         }
@@ -80,6 +85,11 @@ public class Rock : MonoBehaviour
     /// </summary>
     public void FlyToTarget()
     {
+        if(Target == null)
+        {
+            Target = GameObject.FindObjectOfType<PlayerController>().gameObject;
+        }
+        
         direction = (Target.transform.position - transform.position + Vector3.up).normalized;
 
         //施加力，类似爆炸力
@@ -105,10 +115,12 @@ public class Rock : MonoBehaviour
                     agent.velocity = direction * HitPlayerForce;
                     agent.isStopped = true;
 
-                    collision.gameObject.GetComponent<Animator>().SetTrigger("Dizzy");
+                    if (!collision.gameObject.GetComponent<CharacterStats>().IsDefence)
+                        collision.gameObject.GetComponent<Animator>().SetTrigger("Dizzy");
 
                     CharacterStats targetStats = collision.gameObject.GetComponent<CharacterStats>();
                     targetStats.TakeDamage(this.RockDamage, targetStats);
+                    rockState = RockStates.HitNothing;
                 }
 
                 break;
@@ -118,19 +130,13 @@ public class Rock : MonoBehaviour
                 {
                     NavMeshAgent agent = collision.gameObject.GetComponent<NavMeshAgent>();
 
-                    agent.velocity = direction * HitPlayerForce;
-                    agent.isStopped = true;
-
                     CharacterStats targetStats = collision.gameObject.GetComponent<CharacterStats>();
-                    this.RockDamage = Target.GetComponent<CharacterStats>().GetRealDamage();
-
                     targetStats.TakeDamage(this.RockDamage, targetStats);
+                    rockState = RockStates.HitNothing;
+
+                    ReleaseRock();
                 }
 
-                break;
-            case RockStates.HitNothing:
-                //StopAllCoroutines();
-                //StartCoroutine(ReleaseRock());
                 break;
         }
     }
@@ -139,10 +145,15 @@ public class Rock : MonoBehaviour
     /// 放进对象池
     /// </summary>
     /// <returns></returns>
-    IEnumerator ReleaseRock()
+    private void ReleaseRock()
     {
-        yield return new WaitForSeconds(1f);
+        GameObject go = ObjectPool.Instance.GetObject(RockBreakEffect.name, RockBreakEffect);
 
+        go.transform.position = this.transform.position;
+        go.transform.rotation = Quaternion.identity;
+
+        go.GetComponent<ParticleSystem>().Play();
+        
         ObjectPool.Instance.ReleaseObject(this.name, this.gameObject);
     }
 }

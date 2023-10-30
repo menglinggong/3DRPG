@@ -45,7 +45,8 @@ public class Golem : EnemyController
             targetAgent.velocity = dir * KickForce;
 
             //播放玩家眩晕动画
-            attackTarget.GetComponent<Animator>().SetTrigger("Dizzy");
+            if(!attackTarget.GetComponent<CharacterStats>().IsDefence)
+                attackTarget.GetComponent<Animator>().SetTrigger("Dizzy");
 
             //造成伤害
             characterStats.TakeDamage(characterStats, attackTarget.GetComponent<CharacterStats>());
@@ -58,20 +59,20 @@ public class Golem : EnemyController
     /// </summary>
     public void CreateRock()
     {
-        rock = ObjectPool.Instance.GetObject(RockPrefab.name);
+        rock = ObjectPool.Instance.GetObject(RockPrefab.name, RockPrefab);
 
         if(rock == null )
         {
             rock = Instantiate(RockPrefab, Hand.position, Quaternion.identity);
             rock.name = RockPrefab.name;
         }
-
+        rock.transform.localScale = Vector3.one;
         rock.SetActive(true);
         rock.GetComponent<Rigidbody>().isKinematic = true;
-        rock.transform.SetParent(Hand, false);
+        rock.transform.SetParent(Hand, true);
         rock.transform.localPosition = Vector3.zero;
         rock.transform.localRotation = Quaternion.identity;
-        rock.transform.localScale = Vector3.one;
+        //
     }
 
     /// <summary>
@@ -93,6 +94,7 @@ public class Golem : EnemyController
         Rock go = rock.GetComponent<Rock>();
         rock.transform.SetParent(null);
         go.Target = this.attackTarget;
+        rock.GetComponent<Rigidbody>().velocity = Vector3.one;
         rock.GetComponent<Rigidbody>().isKinematic = false;
 
         CalculateRockDamage();

@@ -26,6 +26,11 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private CharacterStats characterStats;
 
+    /// <summary>
+    /// 盾牌，防御状态下显示
+    /// </summary>
+    private GameObject defenceShield;
+
     #endregion
 
     #region 玩家的基本参数
@@ -64,7 +69,8 @@ public class PlayerController : MonoBehaviour
         agent = this.GetComponent<NavMeshAgent>();
         animator = this.GetComponent<Animator>();
         characterStats = this.GetComponent<CharacterStats>();
-        
+
+        defenceShield = this.transform.Find("Defence").gameObject;
         GameManager.Instance.RigisterPlayer(characterStats);
     }
 
@@ -103,6 +109,29 @@ public class PlayerController : MonoBehaviour
 
             MouseManager.Instance.OnMouseClicked -= MoveToTargetPos;
             MouseManager.Instance.OnEnemyClicked -= EventAttack;
+        }
+
+        Defence();
+    }
+
+    /// <summary>
+    /// 玩家是否防御
+    /// </summary>
+    private void Defence()
+    {
+        if (animator.GetCurrentAnimatorStateInfo(1).IsName("Dizzy") || animator.GetCurrentAnimatorStateInfo(1).IsName("GetHit"))
+            return;
+
+        if (Input.GetMouseButton(1))
+        {
+            characterStats.IsDefence = true;
+            agent.isStopped = true;
+            defenceShield.SetActive(true);
+        }
+        else if (Input.GetMouseButtonUp(1))
+        {
+            characterStats.IsDefence = false;
+            defenceShield.SetActive(false);
         }
     }
 
@@ -207,11 +236,12 @@ public class PlayerController : MonoBehaviour
             Rock rock = attackTarget.GetComponent<Rock>();
             if(rock != null)
             {
+                rock.GetComponent<Rigidbody>().velocity = Vector3.one;
                 rock.rockState = RockStates.HitEnemy;
                 rock.RockDamage = characterStats.GetRealDamage();
 
                 //向石头施加一个往玩家前上方的力
-                rock.GetComponent<Rigidbody>().AddForce((this.transform.forward + Vector3.up).normalized * rock.HitPlayerForce, ForceMode.Impulse);
+                rock.GetComponent<Rigidbody>().AddForce((this.transform.forward + Vector3.up * 0.5f).normalized * rock.HitPlayerForce, ForceMode.Impulse);
             }
         }
         else
