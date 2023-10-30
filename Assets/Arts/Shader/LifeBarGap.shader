@@ -63,7 +63,7 @@ Shader "MyShader/MyLifeBarGap"
  
             fixed4 frag (v2f i) : SV_Target
             {
-                half virtualHealthBarWidth = i.uv.x * 100 * _BloodVolume;
+                half virtualHealthBarWidth = i.uv.x * _BloodVolume;
                 
                 //如果当前位置是1000血的倍数，且在间隔的两倍宽度位置，设置颜色显示为黑色
                 if (virtualHealthBarWidth % _Width > _Width - _BlackWidth * 2 && (virtualHealthBarWidth + _Width) / _Width % _Width < 1)

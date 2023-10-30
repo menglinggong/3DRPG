@@ -280,8 +280,8 @@ public class CharacterStats : MonoBehaviour
 
         UpdateHealBarOnAttack?.Invoke(target.CurrentHealth, target.MaxHealth);
 
-        //if (target.CurrentHealth <= 0)
-        //    attacker.CharacterData.UpdateExp(target.CharacterData.KillPoint);
+        if (target.CurrentHealth <= 0)
+            GameManager.Instance.PlayerStats.CharacterData.UpdateExp(target.CharacterData.KillPoint);
         //Debug.Log(target.gameObject.name + "---" + target.CurrentHealth);
     }
 

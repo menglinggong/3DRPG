@@ -373,7 +373,6 @@ GameObject:
   - component: {fileID: 4556465230370854836}
   - component: {fileID: 1116373243232546963}
   - component: {fileID: 1116373243232546925}
-  - component: {fileID: 8636576660211667222}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -504,21 +503,6 @@ MonoBehaviour:
   IsCritical: 0
   Defence: 50
   IsDefence: 0
---- !u!114 &8636576660211667222
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1116373243232546962}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce5d4562be5202a43b919606386b7d5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HealthBarPrefab: {fileID: 5810146897425888496, guid: 05ba2e49d1e9335479fe30b852016aa5, type: 3}
-  IsAlwaysVisble: 1
-  VisbleTime: 3
 --- !u!1 &1116373243232546964
 GameObject:
   m_ObjectHideFlags: 0

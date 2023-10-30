@@ -85,7 +85,7 @@ public class HealthBarUI : MonoBehaviour
         healthBarMaterial = Instantiate<Material>(temp);
         healthBar.transform.GetChild(0).GetComponent<Image>().material = healthBarMaterial;
         //ÉèÖÃ×ÜÑªÁ¿
-        healthBarMaterial.SetFloat("_BloodVolume", characterstats.MaxHealth * 0.01f);
+        healthBarMaterial.SetFloat("_BloodVolume", characterstats.MaxHealth);
 
         healthBar.SetActive(IsAlwaysVisble);
     }

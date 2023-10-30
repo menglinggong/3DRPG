@@ -21,4 +21,4 @@ MonoBehaviour:
   BaseExp: 0
   CurrentExp: 0
   LevelBuff: 0
-  KillPoint: 20
+  KillPoint: 15
