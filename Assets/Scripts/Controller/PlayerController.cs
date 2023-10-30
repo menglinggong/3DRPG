@@ -246,7 +246,8 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            characterStats.TakeDamage(characterStats, attackTarget.GetComponent<CharacterStats>());
+            CharacterStats targetStats = attackTarget.GetComponent<CharacterStats>();
+            targetStats.TakeDamage(characterStats, targetStats);
         }
 
         

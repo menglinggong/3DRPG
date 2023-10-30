@@ -91,6 +91,36 @@ Transform:
   m_Father: {fileID: 3543165324072879190}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1409156069908012697
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4041920019264185712}
+  m_Layer: 7
+  m_Name: HealthBarPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4041920019264185712
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1409156069908012697}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8476617842298153399}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1420601365826028408
 GameObject:
   m_ObjectHideFlags: 0
@@ -167,6 +197,7 @@ GameObject:
   - component: {fileID: 1726337899391362639}
   - component: {fileID: 1726337899391362636}
   - component: {fileID: 1726337899391362637}
+  - component: {fileID: 1255144392143269025}
   m_Layer: 7
   m_Name: GruntPBR
   m_TagString: Enemy
@@ -187,6 +218,7 @@ Transform:
   m_Children:
   - {fileID: 6964546637766794401}
   - {fileID: 2857538206943273347}
+  - {fileID: 4041920019264185712}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -66.807, z: 0}
@@ -264,6 +296,7 @@ MonoBehaviour:
   AttackData: {fileID: 0}
   IsCritical: 0
   Defence: 50
+  IsDefence: 0
 --- !u!114 &1726337899391362637
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -281,6 +314,19 @@ MonoBehaviour:
   PatrolRange: 8
   LookAroundTime: 4
   KickForce: 15
+--- !u!114 &1255144392143269025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1726337899391362635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce5d4562be5202a43b919606386b7d5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HealthBarPrefab: {fileID: 5810146897425888496, guid: 05ba2e49d1e9335479fe30b852016aa5, type: 3}
 --- !u!1 &1920076667414511652
 GameObject:
   m_ObjectHideFlags: 0

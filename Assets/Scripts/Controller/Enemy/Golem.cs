@@ -49,7 +49,8 @@ public class Golem : EnemyController
                 attackTarget.GetComponent<Animator>().SetTrigger("Dizzy");
 
             //‘Ï≥……À∫¶
-            characterStats.TakeDamage(characterStats, attackTarget.GetComponent<CharacterStats>());
+            CharacterStats targetStats = targetAgent.GetComponent<CharacterStats>();
+            targetStats.TakeDamage(characterStats, targetStats);
         }
     }
 

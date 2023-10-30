@@ -418,7 +418,10 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     {
         //现在是玩家在攻击范围内就会受到攻击，需要修改，因为玩家可能在攻击范围内，但不在正面
         if(TargetInAttackRange() && transform.IsFacingTarget(attackTarget.transform))
-            characterStats.TakeDamage(characterStats, attackTarget.GetComponent<CharacterStats>());
+        {
+            CharacterStats targetStats = attackTarget.GetComponent<CharacterStats>();
+            targetStats.TakeDamage(characterStats, targetStats);
+        }
     }
 
     /// <summary>

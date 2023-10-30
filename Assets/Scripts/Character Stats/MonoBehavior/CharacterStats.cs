@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CharacterStats : MonoBehaviour
 {
@@ -216,6 +218,11 @@ public class CharacterStats : MonoBehaviour
     /// </summary>
     public bool IsDefence = false;
 
+    /// <summary>
+    /// 人物受伤时发送血量的事件
+    /// </summary>
+    public event Action<float, float> UpdateHealBarOnAttack;
+
 
     private void Awake()
     {
@@ -239,7 +246,7 @@ public class CharacterStats : MonoBehaviour
         //只是防御值越高，伤害越小，防御值为0，造成100%伤害
         //这种公式会存在极值效果，即防御值越大，抵消伤害的插值越小
         //添加是否防御状态，防御状态下，受到伤害减半
-        float damage = attacker.GetRealDamage() * (target.Defence / (target.Defence + target.CurrentDefence)) * (target.IsDefence ? 0.5f : 1); 
+        float damage = attacker.GetRealDamage() * (target.Defence / (target.Defence + target.CurrentDefence)) * (target.IsDefence ? 0.5f : 1);
 
         //以免造成负值
         target.CurrentHealth = Mathf.Max(target.CurrentHealth - damage, 0);
@@ -251,9 +258,10 @@ public class CharacterStats : MonoBehaviour
             target.GetComponent<Animator>().SetTrigger("GetHurt");
         }
 
-        Debug.Log(target.gameObject.name + "---" + target.CurrentHealth);
+        //Debug.Log(target.gameObject.name + "---" + target.CurrentHealth);
 
         //TODO：更新界面血条
+        UpdateHealBarOnAttack?.Invoke(target.CurrentHealth, target.MaxHealth);
         //TODO：如果是玩家，杀怪后增加经验
         //TODO：死亡
     }
@@ -270,7 +278,9 @@ public class CharacterStats : MonoBehaviour
         //以免造成负值
         target.CurrentHealth = Mathf.Max(target.CurrentHealth - damage, 0);
 
-        Debug.Log(target.gameObject.name + "---" + target.CurrentHealth);
+        UpdateHealBarOnAttack?.Invoke(target.CurrentHealth, target.MaxHealth);
+
+        //Debug.Log(target.gameObject.name + "---" + target.CurrentHealth);
     }
 
     /// <summary>
@@ -279,12 +289,12 @@ public class CharacterStats : MonoBehaviour
     /// <returns></returns>
     public float GetRealDamage()
     {
-        float realDamage = Random.Range(MinDamage, MaxDamage);
+        float realDamage = UnityEngine.Random.Range(MinDamage, MaxDamage);
 
         if(IsCritical)
         {
             realDamage *= CriticalMultiplier;
-            Debug.Log("暴击伤害 = " + realDamage);
+            //Debug.Log("暴击伤害 = " + realDamage);
         }
 
         return realDamage;
