@@ -20,13 +20,11 @@ public class CharacterStats : MonoBehaviour
     /// <summary>
     /// 人物数值对象
     /// </summary>
-    [HideInInspector]
     public CharacterData_SO CharacterData;
 
     /// <summary>
     /// 人物攻击数值对象
     /// </summary>
-    [HideInInspector]
     public AttackData_SO AttackData;
 
     #region 获取人物数值数据的属性
@@ -260,9 +258,11 @@ public class CharacterStats : MonoBehaviour
 
         //Debug.Log(target.gameObject.name + "---" + target.CurrentHealth);
 
-        //TODO：更新界面血条
+        //T更新界面血条
         UpdateHealBarOnAttack?.Invoke(target.CurrentHealth, target.MaxHealth);
-        //TODO：如果是玩家，杀怪后增加经验
+        //杀怪后增加经验
+        if (target.CurrentHealth <= 0)
+            attacker.CharacterData.UpdateExp(target.CharacterData.KillPoint);
         //TODO：死亡
     }
 
@@ -280,6 +280,8 @@ public class CharacterStats : MonoBehaviour
 
         UpdateHealBarOnAttack?.Invoke(target.CurrentHealth, target.MaxHealth);
 
+        //if (target.CurrentHealth <= 0)
+        //    attacker.CharacterData.UpdateExp(target.CharacterData.KillPoint);
         //Debug.Log(target.gameObject.name + "---" + target.CurrentHealth);
     }
 
