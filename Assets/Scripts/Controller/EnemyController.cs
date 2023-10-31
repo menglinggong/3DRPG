@@ -355,15 +355,27 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     {
         //使用Physics.OverlapSphere方法，原理就是以敌人位置为原点，构建一个半径为搜寻值的球体，判断球体内的所有碰撞体是否有玩家
         //注意：使用layer限制时，写法为1<<LayerMask.NameToLayer("Player")，表示只检测层级为Player的碰撞体
-        Collider[] colliders = Physics.OverlapSphere(transform.position, SightRadius, 1<<LayerMask.NameToLayer("Player"));
+        //Collider[] colliders = Physics.OverlapSphere(transform.position, SightRadius, 1<<LayerMask.NameToLayer("Player"));
+        Collider[] colliders = Physics.OverlapSphere(transform.position, SightRadius);
         //先将目标制空
         attackTarget = null;
 
-        if (colliders == null || colliders.Length == 0)
-            return false;
-        //若找到玩家，则给攻击目标赋值
-        attackTarget = colliders[0].gameObject;
-        return true;
+        //if (colliders == null || colliders.Length == 0)
+        //    return false;
+
+        foreach(Collider collider in colliders)
+        {
+            if(collider.CompareTag("Player"))
+            {
+                attackTarget = collider.gameObject;
+                return true;
+            }
+        }
+        return false;
+
+        ////若找到玩家，则给攻击目标赋值
+        //attackTarget = colliders[0].gameObject;
+        //return true;
     }
 
     /// <summary>
