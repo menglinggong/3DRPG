@@ -38,7 +38,10 @@ public class TransitionPoint : MonoBehaviour
     /// </summary>
     private bool isCanTrans = false;
 
-
+    private void Start()
+    {
+        PortalManager.Instance.AddTransitionPoints(this);
+    }
 
     /// <summary>
     /// ´¥·¢Æ÷Stay
@@ -47,7 +50,10 @@ public class TransitionPoint : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
         if(other.CompareTag("Player"))
-            isCanTrans = true;
+        {
+            ScenesManager.Instance.TransitionToDestination(this);
+        }
+            //isCanTrans = true;
     }
 
     /// <summary>
