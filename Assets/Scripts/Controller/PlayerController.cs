@@ -74,7 +74,6 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        characterStats.CurrentHealth = characterStats.MaxHealth;
         stopDistance = agent.stoppingDistance;
         //ÊÂ¼þ°ó¶¨
         MouseManager.Instance.OnMouseClicked += MoveToTargetPos;

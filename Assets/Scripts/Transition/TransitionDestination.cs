@@ -12,11 +12,14 @@ public class TransitionDestination : MonoBehaviour
     /// </summary>
     public enum DestinationType
     {
-        Enter,
-        A,
-        B,
-        C,
-        D
+        Not,
+        Scene01_A,
+        Scene01_B,
+        Scene01_C,
+        Scene01_D,
+        Scene02_A,
+        Scene02_B,
+        Scene02_C,
     }
 
     /// <summary>

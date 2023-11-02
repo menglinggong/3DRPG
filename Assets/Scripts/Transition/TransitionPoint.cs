@@ -33,10 +33,10 @@ public class TransitionPoint : MonoBehaviour
     /// </summary>
     public TransitionDestination.DestinationType Type_Destination;
 
-    /// <summary>
-    /// 是否可以传送
-    /// </summary>
-    private bool isCanTrans = false;
+    ///// <summary>
+    ///// 是否可以传送
+    ///// </summary>
+    //private bool isCanTrans = false;
 
     private void Awake()
     {
@@ -48,26 +48,31 @@ public class TransitionPoint : MonoBehaviour
         PortalManager.Instance.RemoveTransitionPoints(this);
     }
 
-    /// <summary>
-    /// 触发器Stay
-    /// </summary>
-    /// <param name="other"></param>
-    private void OnTriggerStay(Collider other)
+    ///// <summary>
+    ///// 触发器Stay
+    ///// </summary>
+    ///// <param name="other"></param>
+    //private void OnTriggerStay(Collider other)
+    //{
+        
+    //        //isCanTrans = true;
+    //}
+
+    private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
             ScenesManager.Instance.TransitionToDestination(this);
         }
-            //isCanTrans = true;
     }
 
-    /// <summary>
-    /// 触发器离开
-    /// </summary>
-    /// <param name="other"></param>
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-            isCanTrans = false;
-    }
+    ///// <summary>
+    ///// 触发器离开
+    ///// </summary>
+    ///// <param name="other"></param>
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (other.CompareTag("Player"))
+    //        isCanTrans = false;
+    //}
 }

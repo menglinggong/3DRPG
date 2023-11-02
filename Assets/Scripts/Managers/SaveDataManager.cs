@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -58,11 +56,8 @@ public class SaveDataManager : ISingleton<SaveDataManager>
     /// 删除保存的数据
     /// </summary>
     /// <param name="key"></param>
-    public void DeleteData(string key)
+    public void DeleteAllDatas()
     {
-        if (PlayerPrefs.HasKey(key))
-        {
-            PlayerPrefs.DeleteKey(key);
-        }
+        PlayerPrefs.DeleteAll();
     }
 }

@@ -31,6 +31,9 @@ public class GameManager : ISingleton<GameManager>
 
         //设置相机跟踪对象
         freeLookCamera = FindObjectOfType<CinemachineFreeLook>();
+        if (freeLookCamera == null)
+            return;
+
         freeLookCamera.Follow = PlayerStats.transform.Find("head");
         freeLookCamera.LookAt = PlayerStats.transform.Find("head");
     }
