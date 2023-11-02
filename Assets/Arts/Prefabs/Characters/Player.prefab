@@ -496,10 +496,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 046a6a5a7ad779e4da183f7685e4ff18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TemplateData: {fileID: 0}
-  TemplateAttackData: {fileID: 0}
-  CharacterData: {fileID: 11400000, guid: d69ae1c180540aa4082e60900e21dc57, type: 2}
-  AttackData: {fileID: 11400000, guid: 937ae9cc3a253494c91745bd6a144d25, type: 2}
+  TemplateData: {fileID: 11400000, guid: d69ae1c180540aa4082e60900e21dc57, type: 2}
+  TemplateAttackData: {fileID: 11400000, guid: 937ae9cc3a253494c91745bd6a144d25, type: 2}
+  CharacterData: {fileID: 0}
+  AttackData: {fileID: 0}
   IsCritical: 0
   Defence: 50
   IsDefence: 0

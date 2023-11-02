@@ -28,10 +28,6 @@ public class PlayerUI : MonoBehaviour
     /// 经验值材质
     /// </summary>
     private Material expMaterial;
-    /// <summary>
-    /// 玩家数据
-    /// </summary>
-    private CharacterStats playerStats;
 
     private void Awake()
     {
@@ -51,14 +47,9 @@ public class PlayerUI : MonoBehaviour
         expMaterial.SetColor("_LossColor", Color.black);
     }
 
-    private void Start()
-    {
-        playerStats = GameManager.Instance.PlayerStats;
-    }
-
     private void Update()
     {
-        if (playerStats == null)
+        if (GameManager.Instance.PlayerStats == null)
             return;
 
         UpdateHealth();
@@ -71,9 +62,9 @@ public class PlayerUI : MonoBehaviour
     /// </summary>
     void UpdateHealth()
     {
-        healthMaterial.SetFloat("_BloodVolume", playerStats.MaxHealth);
+        healthMaterial.SetFloat("_BloodVolume", GameManager.Instance.PlayerStats.MaxHealth);
 
-        healthMaterial.SetFloat("_life", playerStats.CurrentHealth / playerStats.MaxHealth);
+        healthMaterial.SetFloat("_life", GameManager.Instance.PlayerStats.CurrentHealth / GameManager.Instance.PlayerStats.MaxHealth);
     }
 
     /// <summary>
@@ -81,9 +72,9 @@ public class PlayerUI : MonoBehaviour
     /// </summary>
     void UpdateExp()
     {
-        expMaterial.SetFloat("_BloodVolume", playerStats.CharacterData.BaseExp);
+        expMaterial.SetFloat("_BloodVolume", GameManager.Instance.PlayerStats.CharacterData.BaseExp);
 
-        expMaterial.SetFloat("_life", playerStats.CharacterData.CurrentExp / playerStats.CharacterData.BaseExp);
+        expMaterial.SetFloat("_life", GameManager.Instance.PlayerStats.CharacterData.CurrentExp / GameManager.Instance.PlayerStats.CharacterData.BaseExp);
     }
 
     /// <summary>
@@ -91,6 +82,6 @@ public class PlayerUI : MonoBehaviour
     /// </summary>
     void UpdateLevel()
     {
-        levelText.text = playerStats.CharacterData.CurrentLevel.ToString("00");
+        levelText.text = GameManager.Instance.PlayerStats.CharacterData.CurrentLevel.ToString("00");
     }
 }

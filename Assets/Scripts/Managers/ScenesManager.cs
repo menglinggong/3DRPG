@@ -27,7 +27,6 @@ public class ScenesManager : ISingleton<ScenesManager>
         }
         else
         {
-            //TODO:保存玩家数据
             //异场景传送
             StartCoroutine(Transition(transitionPoint.SceneName, transitionPoint.Type_Destination));
         }
@@ -57,6 +56,8 @@ public class ScenesManager : ISingleton<ScenesManager>
         }
         else
         {
+            ////TODO:保存玩家数据
+            //SaveDataManager.Instance.SavePlayerData();
             //异场景传送，加载场景，创建玩家到指定位置
             //TODO:添加加载场景进度条
             yield return SceneManager.LoadSceneAsync(sceneName);

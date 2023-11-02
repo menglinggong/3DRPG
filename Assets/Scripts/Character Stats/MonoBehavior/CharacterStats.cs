@@ -20,11 +20,13 @@ public class CharacterStats : MonoBehaviour
     /// <summary>
     /// 人物数值对象
     /// </summary>
+    [HideInInspector]
     public CharacterData_SO CharacterData;
 
     /// <summary>
     /// 人物攻击数值对象
     /// </summary>
+    [HideInInspector]
     public AttackData_SO AttackData;
 
     #region 获取人物数值数据的属性
@@ -300,6 +302,16 @@ public class CharacterStats : MonoBehaviour
         }
 
         return realDamage;
+    }
+
+    private void OnEnable()
+    {
+        SaveDataManager.Instance.LoadPlayerData();
+    }
+
+    private void OnDisable()
+    {
+        SaveDataManager.Instance.SavePlayerData();
     }
 
     #endregion
