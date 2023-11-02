@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
@@ -9,6 +10,7 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class ScenesManager : ISingleton<ScenesManager>
 {
+    public GameObject PlayerPrefab;
     private GameObject player;
     private NavMeshAgent playerAgent;
 
@@ -21,10 +23,11 @@ public class ScenesManager : ISingleton<ScenesManager>
         if(transitionPoint.Type_Transition == TransitionPoint.TransitionType.SameScene)
         {
             //同场景传送
-            StartCoroutine(Transition(null, transitionPoint.Type_Destination));
+            StartCoroutine(Transition(SceneManager.GetActiveScene().name, transitionPoint.Type_Destination));
         }
         else
         {
+            //TODO:保存玩家数据
             //异场景传送
             StartCoroutine(Transition(transitionPoint.SceneName, transitionPoint.Type_Destination));
         }
@@ -44,24 +47,24 @@ public class ScenesManager : ISingleton<ScenesManager>
         }
         playerAgent.enabled = false;
 
-        if (string.IsNullOrEmpty(sceneName))
+        if (SceneManager.GetActiveScene().name == sceneName)
         {
+            //同场景传送，设置玩家位置
             var endPoint = PortalManager.Instance.GetTransitionDestinationByType(destinationType);
-            //player.transform.position = endPoint.transform.position;
-            //player.transform.rotation = endPoint.transform.rotation;
             player.transform.SetPositionAndRotation(endPoint.transform.position, endPoint.transform.rotation);
             playerAgent.enabled = true;
             yield return null;
         }
         else
         {
-            var da = SceneManager.LoadSceneAsync(sceneName);
-            //添加进度条
-            while (da.isDone)
-            {
+            //异场景传送，加载场景，创建玩家到指定位置
+            //TODO:添加加载场景进度条
+            yield return SceneManager.LoadSceneAsync(sceneName);
+            var endPoint = PortalManager.Instance.GetTransitionDestinationByType(destinationType);
+            yield return Instantiate(PlayerPrefab, endPoint.transform.position, endPoint.transform.rotation);
 
-                yield return null;
-            }
+            yield break;
         }
     }
+
 }

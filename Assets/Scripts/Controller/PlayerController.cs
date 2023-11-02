@@ -62,8 +62,6 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-
-
     private void Awake()
     {
         agent = this.GetComponent<NavMeshAgent>();

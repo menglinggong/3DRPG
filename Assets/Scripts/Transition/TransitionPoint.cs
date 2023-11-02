@@ -38,9 +38,14 @@ public class TransitionPoint : MonoBehaviour
     /// </summary>
     private bool isCanTrans = false;
 
-    private void Start()
+    private void Awake()
     {
         PortalManager.Instance.AddTransitionPoints(this);
+    }
+
+    private void OnDestroy()
+    {
+        PortalManager.Instance.RemoveTransitionPoints(this);
     }
 
     /// <summary>
