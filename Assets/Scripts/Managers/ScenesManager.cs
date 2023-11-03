@@ -20,6 +20,9 @@ public class ScenesManager : ISingleton<ScenesManager>
     /// <param name="transitionPoint"></param>
     public void TransitionToDestination(TransitionPoint transitionPoint)
     {
+        if (transitionPoint.Type_Destination == TransitionDestination.DestinationType.Not)
+            return;
+
         if(transitionPoint.Type_Transition == TransitionPoint.TransitionType.SameScene)
         {
             //同场景传送
@@ -39,15 +42,15 @@ public class ScenesManager : ISingleton<ScenesManager>
     /// <returns></returns>
     IEnumerator Transition(string sceneName, TransitionDestination.DestinationType destinationType)
     {
-        if(player == null)
-        {
-            player = GameManager.Instance.PlayerStats.gameObject;
-            playerAgent = player.GetComponent<NavMeshAgent>();
-        }
-        playerAgent.enabled = false;
-
         if (SceneManager.GetActiveScene().name == sceneName)
         {
+            if (player == null)
+            {
+                player = GameManager.Instance.PlayerStats.gameObject;
+                playerAgent = player.GetComponent<NavMeshAgent>();
+            }
+            playerAgent.enabled = false;
+
             //同场景传送，设置玩家位置
             var endPoint = PortalManager.Instance.GetTransitionDestinationByType(destinationType);
             player.transform.SetPositionAndRotation(endPoint.transform.position, endPoint.transform.rotation);
@@ -68,4 +71,18 @@ public class ScenesManager : ISingleton<ScenesManager>
         }
     }
 
+    /// <summary>
+    /// 普通的加载场景
+    /// </summary>
+    /// <param name="sceneName"></param>
+    public void LoadScene(string sceneName)
+    {
+        StartCoroutine(LoadSceneBySceneName(sceneName));
+    }
+
+    IEnumerator LoadSceneBySceneName(string sceneName)
+    {
+        if(!SceneManager.GetActiveScene().name.Equals(sceneName))
+            yield return SceneManager.LoadSceneAsync(sceneName);
+    }
 }

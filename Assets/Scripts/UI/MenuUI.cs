@@ -38,6 +38,8 @@ public class MenuUI : MonoBehaviour
     public void OnNewGameBtnClick()
     {
         SaveDataManager.Instance.DeleteAllDatas();
+
+        EnterScene01();
     }
 
     /// <summary>
@@ -45,7 +47,7 @@ public class MenuUI : MonoBehaviour
     /// </summary>
     public void OnContinueGameBtnClick()
     {
-
+        EnterScene01();
     }
 
     /// <summary>
@@ -58,5 +60,19 @@ public class MenuUI : MonoBehaviour
 #else
         Application.Quit();
 #endif
+    }
+
+    /// <summary>
+    /// 无论是开始新游戏还是继续游戏都进入第一关
+    /// </summary>
+    private void EnterScene01()
+    {
+        //进入Level01场景
+        TransitionPoint transitionPoint = new TransitionPoint();
+        transitionPoint.SceneName = "Level01";
+        transitionPoint.Type_Transition = TransitionPoint.TransitionType.DiffenceScene;
+        transitionPoint.Type_Destination = TransitionDestination.DestinationType.Scene01_A;
+
+        ScenesManager.Instance.TransitionToDestination(transitionPoint);
     }
 }

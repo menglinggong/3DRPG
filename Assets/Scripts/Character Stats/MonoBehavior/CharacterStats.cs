@@ -304,15 +304,5 @@ public class CharacterStats : MonoBehaviour
         return realDamage;
     }
 
-    private void OnEnable()
-    {
-        SaveDataManager.Instance.LoadPlayerData();
-    }
-
-    private void OnDisable()
-    {
-        SaveDataManager.Instance.SavePlayerData();
-    }
-
     #endregion
 }
