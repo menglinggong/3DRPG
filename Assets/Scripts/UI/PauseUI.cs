@@ -70,7 +70,7 @@ public class PauseUI : MonoBehaviour
     private void OnReturnMenuBtnClick()
     {
         bg.SetActive(false);
-        StartCoroutine(LoadSceneBySceneName("Main"));
+        ScenesManager.Instance.LoadScene("Main");
     }
 
     /// <summary>
@@ -83,19 +83,5 @@ public class PauseUI : MonoBehaviour
 #else
         Application.Quit();
 #endif
-    }
-
-    /// <summary>
-    /// º”‘ÿ÷˜≥°æ∞
-    /// </summary>
-    /// <param name="sceneName"></param>
-    /// <returns></returns>
-    IEnumerator LoadSceneBySceneName(string sceneName)
-    {
-        if (!SceneManager.GetActiveScene().name.Equals(sceneName))
-        {
-            yield return SceneManager.LoadSceneAsync(sceneName);
-            Time.timeScale = 1;
-        }
     }
 }

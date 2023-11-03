@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.UI;
 
 /// <summary>
@@ -21,6 +22,11 @@ public class MenuUI : MonoBehaviour
     /// </summary>
     private Button quitBtn;
 
+    /// <summary>
+    /// timeline
+    /// </summary>
+    public PlayableDirector Director;
+
     private void Awake()
     {
         newGameBtn = this.transform.Find("NewGameBtn").GetComponent<Button>();
@@ -38,8 +44,13 @@ public class MenuUI : MonoBehaviour
     public void OnNewGameBtnClick()
     {
         SaveDataManager.Instance.DeleteAllDatas();
+        PlayTimeLine();
 
-        EnterScene01();
+        //timeline播放结束跳转到Scene01场景
+        Director.stopped += (dir) =>
+        {
+            EnterScene01();
+        };
     }
 
     /// <summary>
@@ -75,4 +86,13 @@ public class MenuUI : MonoBehaviour
 
         ScenesManager.Instance.TransitionToDestination(transitionPoint);
     }
+
+    /// <summary>
+    /// 播放timeline动画
+    /// </summary>
+    private void PlayTimeLine()
+    {
+        Director.Play();
+    }
+
 }

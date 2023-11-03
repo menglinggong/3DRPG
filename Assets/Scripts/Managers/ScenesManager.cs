@@ -64,6 +64,8 @@ public class ScenesManager : ISingleton<ScenesManager>
             //异场景传送，加载场景，创建玩家到指定位置
             //TODO:添加加载场景进度条
             yield return SceneManager.LoadSceneAsync(sceneName);
+            //AsyncOperation async;
+            //async.progress
             var endPoint = PortalManager.Instance.GetTransitionDestinationByType(destinationType);
             yield return Instantiate(PlayerPrefab, endPoint.transform.position, endPoint.transform.rotation);
 
@@ -82,7 +84,32 @@ public class ScenesManager : ISingleton<ScenesManager>
 
     IEnumerator LoadSceneBySceneName(string sceneName)
     {
-        if(!SceneManager.GetActiveScene().name.Equals(sceneName))
+        //LoadSceneProgressUI.Instance.OnProgressStart.Invoke();
+        //if(!SceneManager.GetActiveScene().name.Equals(sceneName))
+        //{
+        //    AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
+        //    operation.allowSceneActivation = true;
+        //    //while (!operation.isDone)
+        //    //{
+        //    //    Debug.Log(operation.progress);
+        //    //    //LoadSceneProgressUI.Instance.OnProgressChanged.Invoke(operation.progress);
+        //    //}
+
+        //    while (operation.progress < 0.9f)
+        //    {
+        //        //Debug.Log(operation.progress);
+        //        LoadSceneProgressUI.Instance.OnProgressChanged.Invoke(operation.progress);
+        //    }
+        //    LoadSceneProgressUI.Instance.OnProgressDone.Invoke();
+        //    yield return null;
+        //    Time.timeScale = 1;
+        //}
+
+        if (!SceneManager.GetActiveScene().name.Equals(sceneName))
+        {
             yield return SceneManager.LoadSceneAsync(sceneName);
+            Time.timeScale = 1;
+        }
+            
     }
 }
