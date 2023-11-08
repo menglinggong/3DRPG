@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -217,12 +218,6 @@ public class CharacterStats : MonoBehaviour
     /// </summary>
     public bool IsDefence = false;
 
-    /// <summary>
-    /// 人物受伤时发送血量的事件
-    /// </summary>
-    public event Action<float, float> UpdateHealBarOnAttack;
-
-
     private void Awake()
     {
         if(TemplateData != null)
@@ -248,7 +243,9 @@ public class CharacterStats : MonoBehaviour
         float damage = attacker.GetRealDamage() * (target.Defence / (target.Defence + target.CurrentDefence)) * (target.IsDefence ? 0.5f : 1);
 
         //以免造成负值
-        target.CurrentHealth = Mathf.Max(target.CurrentHealth - damage, 0);
+        target.CharacterData.GetHurt(damage);
+        //发送消息设置目标的血条
+        EventManager.Instance.Invoke(MessageConst.UpdateHealth, target);
 
         //攻击者暴击且目标未防御
         if(attacker.IsCritical && !target.IsDefence)
@@ -257,14 +254,14 @@ public class CharacterStats : MonoBehaviour
             target.GetComponent<Animator>().SetTrigger("GetHurt");
         }
 
-        //Debug.Log(target.gameObject.name + "---" + target.CurrentHealth);
-
-        //T更新界面血条
-        UpdateHealBarOnAttack?.Invoke(target.CurrentHealth, target.MaxHealth);
         //杀怪后增加经验
         if (target.CurrentHealth <= 0)
+        {
             attacker.CharacterData.UpdateExp(target.CharacterData.KillPoint);
-        //TODO：死亡
+            //发送消息，设置攻击者的经验条
+            EventManager.Instance.Invoke(MessageConst.UpdateExp, attacker);
+        }
+
     }
 
     /// <summary>
@@ -277,13 +274,15 @@ public class CharacterStats : MonoBehaviour
         damage *= ((target.Defence / (target.Defence + target.CurrentDefence)) * (target.IsDefence ? 0.5f : 1));
 
         //以免造成负值
-        target.CurrentHealth = Mathf.Max(target.CurrentHealth - damage, 0);
-
-        UpdateHealBarOnAttack?.Invoke(target.CurrentHealth, target.MaxHealth);
+        target.CharacterData.GetHurt(damage);
+        //发送消息
+        EventManager.Instance.Invoke(MessageConst.UpdateHealth, target);
 
         if (target.CurrentHealth <= 0)
-            GameManager.Instance.PlayerStats.CharacterData.UpdateExp(target.CharacterData.KillPoint);
-        //Debug.Log(target.gameObject.name + "---" + target.CurrentHealth);
+        {
+            this.CharacterData.UpdateExp(target.CharacterData.KillPoint);
+            EventManager.Instance.Invoke(MessageConst.UpdateExp, this);
+        }
     }
 
     /// <summary>

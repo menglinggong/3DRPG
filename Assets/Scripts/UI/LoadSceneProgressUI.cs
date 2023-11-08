@@ -76,6 +76,8 @@ public class LoadSceneProgressUI : MonoBehaviour
         canvasGroup.alpha = 1;
         progressSlider.value = 0;
         progressText.text = "0%";
+        //播放进度条时，使界面遮挡其他界面
+        canvasGroup.blocksRaycasts = true;
         //StartCoroutine(SetAlpha(false));
     }
 
@@ -95,6 +97,7 @@ public class LoadSceneProgressUI : MonoBehaviour
             timeCount -= Time.deltaTime;
             yield return null;
         }
+        canvasGroup.blocksRaycasts = false;
     }
 
     /// <summary>

@@ -65,8 +65,16 @@ public class HealthBarUI : MonoBehaviour
         characterstats = this.GetComponent<CharacterStats>();
         healthBarCanvas = GameObject.Find("HealthBarCanvas").transform;
         mainCamera = Camera.main;
+    }
 
-        characterstats.UpdateHealBarOnAttack += UpdateHealBar;
+    private void OnEnable()
+    {
+        EventManager.Instance.AddListener(MessageConst.UpdateHealth, UpdateHealBar);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.RemoveListener(MessageConst.UpdateHealth, UpdateHealBar);
     }
 
     private void Start()
@@ -126,13 +134,18 @@ public class HealthBarUI : MonoBehaviour
     /// <param name="arg1"></param>
     /// <param name="arg2"></param>
     /// <exception cref="NotImplementedException"></exception>
-    private void UpdateHealBar(float currentHealth, float maxHealth)
+    private void UpdateHealBar(string msg, object obj)
     {
-        if(currentHealth > 0)
-        {
-            healthBarMaterial.SetFloat("_life", currentHealth / maxHealth);
+        CharacterStats stats = (CharacterStats)obj;
+        if (stats != characterstats)
+            return;
 
-            if(!IsAlwaysVisble)
+
+        if (stats.CurrentHealth > 0)
+        {
+            healthBarMaterial.SetFloat("_life", stats.CurrentHealth / stats.MaxHealth);
+
+            if (!IsAlwaysVisble)
             {
                 healthBar.SetActive(true);
                 time = VisbleTime;
@@ -140,7 +153,6 @@ public class HealthBarUI : MonoBehaviour
         }
         else
         {
-            characterstats.UpdateHealBarOnAttack -= UpdateHealBar;
             //血条小于0，对象池回收
             ObjectPool.Instance.ReleaseObject(HealthBarPrefab.name, healthBar);
         }

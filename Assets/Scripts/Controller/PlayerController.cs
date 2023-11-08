@@ -83,6 +83,9 @@ public class PlayerController : MonoBehaviour
     private void OnEnable()
     {
         SaveDataManager.Instance.LoadPlayerData();
+        //玩家加载数据后发送消息，设置血条和经验条
+        EventManager.Instance.Invoke(MessageConst.UpdateHealth, characterStats);
+        EventManager.Instance.Invoke(MessageConst.UpdateExp, characterStats);
     }
 
     private void OnDisable()

@@ -45,12 +45,12 @@ public class CharacterData_SO : ScriptableObject
     /// 基础经验值
     /// 每次升级时会改变
     /// </summary>
-    public int BaseExp;
+    public float BaseExp;
 
     /// <summary>
     /// 当前经验值
     /// </summary>
-    public int CurrentExp;
+    public float CurrentExp;
 
     /// <summary>
     /// 升级后的加成
@@ -107,5 +107,14 @@ public class CharacterData_SO : ScriptableObject
         BaseDefence = BaseDefence * LevelMultiplier;
         CurrentDefence = BaseDefence;
 
+    }
+
+    /// <summary>
+    /// 受伤
+    /// </summary>
+    /// <param name="damage"></param>
+    public void GetHurt(float damage)
+    {
+        this.CurrentHealth = Mathf.Max(this.CurrentHealth - damage, 0);
     }
 }

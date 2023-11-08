@@ -47,41 +47,42 @@ public class PlayerUI : MonoBehaviour
         expMaterial.SetColor("_LossColor", Color.black);
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        if (GameManager.Instance.PlayerStats == null)
-            return;
+        EventManager.Instance.AddListener(MessageConst.UpdateExp, UpdateExp);
+        EventManager.Instance.AddListener(MessageConst.UpdateHealth, UpdateHealth);
+    }
 
-        UpdateHealth();
-        UpdateExp();
-        UpdateLevel();
+    private void OnDisable()
+    {
+        EventManager.Instance.RemoveListener(MessageConst.UpdateExp, UpdateExp);
+        EventManager.Instance.RemoveListener(MessageConst.UpdateHealth, UpdateHealth);
     }
 
     /// <summary>
     /// 刷新血条
     /// </summary>
-    void UpdateHealth()
+    void UpdateHealth(string msg, object value)
     {
-        healthMaterial.SetFloat("_BloodVolume", GameManager.Instance.PlayerStats.MaxHealth);
+        CharacterStats data = value as CharacterStats;
+        if (data != GameManager.Instance.PlayerStats) return;
 
-        healthMaterial.SetFloat("_life", GameManager.Instance.PlayerStats.CurrentHealth / GameManager.Instance.PlayerStats.MaxHealth);
+        healthMaterial.SetFloat("_BloodVolume", data.MaxHealth);
+
+        healthMaterial.SetFloat("_life", data.CurrentHealth / data.MaxHealth);
     }
 
     /// <summary>
     /// 刷新经验条
     /// </summary>
-    void UpdateExp()
+    void UpdateExp(string msg, object value)
     {
-        expMaterial.SetFloat("_BloodVolume", GameManager.Instance.PlayerStats.CharacterData.BaseExp);
+        CharacterStats data = value as CharacterStats;
+        if (data != GameManager.Instance.PlayerStats) return;
 
-        expMaterial.SetFloat("_life", GameManager.Instance.PlayerStats.CharacterData.CurrentExp / GameManager.Instance.PlayerStats.CharacterData.BaseExp);
+        expMaterial.SetFloat("_BloodVolume", data.CharacterData.BaseExp);
+        expMaterial.SetFloat("_life", data.CharacterData.CurrentExp / data.CharacterData.BaseExp);
+        levelText.text = data.CharacterData.CurrentLevel.ToString("00");
     }
 
-    /// <summary>
-    /// 刷新等级
-    /// </summary>
-    void UpdateLevel()
-    {
-        levelText.text = GameManager.Instance.PlayerStats.CharacterData.CurrentLevel.ToString("00");
-    }
 }
