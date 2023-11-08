@@ -5,7 +5,6 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
-using static UnityEditor.ObjectChangeEventStream;
 
 public class LoadSceneProgressUI : MonoBehaviour
 {
@@ -26,9 +25,10 @@ public class LoadSceneProgressUI : MonoBehaviour
     /// 透明度改变时间
     /// </summary>
     public float AlphaTime = 1f;
-
+    /// <summary>
+    /// 计时
+    /// </summary>
     private float timeCount;
-    private bool isOver = false;
 
     /// <summary>
     /// 进度条改变
@@ -61,9 +61,9 @@ public class LoadSceneProgressUI : MonoBehaviour
     /// <exception cref="NotImplementedException"></exception>
     private void LoadSceneProgressUI_OnProgressDone()
     {
-        isOver = true;
         timeCount = AlphaTime;
         canvasGroup.alpha = 1;
+        StartCoroutine(SetAlpha(true));
     }
 
     /// <summary>
@@ -72,19 +72,28 @@ public class LoadSceneProgressUI : MonoBehaviour
     /// <exception cref="NotImplementedException"></exception>
     private void LoadSceneProgressUI_OnProgressStart()
     {
-        isOver = false;
         timeCount = AlphaTime;
         canvasGroup.alpha = 1;
         progressSlider.value = 0;
         progressText.text = "0%";
+        //StartCoroutine(SetAlpha(false));
     }
 
-    private void Update()
+    /// <summary>
+    /// 设置界面透明度
+    /// </summary>
+    /// <param name="isMinus"></param>
+    /// <returns></returns>
+    IEnumerator SetAlpha(bool isMinus = false)
     {
-        if(timeCount > 0 && isOver)
+        while(timeCount > 0)
         {
-            canvasGroup.alpha -= (Time.deltaTime / timeCount);
+            if(isMinus)
+                canvasGroup.alpha -= (Time.deltaTime / timeCount);
+            else
+                canvasGroup.alpha += (Time.deltaTime / timeCount);
             timeCount -= Time.deltaTime;
+            yield return null;
         }
     }
 
