@@ -5,8 +5,9 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using static UnityEditor.ObjectChangeEventStream;
 
-public class LoadSceneProgressUI : ISingleton<LoadSceneProgressUI>
+public class LoadSceneProgressUI : MonoBehaviour
 {
     /// <summary>
     /// 进度条
@@ -16,7 +17,9 @@ public class LoadSceneProgressUI : ISingleton<LoadSceneProgressUI>
     /// 进度值
     /// </summary>
     private Text progressText;
-
+    /// <summary>
+    /// CanvasGroup
+    /// </summary>
     private CanvasGroup canvasGroup;
 
     /// <summary>
@@ -40,10 +43,8 @@ public class LoadSceneProgressUI : ISingleton<LoadSceneProgressUI>
     /// </summary>
     public  UnityAction OnProgressStart;
 
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
-
         progressSlider = transform.Find("Slider").GetComponent<Slider>();
         progressText = progressSlider.transform.Find("Progress").GetComponent<Text>();
         canvasGroup = transform.parent.GetComponent<CanvasGroup>();
@@ -66,7 +67,7 @@ public class LoadSceneProgressUI : ISingleton<LoadSceneProgressUI>
     }
 
     /// <summary>
-    /// 进度条结束
+    /// 进度条开始
     /// </summary>
     /// <exception cref="NotImplementedException"></exception>
     private void LoadSceneProgressUI_OnProgressStart()
@@ -74,13 +75,15 @@ public class LoadSceneProgressUI : ISingleton<LoadSceneProgressUI>
         isOver = false;
         timeCount = AlphaTime;
         canvasGroup.alpha = 1;
+        progressSlider.value = 0;
+        progressText.text = "0%";
     }
 
     private void Update()
     {
         if(timeCount > 0 && isOver)
         {
-            canvasGroup.alpha -= Time.deltaTime;
+            canvasGroup.alpha -= (Time.deltaTime / timeCount);
             timeCount -= Time.deltaTime;
         }
     }

@@ -51,8 +51,8 @@ public class PauseUI : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Escape) && !SceneManager.GetActiveScene().name.Equals("Menu"))
         {
-            bg.SetActive(true);
-            Time.timeScale = 0;
+            bg.SetActive(!bg.activeSelf);
+            Time.timeScale = bg.activeSelf ? 0 : 1;
         }
     }
 
@@ -71,8 +71,7 @@ public class PauseUI : MonoBehaviour
     private void OnReturnMenuBtnClick()
     {
         bg.SetActive(false);
-        //ScenesManager.Instance.LoadScene("Main");
-        StartCoroutine(LoadSceneBySceneName("Menu"));
+        ScenesManager.Instance.LoadScene("Menu");
         Time.timeScale = 1;
     }
 
@@ -86,13 +85,5 @@ public class PauseUI : MonoBehaviour
 #else
         Application.Quit();
 #endif
-    }
-
-    IEnumerator LoadSceneBySceneName(string sceneName)
-    {
-        if (!SceneManager.GetActiveScene().name.Equals(sceneName))
-        {
-            yield return SceneManager.LoadSceneAsync(sceneName);
-        }
     }
 }

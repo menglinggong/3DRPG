@@ -10,8 +10,21 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class ScenesManager : ISingleton<ScenesManager>
 {
+    /// <summary>
+    /// 加载场景时进度条界面
+    /// </summary>
+    public LoadSceneProgressUI LoadSceneView;
+    /// <summary>
+    /// 玩家预制体
+    /// </summary>
     public GameObject PlayerPrefab;
+    /// <summary>
+    /// 玩家对象
+    /// </summary>
     private GameObject player;
+    /// <summary>
+    /// 玩家的导航网格
+    /// </summary>
     private NavMeshAgent playerAgent;
 
     protected override void Awake()
@@ -65,11 +78,10 @@ public class ScenesManager : ISingleton<ScenesManager>
         }
         else
         {
-            ////TODO:保存玩家数据
-            //SaveDataManager.Instance.SavePlayerData();
             //异场景传送，加载场景，创建玩家到指定位置
             //TODO:添加加载场景进度条
-            yield return SceneManager.LoadSceneAsync(sceneName);
+            yield return StartCoroutine(LoadSceneBySceneName(sceneName));
+            //yield return SceneManager.LoadSceneAsync(sceneName);
             //AsyncOperation async;
             //async.progress
             var endPoint = PortalManager.Instance.GetTransitionDestinationByType(destinationType);
@@ -90,31 +102,42 @@ public class ScenesManager : ISingleton<ScenesManager>
 
     IEnumerator LoadSceneBySceneName(string sceneName)
     {
-        //LoadSceneProgressUI.Instance.OnProgressStart.Invoke();
-        //if(!SceneManager.GetActiveScene().name.Equals(sceneName))
-        //{
-        //    AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
-        //    operation.allowSceneActivation = true;
-        //    //while (!operation.isDone)
-        //    //{
-        //    //    Debug.Log(operation.progress);
-        //    //    //LoadSceneProgressUI.Instance.OnProgressChanged.Invoke(operation.progress);
-        //    //}
-
-        //    while (operation.progress < 0.9f)
-        //    {
-        //        //Debug.Log(operation.progress);
-        //        LoadSceneProgressUI.Instance.OnProgressChanged.Invoke(operation.progress);
-        //    }
-        //    LoadSceneProgressUI.Instance.OnProgressDone.Invoke();
-        //    yield return null;
-        //    Time.timeScale = 1;
-        //}
-
+        float progress = 0;
+        LoadSceneView.OnProgressStart.Invoke();
         if (!SceneManager.GetActiveScene().name.Equals(sceneName))
         {
-            yield return SceneManager.LoadSceneAsync(sceneName);
-        }
+            AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
+            operation.allowSceneActivation = true;
+
+            //实际加载进度
+            //while (operation.progress < 0.9f)
+            //{
+            //    Debug.Log(operation.progress);
+            //    LoadSceneViewe.OnProgressChanged.Invoke(operation.progress);
+            //}
+
+            //不使用实际加载进度，太快看不见
+            yield return new WaitForSeconds(1);
             
+            while (progress < 1)
+            {
+                if(operation.progress < 0.9f)
+                    progress += 0.1f;
+                else
+                    progress += 0.05f;
+
+                LoadSceneView.OnProgressChanged.Invoke(progress);
+            }
+            //让进度条维持在100持续1秒
+            yield return new WaitForSeconds(1);
+            LoadSceneView.OnProgressDone.Invoke();
+            yield return null;
+        }
+
+        //if (!SceneManager.GetActiveScene().name.Equals(sceneName))
+        //{
+        //    yield return SceneManager.LoadSceneAsync(sceneName);
+        //}
+
     }
 }
