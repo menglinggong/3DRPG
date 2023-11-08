@@ -42,6 +42,9 @@ public class MouseManager : ISingleton<MouseManager>
     /// </summary>
     private void SetCursorTexture()
     {
+        if (Camera.main == null)
+            return;
+
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out hitInfo))

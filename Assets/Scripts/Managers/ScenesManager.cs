@@ -14,6 +14,12 @@ public class ScenesManager : ISingleton<ScenesManager>
     private GameObject player;
     private NavMeshAgent playerAgent;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        LoadScene("Menu");
+    }
+
     /// <summary>
     /// ´«ËÍ
     /// </summary>
@@ -108,7 +114,6 @@ public class ScenesManager : ISingleton<ScenesManager>
         if (!SceneManager.GetActiveScene().name.Equals(sceneName))
         {
             yield return SceneManager.LoadSceneAsync(sceneName);
-            Time.timeScale = 1;
         }
             
     }
