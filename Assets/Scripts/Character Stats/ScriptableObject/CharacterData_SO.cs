@@ -82,8 +82,12 @@ public class CharacterData_SO : ScriptableObject
     {
         CurrentExp += point;
 
-        if (CurrentExp >= BaseExp)
+        if (BaseExp == 0)
+            return;
+
+        while (CurrentExp >= BaseExp)
         {
+            CurrentExp = CurrentExp - BaseExp;
             LevelUp();
         }
     }
@@ -93,12 +97,9 @@ public class CharacterData_SO : ScriptableObject
     /// </summary>
     private void LevelUp()
     {
-        //TODO:解决若击杀后经验值依然高于升级所需经验值，未继续升级的问题
         CurrentLevel = Mathf.Clamp(CurrentLevel + 1, 0, MaxLevel);
 
-        Debug.Log($"当前等级：{CurrentLevel}");
         //修改当前经验与下一级所需经验
-        //CurrentExp = CurrentExp - BaseExp;
         BaseExp = (int)(BaseExp * LevelMultiplier);
 
         MaxHealth = MaxHealth * LevelMultiplier;
@@ -106,7 +107,6 @@ public class CharacterData_SO : ScriptableObject
 
         BaseDefence = BaseDefence * LevelMultiplier;
         CurrentDefence = BaseDefence;
-
     }
 
     /// <summary>

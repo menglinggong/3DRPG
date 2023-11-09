@@ -19,12 +19,6 @@ namespace AI.FSM
             base.OnEnterState(fsmBase);
             fsmBase.EnemyController.Win();
         }
-
-        public override void OnStayState(FSMBase fsmBase)
-        {
-            base.OnStayState(fsmBase);
-            fsmBase.EnemyController.Win();
-        }
     }
 }
 
