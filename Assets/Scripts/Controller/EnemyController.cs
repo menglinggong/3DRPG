@@ -40,16 +40,6 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     #region 敌人的基本参数
 
     /// <summary>
-    /// 敌人状态
-    /// </summary>
-    private EnemyStates enemy_State;
-
-    /// <summary>
-    /// 敌人追击的初始速度
-    /// </summary>
-    private float speed;
-
-    /// <summary>
     /// 攻击目标
     /// </summary>
     protected GameObject attackTarget;
@@ -112,10 +102,32 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
 
     #endregion
 
+    #region 属性
+
     /// <summary>
     /// 玩家是否死亡
     /// </summary>
     private bool isPlayerDie = false;
+
+    /// <summary>
+    /// 敌人追击的初始速度
+    /// </summary>
+    private float speed;
+
+    public CharacterStats CharacterStats
+    {
+        get { return characterStats; }
+    }
+
+    public bool IsPlayerDie
+    {
+        get
+        {
+            return isPlayerDie;
+        }
+    }
+
+    #endregion
 
     private void Awake()
     {
@@ -125,25 +137,20 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
         
         collider = this.GetComponent<Collider>();
         speed = agent.speed;
+
+        //设置敌人初始位置与巡逻位置
+        enemyStartPoint = this.transform.position;
+        enemyStartQuaternion = this.transform.rotation;
     }
 
     private void Start()
     {
-        enemy_State = IsGuard ? EnemyStates.GUARD : EnemyStates.PATROL;
-        //设置敌人初始位置与巡逻位置
-        enemyStartPoint = this.transform.position;
-        enemyStartQuaternion = this.transform.rotation;
         GetNewWayPoint();
 
         GameManager.Instance.AddEndGameObserver(this);
 
         characterStats.CurrentHealth = characterStats.MaxHealth;
     }
-
-    //private void OnEnable()
-    //{
-    //    GameManager.Instance.AddEndGameObserver(this);
-    //}
 
     private void OnDisable()
     {
@@ -162,7 +169,6 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
         if (isPlayerDie)
             return;
 
-        SwitchEnemyState();
         SwitchAnimation();
     }
 
@@ -177,181 +183,10 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     }
 
     /// <summary>
-    /// 切换敌人的状态
-    /// </summary>
-    void SwitchEnemyState()
-    {
-        if (characterStats.CurrentHealth <= 0)
-        {
-            enemy_State = EnemyStates.DEAD;
-        }
-
-        bool isFoundPlayer = FoundPlayer();
-
-        switch (enemy_State)
-        {
-            case EnemyStates.GUARD:
-
-                isChase = false;
-                //设置守卫时，敌人的速度为追击时的一半，使用乘法的消耗比除法小
-                agent.speed = speed * 0.5f;
-
-                if (isFoundPlayer)
-                {
-                    enemy_State = EnemyStates.CHASE;
-                }
-                else
-                {
-                    //如果当前位置不是初始位置，则回到初始位置，此方法与Vector3.Distance作用一样，但开销更小
-                    if (Vector3.SqrMagnitude(transform.position - enemyStartPoint) > agent.stoppingDistance)
-                    {
-                        isWalk = true;
-                        
-                        //如果四处张望的时间到了
-                        if (remainLookAroundTime <= 0)
-                        {
-                            agent.isStopped = false;
-                            agent.destination = enemyStartPoint;
-                            remainLookAroundTime = LookAroundTime;
-
-                        }
-                        else
-                        {
-                            //敌人四处看看，同时计时
-                            remainLookAroundTime -= Time.deltaTime;
-                        }
-                    }
-                    else
-                    {
-                        isWalk = false;
-                        
-                        if(this.transform.rotation != enemyStartQuaternion)
-                        {
-                            if (remainLookAroundTime <= 0)
-                            {
-                                //回到初始朝向
-                                this.transform.rotation = Quaternion.Lerp(this.transform.rotation, enemyStartQuaternion, 1f);
-                                remainLookAroundTime = LookAroundTime;
-                            }
-                            else
-                            {
-                                //敌人四处看看，同时计时
-                                remainLookAroundTime -= Time.deltaTime;
-                            }
-
-                            
-                        }
-                    }
-                }
-
-                break;
-            case EnemyStates.PATROL:
-
-                isChase = false;
-                //设置巡逻时，敌人的速度为追击时的一半
-                agent.speed = speed * 0.5f;
-
-                if (isFoundPlayer)
-                {
-                    enemy_State = EnemyStates.CHASE;
-                }
-                else
-                {
-                    //到巡逻点
-                    if (Vector3.Distance(transform.position, wayPoint) <= agent.stoppingDistance)
-                    {
-                        isWalk = false;
-
-                        //如果四处张望的时间到了
-                        if(remainLookAroundTime <= 0)
-                        {
-                            //获取下一个巡逻点
-                            GetNewWayPoint();
-                            
-                        }
-                        else
-                        {
-                            //敌人四处看看，同时计时
-                            remainLookAroundTime -= Time.deltaTime;
-                        }
-                    }
-                    else
-                    {
-                        //移动到巡逻点
-                        isWalk = true;
-                        agent.isStopped = false;
-                        agent.destination = wayPoint;
-                    }
-                }
-
-                break;
-            case EnemyStates.CHASE:
-
-                //追击玩家
-                isWalk = false;
-                isChase = true;
-                //设置追击时，敌人的速度正常
-                agent.speed = speed;
-
-                if (!isFoundPlayer)
-                {
-                    isFollow = false;
-
-                    if(remainLookAroundTime > 0)
-                    {
-                        //丢失目标，立刻停止移动，如果四处张望的计时未结束，等待四处张望
-                        agent.destination = transform.position;
-                        remainLookAroundTime -= Time.deltaTime;
-                    }
-                    else
-                    {
-                        //张望结束，回到上个状态
-                        enemy_State = IsGuard ? EnemyStates.GUARD : EnemyStates.PATROL;
-                    }
-                }
-                else
-                {
-                    //在攻击范围内则攻击
-                    if(TargetInAttackRange() || TargetInSkillRange())
-                    {
-                        isFollow = false;
-                        agent.isStopped = true;
-
-                        if(lastAttackTime <= 0)
-                        {
-                            //攻击
-                            Attack();
-                        }
-                    }
-                    else
-                    {
-                        //发现玩家，追击
-                        isFollow = true;
-                        agent.isStopped = false;
-                        agent.destination = attackTarget.transform.position;
-                    }
-                }
-
-                break;
-            case EnemyStates.DEAD:
-
-                agent.enabled = false;
-                collider.enabled = false;
-
-                isDie = true;
-                //播放死亡动画
-                animator.SetTrigger("Die");
-                //销毁该物体
-                Destroy(gameObject, 2f);
-                break;
-        }
-    }
-
-    /// <summary>
     /// 在搜寻半径内搜索玩家
     /// </summary>
     /// <returns></returns>
-    private bool FoundPlayer()
+    public bool FoundPlayer()
     {
         //使用Physics.OverlapSphere方法，原理就是以敌人位置为原点，构建一个半径为搜寻值的球体，判断球体内的所有碰撞体是否有玩家
         //注意：使用layer限制时，写法为1<<LayerMask.NameToLayer("Player")，表示只检测层级为Player的碰撞体
@@ -477,25 +312,160 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     public void EndNotify()
     {
         isPlayerDie = true;
+        //animator.SetBool("Win", true);
+        //isWalk = false;
+        //isChase = false;
+        //isFollow = false;
+        //attackTarget = null;
+    }
+
+    #region 不同状态下执行的方法
+
+    /// <summary>
+    /// 巡逻方法
+    /// </summary>
+    public void Patrol()
+    {
+        isChase = false;
+        //设置巡逻时，敌人的速度为追击时的一半
+        agent.speed = speed * 0.5f;
+
+        //到巡逻点
+        if (Vector3.Distance(transform.position, wayPoint) <= agent.stoppingDistance)
+        {
+            isWalk = false;
+
+            //如果四处张望的时间到了
+            if (remainLookAroundTime <= 0)
+            {
+                //获取下一个巡逻点
+                GetNewWayPoint();
+
+            }
+            else
+            {
+                //敌人四处看看，同时计时
+                remainLookAroundTime -= Time.deltaTime;
+            }
+        }
+        else
+        {
+            //移动到巡逻点
+            isWalk = true;
+            agent.isStopped = false;
+            agent.destination = wayPoint;
+        }
+    }
+
+    /// <summary>
+    /// 守卫方法
+    /// </summary>
+    public void Guard()
+    {
+        isChase = false;
+        //设置守卫时，敌人的速度为追击时的一半，使用乘法的消耗比除法小
+        agent.speed = speed * 0.5f;
+
+        //如果当前位置不是初始位置，则回到初始位置，此方法与Vector3.Distance作用一样，但开销更小
+        if (Vector3.SqrMagnitude(transform.position - enemyStartPoint) > agent.stoppingDistance)
+        {
+            isWalk = true;
+
+            //如果四处张望的时间到了
+            if (remainLookAroundTime <= 0)
+            {
+                agent.isStopped = false;
+                agent.destination = enemyStartPoint;
+                remainLookAroundTime = LookAroundTime;
+
+            }
+            else
+            {
+                //敌人四处看看，同时计时
+                remainLookAroundTime -= Time.deltaTime;
+            }
+        }
+        else
+        {
+            isWalk = false;
+
+            if (this.transform.rotation != enemyStartQuaternion)
+            {
+                if (remainLookAroundTime <= 0)
+                {
+                    //回到初始朝向
+                    this.transform.rotation = Quaternion.Lerp(this.transform.rotation, enemyStartQuaternion, 1f);
+                    remainLookAroundTime = LookAroundTime;
+                }
+                else
+                {
+                    //敌人四处看看，同时计时
+                    remainLookAroundTime -= Time.deltaTime;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 死亡
+    /// </summary>
+    public void Dead()
+    {
+        agent.enabled = false;
+        collider.enabled = false;
+
+        isDie = true;
+        //播放死亡动画
+        animator.SetTrigger("Die");
+        //销毁该物体
+        Destroy(gameObject, 2f);
+    }
+
+    /// <summary>
+    /// 追击
+    /// </summary>
+    public void Chase()
+    {
+        //追击玩家
+        isWalk = false;
+        isChase = true;
+        //设置追击时，敌人的速度正常
+        agent.speed = speed;
+
+        //发现玩家，追击
+        isFollow = true;
+        agent.isStopped = false;
+        agent.destination = attackTarget.transform.position;
+        
+    }
+
+    /// <summary>
+    /// 攻击
+    /// </summary>
+    public void AttackState()
+    {
+        isFollow = false;
+        agent.isStopped = true;
+
+        if (lastAttackTime <= 0)
+        {
+            //攻击
+            Attack();
+        }
+    }
+
+    /// <summary>
+    /// 胜利
+    /// </summary>
+    public void Win()
+    {
         animator.SetBool("Win", true);
         isWalk = false;
         isChase = false;
         isFollow = false;
         attackTarget = null;
     }
+
+    #endregion
 }
 
-/// <summary>
-/// 敌人状态
-/// </summary>
-public enum EnemyStates
-{
-    //站桩/守卫（不会自己巡逻）
-    GUARD,
-    //巡逻
-    PATROL,
-    //追击
-    CHASE,
-    //死亡
-    DEAD
-}

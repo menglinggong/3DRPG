@@ -198,6 +198,7 @@ GameObject:
   - component: {fileID: 1726337899391362636}
   - component: {fileID: 1726337899391362637}
   - component: {fileID: 1255144392143269025}
+  - component: {fileID: -6040968190241936846}
   m_Layer: 7
   m_Name: GruntPBR
   m_TagString: Enemy
@@ -327,6 +328,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HealthBarPrefab: {fileID: 5810146897425888496, guid: 05ba2e49d1e9335479fe30b852016aa5, type: 3}
+  IsAlwaysVisble: 0
+  VisbleTime: 3
+--- !u!114 &-6040968190241936846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1726337899391362635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bfe01f710f896b45b038406d0f33ea1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultStateID: 2
+  FileName: Enemy_Patrol.txt
 --- !u!1 &1920076667414511652
 GameObject:
   m_ObjectHideFlags: 0

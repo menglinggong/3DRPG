@@ -1,0 +1,17 @@
+[Patrol]
+SawTarget>Chase
+NoHealth>Dead
+ReachTarget>Attack
+KilledTarget>Win
+[Chase]
+KilledTarget>Win
+NoHealth>Dead
+LoseTarget>Patrol
+ReachTarget>Attack
+[Attack]
+WithoutAttackRange>Chase
+NoHealth>Dead
+KilledTarget>Win
+LoseTarget>Patrol
+[Dead]
+[Win]

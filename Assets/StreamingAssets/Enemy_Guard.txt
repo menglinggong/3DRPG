@@ -1,0 +1,17 @@
+[Guard]
+SawTarget>Chase
+NoHealth>Dead
+ReachTarget>Attack
+KilledTarget>Win
+[Chase]
+KilledTarget>Win
+NoHealth>Dead
+LoseTarget>Guard
+ReachTarget>Attack
+[Attack]
+WithoutAttackRange>Chase
+NoHealth>Dead
+KilledTarget>Win
+LoseTarget>Guard
+[Dead]
+[Win]
