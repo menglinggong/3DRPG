@@ -253,15 +253,6 @@ public class CharacterStats : MonoBehaviour
             //暴击且目标未防御，播放目标的受到伤害动画
             target.GetComponent<Animator>().SetTrigger("GetHurt");
         }
-
-        //杀怪后增加经验
-        if (target.CurrentHealth <= 0)
-        {
-            attacker.CharacterData.UpdateExp(target.CharacterData.KillPoint);
-            //发送消息，设置攻击者的经验条
-            EventManager.Instance.Invoke(MessageConst.UpdateExp, attacker);
-        }
-
     }
 
     /// <summary>
@@ -277,12 +268,6 @@ public class CharacterStats : MonoBehaviour
         target.CharacterData.GetHurt(damage);
         //发送消息
         EventManager.Instance.Invoke(MessageConst.UpdateHealth, target);
-
-        if (target.CurrentHealth <= 0)
-        {
-            this.CharacterData.UpdateExp(target.CharacterData.KillPoint);
-            EventManager.Instance.Invoke(MessageConst.UpdateExp, this);
-        }
     }
 
     /// <summary>
@@ -300,6 +285,17 @@ public class CharacterStats : MonoBehaviour
         }
 
         return realDamage;
+    }
+
+    /// <summary>
+    /// 更新经验值
+    /// </summary>
+    /// <param name="exp"></param>
+    public void UpdateExp(int exp)
+    {
+        this.CharacterData.UpdateExp(exp);
+        //发送消息，设置攻击者的经验条
+        EventManager.Instance.Invoke(MessageConst.UpdateExp, this);
     }
 
     #endregion

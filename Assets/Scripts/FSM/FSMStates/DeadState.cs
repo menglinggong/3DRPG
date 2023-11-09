@@ -25,6 +25,7 @@ namespace AI.FSM
 
             //禁用状态机，以免状态机的updata一直运行，然后某种条件满足出现意外情况
             fsmBase.EnemyController.Dead();
+            GameManager.Instance.PlayerStats.UpdateExp(fsmBase.EnemyController.CharacterStats.CharacterData.KillPoint);
             fsmBase.enabled = false;
         }
     }

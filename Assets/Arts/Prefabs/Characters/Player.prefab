@@ -373,6 +373,8 @@ GameObject:
   - component: {fileID: 4556465230370854836}
   - component: {fileID: 1116373243232546963}
   - component: {fileID: 1116373243232546925}
+  - component: {fileID: 1266558703848483017}
+  - component: {fileID: 1351465151549586492}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -503,6 +505,87 @@ MonoBehaviour:
   IsCritical: 0
   Defence: 50
   IsDefence: 0
+--- !u!114 &1266558703848483017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1116373243232546962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47443b16d52c3394690942efb808cd01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillDatas:
+  - skillID: 0
+    name: "\u666E\u901A\u653B\u51FB"
+    description: "\u666E\u901A\u653B\u51FB"
+    coolTime: 2
+    coolRemain: 0
+    costSP: 0
+    attackDistance: 1.5
+    attackAngle: 45
+    attackTargetTags:
+    - Enemy
+    - AttackAble
+    attackTargets: []
+    impactype:
+    - Damage
+    nextBatterID: 0
+    atkRatio: 6
+    durationTime: 0.2
+    atkInterval: 0
+    owner: {fileID: 0}
+    prefabName: MeleeSkillDeployer
+    skillPrefab: {fileID: 0}
+    animationName: Attack
+    isTrigger: 1
+    hitFxName: 
+    hitFxPrefab: {fileID: 0}
+    level: 1
+    attackType: 1
+    selectorType: 0
+  - skillID: 1
+    name: "\u6A2A\u626B"
+    description: "\u6A2A\u626B"
+    coolTime: 2
+    coolRemain: 0
+    costSP: 0
+    attackDistance: 1.5
+    attackAngle: 180
+    attackTargetTags:
+    - Enemy
+    - AttackAble
+    attackTargets: []
+    impactype:
+    - Damage
+    nextBatterID: 0
+    atkRatio: 6
+    durationTime: 0.2
+    atkInterval: 0
+    owner: {fileID: 0}
+    prefabName: MeleeSkillDeployer
+    skillPrefab: {fileID: 0}
+    animationName: CriticalAttack
+    isTrigger: 1
+    hitFxName: 
+    hitFxPrefab: {fileID: 0}
+    level: 1
+    attackType: 1
+    selectorType: 0
+--- !u!114 &1351465151549586492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1116373243232546962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93616ef0371a6684c8c719be68a53155, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1116373243232546964
 GameObject:
   m_ObjectHideFlags: 0

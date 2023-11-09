@@ -30,6 +30,11 @@ public class CharacterData_SO : ScriptableObject
     /// </summary>
     public float CurrentDefence;
 
+    /// <summary>
+    /// 拥有的蓝量
+    /// </summary>
+    public float SP;
+
     [Header("等级")]
     /// <summary>
     /// 当前等级
@@ -116,5 +121,15 @@ public class CharacterData_SO : ScriptableObject
     public void GetHurt(float damage)
     {
         this.CurrentHealth = Mathf.Max(this.CurrentHealth - damage, 0);
+        Debug.Log("GetHurt + " + CurrentHealth);
+    }
+
+    /// <summary>
+    /// 减少SP
+    /// </summary>
+    /// <param name="value"></param>
+    public void ExpendSP(float value)
+    {
+        SP -= value;
     }
 }

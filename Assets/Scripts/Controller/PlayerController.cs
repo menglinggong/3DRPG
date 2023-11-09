@@ -1,3 +1,4 @@
+using RPG.Skill;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -30,6 +31,11 @@ public class PlayerController : MonoBehaviour
     /// 盾牌，防御状态下显示
     /// </summary>
     private GameObject defenceShield;
+
+    /// <summary>
+    /// 玩家的技能系统
+    /// </summary>
+    private CharacterSkillSystem characterSkillSystem;
 
     #endregion
 
@@ -67,6 +73,7 @@ public class PlayerController : MonoBehaviour
         agent = this.GetComponent<NavMeshAgent>();
         animator = this.GetComponent<Animator>();
         characterStats = this.GetComponent<CharacterStats>();
+        characterSkillSystem = this.GetComponent<CharacterSkillSystem>();
 
         defenceShield = this.transform.Find("Defence").gameObject;
         GameManager.Instance.RigisterPlayer(characterStats);
@@ -119,6 +126,12 @@ public class PlayerController : MonoBehaviour
 
             MouseManager.Instance.OnMouseClicked -= MoveToTargetPos;
             MouseManager.Instance.OnEnemyClicked -= EventAttack;
+        }
+
+        //测试按Q放技能
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            characterSkillSystem.AttackUseSkill(1, false);
         }
 
         Defence();
@@ -210,28 +223,21 @@ public class PlayerController : MonoBehaviour
         //1.使玩家不可移动
         agent.isStopped = true;
         //2.计算攻击间隔时间
-        if(lastAttackTime <= 0)
+        if (lastAttackTime <= 0)
         {
             Attack();
         }
     }
 
     /// <summary>
-    /// 攻击
+    /// 普通攻击
     /// </summary>
     private void Attack()
     {
-        //判断是否暴击，Random.value的值是0~1的随机值
-        characterStats.IsCritical = UnityEngine.Random.value <= characterStats.CriticalChance;
-
-        transform.LookAt(attackTarget.transform);
-
-        //若暴击了则播放暴击动画，否则播放普通攻击动画
-        animator.SetBool("CriticalAttack", characterStats.IsCritical);
-        animator.SetTrigger("Attack");
-
-        //重置计时
-        lastAttackTime = characterStats.CoolDown;
+        //TODO:解决使用技能系统进行普通攻击时，无法计算攻击冷却的问题
+        //使用技能系统进行普通攻击
+        lastAttackTime = characterStats.AttackData.CoolDown;
+        characterSkillSystem.AttackUseSkill(0, false);
     }
 
     /// <summary>
@@ -239,12 +245,13 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void Hit()
     {
+        //TODO:动画事件使用技能系统的方法
         if (attackTarget == null) return;
 
         if (attackTarget.CompareTag("AttackAble"))
         {
             Rock rock = attackTarget.GetComponent<Rock>();
-            if(rock != null)
+            if (rock != null)
             {
                 rock.GetComponent<Rigidbody>().velocity = Vector3.one;
                 rock.rockState = RockStates.HitEnemy;
@@ -259,7 +266,5 @@ public class PlayerController : MonoBehaviour
             CharacterStats targetStats = attackTarget.GetComponent<CharacterStats>();
             targetStats.TakeDamage(characterStats, targetStats);
         }
-
-        
     }
 }
