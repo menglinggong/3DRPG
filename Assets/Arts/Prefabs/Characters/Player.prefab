@@ -411,7 +411,7 @@ Animator:
   m_GameObject: {fileID: 1116373243232546962}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: d9a1483b77bf10e4e851678ab6c2e54e, type: 3}
-  m_Controller: {fileID: 9100000, guid: c66dd5e8836550d4f9e0beeeb113bedc, type: 2}
+  m_Controller: {fileID: 9100000, guid: 3be0f516935fa1b4d8ac34515906a046, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -529,10 +529,10 @@ MonoBehaviour:
     - Enemy
     - AttackAble
     attackTargets: []
-    impactype:
-    - Damage
+    impactypes:
+    - name: Damage
+      value: 10
     nextBatterID: 0
-    atkRatio: 6
     durationTime: 0.2
     atkInterval: 0
     owner: {fileID: 0}

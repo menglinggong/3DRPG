@@ -63,10 +63,18 @@ namespace RPG.Skill
                 attackStats.CalculateCritical(attackStats);
                 float damage = attackStats.CalculateDamage(skillData.owner.GetComponent<CharacterStats>(), targetStats);
 
+                //加上技能的基础伤害
+                var data = skillData.GetImpactypeByName("Damage");
+                if (data != null)
+                    damage += data.value;
+
                 targetStats.CharacterData.GetHurt(damage);
 
                 //发送消息，更新敌人血条
-                EventManager.Instance.Invoke(MessageConst.UpdateHealth, target.GetComponent<EnemyController>().CharacterStats);
+                if(target.GetComponent<EnemyController>() != null)
+                    EventManager.Instance.Invoke(MessageConst.UpdateHealth, target.GetComponent<EnemyController>().CharacterStats);
+                else if (target.GetComponent<PlayerController>() != null)
+                    EventManager.Instance.Invoke(MessageConst.UpdateHealth, target.GetComponent<PlayerController>().CharacterStats);
             }
 
             //创建攻击特效

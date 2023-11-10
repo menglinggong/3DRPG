@@ -68,6 +68,15 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
+    #region  Ù–‘
+
+    public CharacterStats CharacterStats
+    {
+        get { return characterStats; }
+    }
+
+    #endregion
+
     private void Awake()
     {
         agent = this.GetComponent<NavMeshAgent>();

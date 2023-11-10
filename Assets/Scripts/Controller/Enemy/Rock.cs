@@ -58,7 +58,6 @@ public class Rock : MonoBehaviour
     /// <summary>
     /// 石头的伤害值，会根据是石头人打击还是玩家反击变更
     /// </summary>
-    [HideInInspector]
     public float RockDamage;
 
     private void Start()
@@ -121,6 +120,8 @@ public class Rock : MonoBehaviour
                     CharacterStats targetStats = collision.gameObject.GetComponent<CharacterStats>();
                     targetStats.TakeDamage(this.RockDamage, targetStats);
                     rockState = RockStates.HitNothing;
+
+                    Destroy(this.gameObject);
                 }
 
                 break;

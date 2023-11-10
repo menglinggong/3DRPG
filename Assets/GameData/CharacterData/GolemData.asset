@@ -28,7 +28,7 @@ MonoBehaviour:
   MaxSP: 0
   ModerateResistance: 0
   DominateResistance: 0
-  AttackRange: 5
+  AttackRange: 7
   CurrentLevel: 0
   MaxLevel: 0
   BaseExp: 0

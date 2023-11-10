@@ -8,35 +8,5 @@ using UnityEngine.AI;
 /// </summary>
 public class Grunt : EnemyController
 {
-    /// <summary>
-    /// 推的力
-    /// </summary>
-    [Header("技能")]
-    public float KickForce = 10;
-
-    /// <summary>
-    /// 推玩家
-    /// </summary>
-    public void KickOff()
-    {
-        if (TargetInAttackRange() && transform.IsFacingTarget(attackTarget.transform))
-        {
-            //转向玩家
-            if (turnRoundCoroutine != null)
-                StopCoroutine(turnRoundCoroutine);
-
-            turnRoundCoroutine = StartCoroutine(transform.TurnRound(attackTarget.transform.position, characterStats.CharacterData.TurnRoundSpeed));
-
-            Vector3 dir = (attackTarget.transform.position - this.transform.position).normalized;
-
-            //击退玩家
-            NavMeshAgent targetAgent = attackTarget.GetComponent<NavMeshAgent>();
-            targetAgent.isStopped = true;
-            targetAgent.velocity = dir * KickForce;
-
-            //播放玩家眩晕动画
-            if (!attackTarget.GetComponent<CharacterStats>().IsDefence)
-                attackTarget.GetComponent<Animator>().SetTrigger("Dizzy");
-        }
-    }
+    
 }

@@ -1,3 +1,4 @@
+using RPG.Skill;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -34,6 +35,16 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     /// 敌人的碰撞器
     /// </summary>
     private Collider collider;
+
+    /// <summary>
+    /// 技能管理器
+    /// </summary>
+    private CharacterSkillManager characterSkillManager;
+
+    /// <summary>
+    /// 技能系统
+    /// </summary>
+    private CharacterSkillSystem characterSkillSystem;
 
     #endregion
 
@@ -95,9 +106,9 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
 
     #region 动画的参数
 
-    bool isWalk;
-    bool isChase;
-    bool isFollow;
+    bool isWalk = false;
+    bool isChase = false;
+    bool isFollow = false;
     bool isDie = false;
 
     #endregion
@@ -136,6 +147,8 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
         agent = this.GetComponent<NavMeshAgent>();
         animator = this.GetComponent<Animator>();
         characterStats = this.GetComponent<CharacterStats>();
+        characterSkillManager = this.GetComponent<CharacterSkillManager>();
+        characterSkillSystem = this.GetComponent<CharacterSkillSystem>();
         
         collider = this.GetComponent<Collider>();
         speed = agent.speed;
@@ -150,6 +163,7 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
         agent.speed = characterStats.CharacterData.MoveSpeed;
         GetNewWayPoint();
 
+        agent.stoppingDistance = characterStats.CharacterData.AttackRange;
         GameManager.Instance.AddEndGameObserver(this);
 
         characterStats.CharacterData.CurrentHealth = characterStats.CharacterData.MaxHealth;
@@ -196,12 +210,11 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
         //Collider[] colliders = Physics.OverlapSphere(transform.position, SightRadius, 1<<LayerMask.NameToLayer("Player"));
         Collider[] colliders = Physics.OverlapSphere(transform.position, SightRadius);
         //先将目标制空
-        attackTarget = null;
-
+        
         //if (colliders == null || colliders.Length == 0)
         //    return false;
 
-        foreach(Collider collider in colliders)
+        foreach (Collider collider in colliders)
         {
             if(collider.CompareTag("Player"))
             {
@@ -209,6 +222,7 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
                 return true;
             }
         }
+        attackTarget = null;
         return false;
 
         ////若找到玩家，则给攻击目标赋值
@@ -255,11 +269,6 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
             animator.SetTrigger("Attack");
         }
 
-        if(TargetInSkillRange())
-        {
-            animator.SetTrigger("Skill");
-        }
-       
         //重置计时
         lastAttackTime = 1f / characterStats.CharacterData.AttackSpeed;
     }
@@ -284,7 +293,9 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     public bool TargetInAttackRange()
     {
         if (attackTarget != null)
+        {
             return Vector3.Distance(attackTarget.transform.position, this.transform.position) <= characterStats.CharacterData.AttackRange;
+        }
 
         return false;
     }
@@ -295,9 +306,14 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     /// <returns></returns>
     public bool TargetInSkillRange()
     {
-        //TODO:修改技能范围已经去掉，需要修改
-        if (attackTarget != null)
-            return Vector3.Distance(attackTarget.transform.position, this.transform.position) <= characterStats.CharacterData.AttackRange;
+        if (attackTarget == null || characterSkillManager == null || characterSkillManager.skillDatas == null)
+            return false;
+
+        foreach (var skill in characterSkillManager.skillDatas)
+        {
+            if (Vector3.Distance(attackTarget.transform.position, this.transform.position) <= skill.attackDistance)
+                return true;
+        }
 
         return false;
     }
@@ -454,7 +470,11 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
         isFollow = false;
         agent.isStopped = true;
 
-        if (lastAttackTime <= 0)
+        if (TargetInSkillRange())
+        {
+            characterSkillSystem.UseRandomSkill();
+        }
+        else if (lastAttackTime <= 0)
         {
             //攻击
             Attack();

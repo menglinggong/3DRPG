@@ -199,6 +199,8 @@ GameObject:
   - component: {fileID: 1726337899391362637}
   - component: {fileID: 1255144392143269025}
   - component: {fileID: -6040968190241936846}
+  - component: {fileID: 7586602914108114896}
+  - component: {fileID: 8737592515581551503}
   m_Layer: 7
   m_Name: GruntPBR
   m_TagString: Enemy
@@ -292,9 +294,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TemplateData: {fileID: 11400000, guid: faca90b1ac6fee14da25ba37d59b3717, type: 2}
-  TemplateAttackData: {fileID: 11400000, guid: 4c2db15507751f9449dbdc9118d89785, type: 2}
   CharacterData: {fileID: 0}
-  AttackData: {fileID: 0}
   IsCritical: 0
   Defence: 50
   IsDefence: 0
@@ -314,7 +314,6 @@ MonoBehaviour:
   IsGuard: 0
   PatrolRange: 8
   LookAroundTime: 4
-  KickForce: 15
 --- !u!114 &1255144392143269025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -344,6 +343,61 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultStateID: 2
   FileName: Enemy_Patrol.txt
+--- !u!114 &7586602914108114896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1726337899391362635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47443b16d52c3394690942efb808cd01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillDatas:
+  - skillID: 0
+    name: "\u51FB\u9000"
+    description: "\u51FB\u9000\u73A9\u5BB6"
+    coolTime: 4
+    coolRemain: 0
+    costSP: 0
+    attackDistance: 1.8
+    attackAngle: 45
+    IsInterruptMove: 1
+    attackTargetTags:
+    - Player
+    attackTargets: []
+    impactypes:
+    - name: Damage
+      value: 10
+    - name: Repel
+      value: 15
+    nextBatterID: 0
+    durationTime: 0
+    atkInterval: 0
+    owner: {fileID: 0}
+    prefabName: MeleeSkillDeployer
+    skillPrefab: {fileID: 0}
+    animationName: Skill
+    isTrigger: 1
+    hitFxName: 
+    hitFxPrefab: {fileID: 0}
+    level: 0
+    attackType: 0
+    selectorType: 0
+--- !u!114 &8737592515581551503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1726337899391362635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93616ef0371a6684c8c719be68a53155, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1920076667414511652
 GameObject:
   m_ObjectHideFlags: 0

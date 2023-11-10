@@ -131,4 +131,4 @@ MonoBehaviour:
   HitPlayerForce: 15
   Target: {fileID: 0}
   rockState: 0
-  RockDamage: 0
+  RockDamage: 10

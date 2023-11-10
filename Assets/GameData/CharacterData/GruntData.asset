@@ -21,14 +21,14 @@ MonoBehaviour:
   CoolDownReduction: 0
   CriticalChance: 0.1
   CriticalAddition: 1.2
-  AttackSpeed: 0.7
+  AttackSpeed: 0.5
   MaxHealth: 60
   CurrentHealth: 60
   CurrentSP: 0
   MaxSP: 0
   ModerateResistance: 0
   DominateResistance: 0
-  AttackRange: 2
+  AttackRange: 2.3
   CurrentLevel: 0
   MaxLevel: 0
   BaseExp: 0

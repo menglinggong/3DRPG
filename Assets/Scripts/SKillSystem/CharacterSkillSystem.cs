@@ -84,7 +84,16 @@ namespace RPG.Skill
             if (usableSkills.Count == 0) return;
 
             int index = Random.Range(0, usableSkills.Count);
-            AttackUseSkill(usableSkills[index].skillID);
+
+            //准备技能
+            skillData = skillManager.PrepareSkill(index);
+            if (skillData == null) return;
+
+            //释放技能时，判断是否中断移动
+            InterruptMove(skillData);
+            //是否中断攻击
+            InterruptAttack();
+            //AttackUseSkill(usableSkills[index].skillID);
         }
 
 
@@ -93,7 +102,7 @@ namespace RPG.Skill
         /// </summary>
         private void InterruptAttack()
         {
-            var info = animator.GetCurrentAnimatorStateInfo(0);
+            var info = animator.GetCurrentAnimatorStateInfo(1);
             if (info.IsName("Attack_Normal"))
             {
                 //普通攻击状态，释放技能会打断当前状态，普通攻击不会打断当前状态
@@ -104,7 +113,7 @@ namespace RPG.Skill
 
                 animator.Play("Locomotion");
             }
-            else if (info.IsName("Locomotion"))
+            else if (info.IsName("Base State") || info.IsName("IdleBattle") || info.IsName("RunFWD"))
             {
                 //非攻击状态，允许播放技能动画
                 if (skillData.isTrigger)

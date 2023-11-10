@@ -67,7 +67,7 @@ public class MouseManager : ISingleton<MouseManager>
                 //case "Point":
                 //    break;
                 default:
-                    Cursor.SetCursor(Arrow, new Vector2(16, 16), CursorMode.Auto);
+                    Cursor.SetCursor(Arrow, Vector2.zero, CursorMode.Auto);
                     break;
             }
         }

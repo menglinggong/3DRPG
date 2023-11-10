@@ -51,9 +51,9 @@ namespace RPG.Skill
             //例如蓝量的影响：RPG.Skill.CostSPImpactEffect
             List<IImpactEffect> impactEffects = new List<IImpactEffect>();
 
-            foreach (var impactType in skillData.impactype)
+            foreach (var impactType in skillData.impactypes)
             {
-                string impactName = string.Format("RPG.Skill.{0}ImpactEffect", impactType);
+                string impactName = string.Format("RPG.Skill.{0}ImpactEffect", impactType.name);
                 //Type impact = Type.GetType(name);
                 //impactEffects.Add(Activator.CreateInstance(impact) as IImpactEffect);
                 impactEffects.Add(CreateObject<IImpactEffect>(impactName));

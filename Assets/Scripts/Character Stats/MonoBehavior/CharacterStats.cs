@@ -112,7 +112,6 @@ public class CharacterStats : MonoBehaviour
 
         if (attacker.IsCritical)
         {
-            Debug.Log("±©»÷");
             physicsDamage *= attacker.CharacterData.CriticalAddition;
             magicDamage *= attacker.CharacterData.CriticalAddition;
         }

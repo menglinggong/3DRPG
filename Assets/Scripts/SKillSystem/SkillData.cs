@@ -59,15 +59,15 @@ namespace RPG.Skill
         /// <summary>
         /// 技能影响类型
         /// </summary>
-        public string[] impactype = { "CostSP", "Damage" };
+        public List<Impactype> impactypes;
         /// <summary>
         /// 连击的下一个技能编号
         /// </summary>
         public int nextBatterID;
-        /// <summary>
-        /// 伤害比率/伤害数值
-        /// </summary>
-        public float atkRatio;
+        ///// <summary>
+        ///// 伤害比率/伤害数值
+        ///// </summary>
+        //public float atkRatio;
         /// <summary>
         /// 持续时间
         /// </summary>
@@ -121,5 +121,34 @@ namespace RPG.Skill
         public SelectorType selectorType;
 
         //其他数据
+
+        /// <summary>
+        /// 通过影响效果的名称获取影响效果及其数值
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Impactype GetImpactypeByName(string name)
+        {
+            return impactypes.Find(a =>a.name == name);
+        }
+    }
+
+    /// <summary>
+    /// 影响效果及其数值
+    /// </summary>
+    [Serializable]
+    public class Impactype
+    {
+        /// <summary>
+        /// 影响效果的名称
+        /// </summary>
+        public string name;
+        /// <summary>
+        /// 影响效果的值，不同类型的影响效果，值的意思不同
+        /// 伤害--基础伤害值
+        /// 击退--击退的力
+        /// 眩晕--无意义，目前眩晕时长取决于动画，TODO:改为技能控制眩晕时长
+        /// </summary>
+        public float value;
     }
 }

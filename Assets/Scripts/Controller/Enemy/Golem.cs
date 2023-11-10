@@ -9,11 +9,6 @@ using UnityEngine.AI;
 public class Golem : EnemyController
 {
     /// <summary>
-    /// 推的力
-    /// </summary>
-    public float KickForce = 30;
-
-    /// <summary>
     /// 石头人手的部位
     /// </summary>
     public Transform Hand;
@@ -27,31 +22,6 @@ public class Golem : EnemyController
     /// 创建出的石头
     /// </summary>
     private GameObject rock;
-
-    /// <summary>
-    /// Animation event
-    /// 击退玩家
-    /// </summary>
-    public void KickOffAndHit()
-    {
-        if(TargetInAttackRange() && transform.IsFacingTarget(attackTarget.transform))
-        {
-            Vector3 dir = (attackTarget.transform.position - transform.position).normalized;
-
-            //击退玩家
-            NavMeshAgent targetAgent = attackTarget.GetComponent<NavMeshAgent>();
-            targetAgent.isStopped = true;
-            targetAgent.velocity = dir * KickForce;
-
-            //播放玩家眩晕动画
-            if(!attackTarget.GetComponent<CharacterStats>().IsDefence)
-                attackTarget.GetComponent<Animator>().SetTrigger("Dizzy");
-
-            //造成伤害
-            CharacterStats targetStats = targetAgent.GetComponent<CharacterStats>();
-            targetStats.TakeDamage(characterStats, targetStats);
-        }
-    }
 
     /// <summary>
     /// Animation event
