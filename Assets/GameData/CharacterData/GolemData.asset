@@ -12,13 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2930d7008947f1142869ac4215b851af, type: 3}
   m_Name: GolemData
   m_EditorClassIdentifier: 
-  MaxHealth: 80
-  CurrentHealth: 80
-  BaseDefence: 8
-  CurrentDefence: 8
-  SP: 0
+  AttackDamage: 10
+  AbilityPower: 0
+  Armor: 6
+  MagicResistance: 6
   MoveSpeed: 2
   TurnRoundSpeed: 0.1
+  CoolDownReduction: 0
+  CriticalChance: 0.1
+  CriticalAddition: 1.2
+  AttackSpeed: 0.6
+  MaxHealth: 80
+  CurrentHealth: 80
+  CurrentSP: 0
+  MaxSP: 0
+  ModerateResistance: 0
+  DominateResistance: 0
+  AttackRange: 5
   CurrentLevel: 0
   MaxLevel: 0
   BaseExp: 0

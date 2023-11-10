@@ -58,12 +58,12 @@ namespace RPG.Skill
                 //计算造成的伤害量：需要结合技能释放者的基础攻击力，破甲/法穿，目标的护甲/魔抗等众多因素
                 //此处只做简单计算
                 //如果角色状态类中存在详细的扣血方法，只需简单计算出该方法所需参数即可
-                //float damage = skillData.atkRatio * skillData.owner.GetComponent<CharacterStatus>().BaseAttack;
-                //target.GetComponent<CharacterStatus>().ExpendHP(damage);
+                var targetStats = target.GetComponent<CharacterStats>();
+                var attackStats = skillData.owner.GetComponent<CharacterStats>();
+                attackStats.CalculateCritical(attackStats);
+                float damage = attackStats.CalculateDamage(skillData.owner.GetComponent<CharacterStats>(), targetStats);
 
-                float damage = skillData.owner.GetComponent<CharacterStats>().GetRealDamage();
-
-                target.GetComponent<CharacterStats>().CharacterData.GetHurt(damage);
+                targetStats.CharacterData.GetHurt(damage);
 
                 //发送消息，更新敌人血条
                 EventManager.Instance.Invoke(MessageConst.UpdateHealth, target.GetComponent<EnemyController>().CharacterStats);

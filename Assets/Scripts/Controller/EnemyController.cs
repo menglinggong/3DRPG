@@ -240,14 +240,13 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     /// </summary>
     private void Attack()
     {
-        //判断是否暴击，Random.value的值是0~1的随机值
-        characterStats.IsCritical = Random.value <= characterStats.AttackData.CriticalChance;
-
         //转向玩家
         if(turnRoundCoroutine != null)
             StopCoroutine(turnRoundCoroutine);
 
         turnRoundCoroutine = StartCoroutine(transform.TurnRound(attackTarget.transform.position, characterStats.CharacterData.TurnRoundSpeed));
+
+        characterStats.CalculateCritical(characterStats);
 
         if (TargetInAttackRange())
         {
@@ -262,7 +261,7 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
         }
        
         //重置计时
-        lastAttackTime = characterStats.AttackData.CoolDown;
+        lastAttackTime = 1f / characterStats.CharacterData.AttackSpeed;
     }
 
     /// <summary>
@@ -285,7 +284,7 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     public bool TargetInAttackRange()
     {
         if (attackTarget != null)
-            return Vector3.Distance(attackTarget.transform.position, this.transform.position) <= characterStats.AttackData.AttackRange;
+            return Vector3.Distance(attackTarget.transform.position, this.transform.position) <= characterStats.CharacterData.AttackRange;
 
         return false;
     }
@@ -296,8 +295,9 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     /// <returns></returns>
     public bool TargetInSkillRange()
     {
+        //TODO:修改技能范围已经去掉，需要修改
         if (attackTarget != null)
-            return Vector3.Distance(attackTarget.transform.position, this.transform.position) <= characterStats.AttackData.SkillRange;
+            return Vector3.Distance(attackTarget.transform.position, this.transform.position) <= characterStats.CharacterData.AttackRange;
 
         return false;
     }

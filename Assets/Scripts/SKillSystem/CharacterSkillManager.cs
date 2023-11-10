@@ -50,7 +50,7 @@ namespace RPG.Skill
             //TODO:添加判断条件，判断技能是否需要指定目标，若需要则鼠标必须在目标身上，且目标需要在技能范围内
             //若技能不需要指定目标，则正常释放
             //判断条件
-            if (skill != null && skill.coolRemain <= 0 && skill.costSP <= this.transform.GetComponent<CharacterStats>().CharacterData.SP)
+            if (skill != null && skill.coolRemain <= 0 && skill.costSP <= this.transform.GetComponent<CharacterStats>().CharacterData.CurrentSP)
                 return skill;
             //返回技能数据
             else

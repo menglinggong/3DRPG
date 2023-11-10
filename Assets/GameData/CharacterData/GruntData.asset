@@ -12,13 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2930d7008947f1142869ac4215b851af, type: 3}
   m_Name: GruntData
   m_EditorClassIdentifier: 
-  MaxHealth: 60
-  CurrentHealth: 60
-  BaseDefence: 6
-  CurrentDefence: 6
-  SP: 0
+  AttackDamage: 7
+  AbilityPower: 0
+  Armor: 4
+  MagicResistance: 4
   MoveSpeed: 3
   TurnRoundSpeed: 0.1
+  CoolDownReduction: 0
+  CriticalChance: 0.1
+  CriticalAddition: 1.2
+  AttackSpeed: 0.7
+  MaxHealth: 60
+  CurrentHealth: 60
+  CurrentSP: 0
+  MaxSP: 0
+  ModerateResistance: 0
+  DominateResistance: 0
+  AttackRange: 2
   CurrentLevel: 0
   MaxLevel: 0
   BaseExp: 0

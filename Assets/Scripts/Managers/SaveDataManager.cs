@@ -11,7 +11,6 @@ public class SaveDataManager : ISingleton<SaveDataManager>
     public void SavePlayerData()
     {
         SaveData("PlayerCharacterData", GameManager.Instance.PlayerStats.CharacterData);
-        SaveData("PlayerAttackData", GameManager.Instance.PlayerStats.AttackData);
     }
 
     /// <summary>
@@ -20,7 +19,6 @@ public class SaveDataManager : ISingleton<SaveDataManager>
     public void LoadPlayerData()
     {
         LoadData("PlayerCharacterData", GameManager.Instance.PlayerStats.CharacterData);
-        LoadData("PlayerAttackData", GameManager.Instance.PlayerStats.AttackData);
     }
 
     /// <summary>

@@ -9,69 +9,97 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Data", menuName = "Character Stats/Data")]
 public class CharacterData_SO : ScriptableObject
 {
-    [Header("基础属性")]
     /// <summary>
-    /// 最大生命值
+    /// 攻击力
     /// </summary>
-    public float MaxHealth;
-
+    public float AttackDamage;
     /// <summary>
-    /// 当前生命值
+    /// 法术强度
     /// </summary>
-    public float CurrentHealth;
-
+    public float AbilityPower;
     /// <summary>
-    /// 基础防御值
+    /// 护甲
     /// </summary>
-    public float BaseDefence;
-
+    public float Armor;
     /// <summary>
-    /// 当前防御值
+    /// 魔抗
     /// </summary>
-    public float CurrentDefence;
-
-    /// <summary>
-    /// 拥有的蓝量
-    /// </summary>
-    public float SP;
-
+    public float MagicResistance;
     /// <summary>
     /// 移动速度
     /// </summary>
     public float MoveSpeed;
-
     /// <summary>
     /// 转向速度
     /// </summary>
     public float TurnRoundSpeed;
+    /// <summary>
+    /// 冷却缩减
+    /// </summary>
+    public float CoolDownReduction;
+    /// <summary>
+    /// 暴击概率
+    /// </summary>
+    public float CriticalChance;
+    /// <summary>
+    /// 暴击加成
+    /// </summary>
+    public float CriticalAddition;
+    /// <summary>
+    /// 攻速
+    /// </summary>
+    public float AttackSpeed;
+    
+    /// <summary>
+    /// 最大生命值
+    /// </summary>
+    public float MaxHealth;
+    /// <summary>
+    /// 当前生命值
+    /// </summary>
+    public float CurrentHealth;
+    /// <summary>
+    /// 当前蓝量
+    /// </summary>
+    public float CurrentSP;
+    /// <summary>
+    /// 最大蓝量
+    /// </summary>
+    public float MaxSP;
+    /// <summary>
+    /// 减速抗性
+    /// </summary>
+    public float ModerateResistance;
+    /// <summary>
+    /// 控制抗性
+    /// </summary>
+    public float DominateResistance;
+    /// <summary>
+    /// 攻击距离
+    /// </summary>
+    public float AttackRange;
 
-    [Header("等级")]
     /// <summary>
     /// 当前等级
     /// </summary>
     public int CurrentLevel;
-
     /// <summary>
     /// 最高等级
     /// </summary>
     public int MaxLevel;
-
     /// <summary>
     /// 基础经验值
     /// 每次升级时会改变
     /// </summary>
     public float BaseExp;
-
     /// <summary>
     /// 当前经验值
     /// </summary>
     public float CurrentExp;
-
     /// <summary>
     /// 升级后的加成
     /// </summary>
     public float LevelBuff;
-
     /// <summary>
     /// 升级加成倍增器
     /// </summary>
@@ -83,11 +111,11 @@ public class CharacterData_SO : ScriptableObject
         }
     }
 
-    [Header("击杀")]
     /// <summary>
     /// 击杀获得的经验值
     /// </summary>
     public int KillPoint;
+
 
     /// <summary>
     /// 更新经验值
@@ -120,8 +148,7 @@ public class CharacterData_SO : ScriptableObject
         MaxHealth = MaxHealth * LevelMultiplier;
         CurrentHealth = MaxHealth;
 
-        BaseDefence = BaseDefence * LevelMultiplier;
-        CurrentDefence = BaseDefence;
+        //TODO：升级增加护甲
     }
 
     /// <summary>
@@ -131,7 +158,6 @@ public class CharacterData_SO : ScriptableObject
     public void GetHurt(float damage)
     {
         this.CurrentHealth = Mathf.Max(this.CurrentHealth - damage, 0);
-        Debug.Log("GetHurt + " + CurrentHealth);
     }
 
     /// <summary>
@@ -140,6 +166,6 @@ public class CharacterData_SO : ScriptableObject
     /// <param name="value"></param>
     public void ExpendSP(float value)
     {
-        SP -= value;
+        CurrentSP -= value;
     }
 }

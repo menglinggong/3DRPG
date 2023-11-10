@@ -499,9 +499,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TemplateData: {fileID: 11400000, guid: d69ae1c180540aa4082e60900e21dc57, type: 2}
-  TemplateAttackData: {fileID: 11400000, guid: 937ae9cc3a253494c91745bd6a144d25, type: 2}
   CharacterData: {fileID: 0}
-  AttackData: {fileID: 0}
   IsCritical: 0
   Defence: 50
   IsDefence: 0
@@ -518,35 +516,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillDatas:
-  - skillID: 0
-    name: "\u666E\u901A\u653B\u51FB"
-    description: "\u666E\u901A\u653B\u51FB"
-    coolTime: 2
-    coolRemain: 0
-    costSP: 0
-    attackDistance: 1.5
-    attackAngle: 45
-    IsInterruptMove: 0
-    attackTargetTags:
-    - Enemy
-    - AttackAble
-    attackTargets: []
-    impactype:
-    - Damage
-    nextBatterID: 0
-    atkRatio: 6
-    durationTime: 0.2
-    atkInterval: 0
-    owner: {fileID: 0}
-    prefabName: MeleeSkillDeployer
-    skillPrefab: {fileID: 0}
-    animationName: Attack
-    isTrigger: 1
-    hitFxName: 
-    hitFxPrefab: {fileID: 0}
-    level: 1
-    attackType: 1
-    selectorType: 0
   - skillID: 1
     name: "\u6A2A\u626B"
     description: "\u6A2A\u626B"
@@ -569,7 +538,7 @@ MonoBehaviour:
     owner: {fileID: 0}
     prefabName: MeleeSkillDeployer
     skillPrefab: {fileID: 0}
-    animationName: CriticalAttack
+    animationName: Skill_Q
     isTrigger: 1
     hitFxName: 
     hitFxPrefab: {fileID: 0}

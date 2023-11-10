@@ -76,16 +76,6 @@ public class Golem : EnemyController
     }
 
     /// <summary>
-    /// 计算石头的伤害
-    /// </summary>
-    private void CalculateRockDamage()
-    {
-        characterStats.IsCritical = Random.value <= characterStats.AttackData.CriticalChance;
-
-        rock.GetComponent<Rock>().RockDamage = characterStats.GetRealDamage();
-    }
-
-    /// <summary>
     /// Animation event
     /// 投掷石头
     /// </summary>
@@ -97,7 +87,8 @@ public class Golem : EnemyController
         rock.GetComponent<Rigidbody>().velocity = Vector3.one;
         rock.GetComponent<Rigidbody>().isKinematic = false;
 
-        CalculateRockDamage();
+        //TODO:石头的伤害值是固定值
+        //go.RockDamage = 10;
         go.FlyToTarget();
     }
 

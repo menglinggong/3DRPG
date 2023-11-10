@@ -12,13 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2930d7008947f1142869ac4215b851af, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  MaxHealth: 100
-  CurrentHealth: 100
-  BaseDefence: 6
-  CurrentDefence: 6
-  SP: 0
+  AttackDamage: 10
+  AbilityPower: 4
+  Armor: 5
+  MagicResistance: 5
   MoveSpeed: 5
   TurnRoundSpeed: 0.1
+  CoolDownReduction: 0
+  CriticalChance: 0.2
+  CriticalAddition: 1.2
+  AttackSpeed: 1
+  MaxHealth: 100
+  CurrentHealth: 100
+  CurrentSP: 100
+  MaxSP: 100
+  ModerateResistance: 0.2
+  DominateResistance: 0.2
+  AttackRange: 1.5
   CurrentLevel: 1
   MaxLevel: 30
   BaseExp: 30

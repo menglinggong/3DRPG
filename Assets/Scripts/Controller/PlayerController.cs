@@ -212,9 +212,9 @@ public class PlayerController : MonoBehaviour
         //使玩家可移动
         agent.isStopped = false;
         //设置玩家移动到攻击距离
-        agent.stoppingDistance = characterStats.AttackData.AttackRange;
+        agent.stoppingDistance = characterStats.CharacterData.AttackRange;
         //离敌人距离大于攻击距离，移动
-        while (Vector3.Distance(this.transform.position, attackTarget.transform.position) > characterStats.AttackData.AttackRange)
+        while (Vector3.Distance(this.transform.position, attackTarget.transform.position) > characterStats.CharacterData.AttackRange)
         {
             agent.destination = attackTarget.transform.position;
             yield return null;
@@ -235,10 +235,13 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void Attack()
     {
-        //TODO:解决使用技能系统进行普通攻击时，无法计算攻击冷却的问题
-        //使用技能系统进行普通攻击
-        lastAttackTime = characterStats.AttackData.CoolDown;
-        characterSkillSystem.AttackUseSkill(0, false);
+        //普通攻击不算技能，不使用技能系统的逻辑
+        lastAttackTime = 1f / characterStats.CharacterData.AttackSpeed;
+
+        characterStats.CalculateCritical(characterStats);
+        //若暴击了则播放暴击动画，否则播放普通攻击动画
+        animator.SetBool("CriticalAttack", characterStats.IsCritical);
+        animator.SetTrigger("Attack");
     }
 
     /// <summary>
@@ -256,7 +259,8 @@ public class PlayerController : MonoBehaviour
             {
                 rock.GetComponent<Rigidbody>().velocity = Vector3.one;
                 rock.rockState = RockStates.HitEnemy;
-                rock.RockDamage = characterStats.GetRealDamage();
+                //石头的伤害值是固定值
+                //rock.RockDamage = 10;
 
                 //向石头施加一个往玩家前上方的力
                 rock.GetComponent<Rigidbody>().AddForce((this.transform.forward + Vector3.up * 0.5f).normalized * rock.HitPlayerForce, ForceMode.Impulse);
