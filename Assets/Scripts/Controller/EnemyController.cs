@@ -129,6 +129,8 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
 
     #endregion
 
+    protected Coroutine turnRoundCoroutine;
+
     private void Awake()
     {
         agent = this.GetComponent<NavMeshAgent>();
@@ -145,11 +147,12 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
 
     private void Start()
     {
+        agent.speed = characterStats.CharacterData.MoveSpeed;
         GetNewWayPoint();
 
         GameManager.Instance.AddEndGameObserver(this);
 
-        characterStats.CurrentHealth = characterStats.MaxHealth;
+        characterStats.CharacterData.CurrentHealth = characterStats.CharacterData.MaxHealth;
     }
 
     private void OnDisable()
@@ -238,11 +241,15 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     private void Attack()
     {
         //判断是否暴击，Random.value的值是0~1的随机值
-        characterStats.IsCritical = Random.value <= characterStats.CriticalChance;
-        //TODO:转向玩家因该有个过程，不能立刻转
-        transform.LookAt(attackTarget.transform);
+        characterStats.IsCritical = Random.value <= characterStats.AttackData.CriticalChance;
 
-        if(TargetInAttackRange())
+        //转向玩家
+        if(turnRoundCoroutine != null)
+            StopCoroutine(turnRoundCoroutine);
+
+        turnRoundCoroutine = StartCoroutine(transform.TurnRound(attackTarget.transform.position, characterStats.CharacterData.TurnRoundSpeed));
+
+        if (TargetInAttackRange())
         {
             //若暴击了则播放暴击动画，否则播放普通攻击动画
             animator.SetBool("CriticalAttack", characterStats.IsCritical);
@@ -255,7 +262,7 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
         }
        
         //重置计时
-        lastAttackTime = characterStats.CoolDown;
+        lastAttackTime = characterStats.AttackData.CoolDown;
     }
 
     /// <summary>
@@ -278,7 +285,7 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     public bool TargetInAttackRange()
     {
         if (attackTarget != null)
-            return Vector3.Distance(attackTarget.transform.position, this.transform.position) <= characterStats.AttackRange;
+            return Vector3.Distance(attackTarget.transform.position, this.transform.position) <= characterStats.AttackData.AttackRange;
 
         return false;
     }
@@ -290,7 +297,7 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     public bool TargetInSkillRange()
     {
         if (attackTarget != null)
-            return Vector3.Distance(attackTarget.transform.position, this.transform.position) <= characterStats.SkillRange;
+            return Vector3.Distance(attackTarget.transform.position, this.transform.position) <= characterStats.AttackData.SkillRange;
 
         return false;
     }

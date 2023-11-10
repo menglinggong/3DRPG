@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+using static UnityEditor.PlayerSettings;
 
 namespace RPG.Skill
 {
@@ -11,14 +13,17 @@ namespace RPG.Skill
     /// </summary>
     public class CharacterSkillSystem : MonoBehaviour
     {
+        private CharacterStats characterStats;
         private CharacterSkillManager skillManager;
         private Animator animator;
         private SkillData skillData;
+        private Coroutine turnRoundCoroutine;
 
         private void Start()
         {
             skillManager = GetComponent<CharacterSkillManager>();
             animator = GetComponent<Animator>();
+            characterStats = GetComponent<CharacterStats>();
         }
 
         /// <summary>
@@ -48,28 +53,12 @@ namespace RPG.Skill
             skillData = skillManager.PrepareSkill(skillID);
             if (skillData == null) return;
 
-            var info = animator.GetCurrentAnimatorStateInfo(0);
-            if(info.IsName("Attack_Normal"))
-            {
-                //TODO:释放技能时会打断普通攻击
-                if (skillData.isTrigger)
-                    animator.SetTrigger(skillData.animationName);
-                else
-                    animator.SetBool(skillData.animationName, true);
-
-                animator.Play("Locomotion");
-            }
-            else if(info.IsName("Locomotion"))
-            {
-                //允许播放动画
-                if (skillData.isTrigger)
-                    animator.SetTrigger(skillData.animationName);
-                else
-                    animator.SetBool(skillData.animationName, true);
-            }
-            //TODO:技能释放过程中，无法使用其他技能，无法使用普通攻击
-
-
+            //释放技能时，玩家朝向鼠标方向
+            LookAtMousePos();
+            //释放技能时，判断是否中断移动
+            InterruptMove(skillData);
+            //是否中断攻击
+            InterruptAttack();
             //播放技能动画，此处为测试代码,后续根据实际动画系统的设置进行修改
 
 
@@ -80,8 +69,6 @@ namespace RPG.Skill
             //  2.选中A目标，在自动取消选中钱又选中B目标，则需要手动将A目标取消选中
 
         }
-
-
 
         /// <summary>
         /// 使用随机技能攻击（为NPC提供）
@@ -98,6 +85,67 @@ namespace RPG.Skill
 
             int index = Random.Range(0, usableSkills.Count);
             AttackUseSkill(usableSkills[index].skillID);
+        }
+
+
+        /// <summary>
+        /// 是否中断攻击
+        /// </summary>
+        private void InterruptAttack()
+        {
+            var info = animator.GetCurrentAnimatorStateInfo(0);
+            if (info.IsName("Attack_Normal"))
+            {
+                //普通攻击状态，释放技能会打断当前状态，普通攻击不会打断当前状态
+                if (skillData.isTrigger)
+                    animator.SetTrigger(skillData.animationName);
+                else
+                    animator.SetBool(skillData.animationName, true);
+
+                animator.Play("Locomotion");
+            }
+            else if (info.IsName("Locomotion"))
+            {
+                //非攻击状态，允许播放技能动画
+                if (skillData.isTrigger)
+                    animator.SetTrigger(skillData.animationName);
+                else
+                    animator.SetBool(skillData.animationName, true);
+            }
+            else
+            {
+                //技能释放状态，无法使用其他技能，无法使用普通攻击
+            }
+        }
+
+        /// <summary>
+        /// 是否中断移动
+        /// </summary>
+        /// <param name="data"></param>
+        private void InterruptMove(SkillData data)
+        {
+            if (data.IsInterruptMove)
+            {
+                //中断移动
+                NavMeshAgent agent = data.owner.GetComponent<NavMeshAgent>();
+                agent.destination = data.owner.transform.position;
+                agent.isStopped = true;
+            }
+        }
+
+        /// <summary>
+        /// 玩家看向鼠标位置
+        /// </summary>
+        private void LookAtMousePos()
+        {
+            Vector3 pos = MouseManager.Instance.MousePosToWorld();
+            if (pos == Vector3.one * 10000)
+                return;
+
+            if(turnRoundCoroutine != null)
+                StopCoroutine(turnRoundCoroutine);
+
+            turnRoundCoroutine = StartCoroutine(transform.TurnRound(pos, characterStats.CharacterData.TurnRoundSpeed));
         }
     }
 }

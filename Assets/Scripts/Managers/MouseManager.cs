@@ -90,5 +90,18 @@ public class MouseManager : ISingleton<MouseManager>
                 OnMouseClicked?.Invoke(new Vector3(hitInfo.point.x, 0, hitInfo.point.z) + hitInfo.collider.transform.forward * 0.5f);
         }
     }
+
+    /// <summary>
+    /// 获取鼠标在世界空间的位置
+    /// </summary>
+    /// <returns></returns>
+    public Vector3 MousePosToWorld()
+    {
+        if (hitInfo.collider != null)
+        {
+            return hitInfo.point;
+        }
+        return Vector3.one * 10000;
+    }
 }
 

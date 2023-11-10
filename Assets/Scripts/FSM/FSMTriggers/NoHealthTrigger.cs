@@ -17,7 +17,7 @@ namespace AI.FSM
         public override bool HandleTrigger(FSMBase fsmBase)
         {
             //如果HP<=0则返回true，否则返回false
-            return fsmBase.EnemyController.CharacterStats.CurrentHealth <= 0;
+            return fsmBase.EnemyController.CharacterStats.CharacterData.CurrentHealth <= 0;
         }
 
         public override void Init()

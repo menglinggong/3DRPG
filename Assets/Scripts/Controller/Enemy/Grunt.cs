@@ -21,7 +21,11 @@ public class Grunt : EnemyController
     {
         if (TargetInAttackRange() && transform.IsFacingTarget(attackTarget.transform))
         {
-            this.transform.LookAt(attackTarget.transform);
+            //×ªÏòÍæ¼Ò
+            if (turnRoundCoroutine != null)
+                StopCoroutine(turnRoundCoroutine);
+
+            turnRoundCoroutine = StartCoroutine(transform.TurnRound(attackTarget.transform.position, characterStats.CharacterData.TurnRoundSpeed));
 
             Vector3 dir = (attackTarget.transform.position - this.transform.position).normalized;
 

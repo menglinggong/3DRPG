@@ -81,6 +81,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        agent.speed = characterStats.CharacterData.MoveSpeed;
         stopDistance = agent.stoppingDistance;
         //事件绑定
         MouseManager.Instance.OnMouseClicked += MoveToTargetPos;
@@ -116,7 +117,7 @@ public class PlayerController : MonoBehaviour
         if(lastAttackTime > 0)
             lastAttackTime -= Time.deltaTime;
 
-        if(characterStats.CurrentHealth <= 0 && !isDie)
+        if(characterStats.CharacterData.CurrentHealth <= 0 && !isDie)
         {
             isDie = true;
             agent.enabled = false;
@@ -211,9 +212,9 @@ public class PlayerController : MonoBehaviour
         //使玩家可移动
         agent.isStopped = false;
         //设置玩家移动到攻击距离
-        agent.stoppingDistance = characterStats.AttackRange;
+        agent.stoppingDistance = characterStats.AttackData.AttackRange;
         //离敌人距离大于攻击距离，移动
-        while (Vector3.Distance(this.transform.position, attackTarget.transform.position) > characterStats.AttackRange)
+        while (Vector3.Distance(this.transform.position, attackTarget.transform.position) > characterStats.AttackData.AttackRange)
         {
             agent.destination = attackTarget.transform.position;
             yield return null;

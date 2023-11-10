@@ -526,6 +526,7 @@ MonoBehaviour:
     costSP: 0
     attackDistance: 1.5
     attackAngle: 45
+    IsInterruptMove: 0
     attackTargetTags:
     - Enemy
     - AttackAble
@@ -554,6 +555,7 @@ MonoBehaviour:
     costSP: 0
     attackDistance: 1.5
     attackAngle: 180
+    IsInterruptMove: 1
     attackTargetTags:
     - Enemy
     - AttackAble

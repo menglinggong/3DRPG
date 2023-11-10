@@ -35,6 +35,16 @@ public class CharacterData_SO : ScriptableObject
     /// </summary>
     public float SP;
 
+    /// <summary>
+    /// 移动速度
+    /// </summary>
+    public float MoveSpeed;
+
+    /// <summary>
+    /// 转向速度
+    /// </summary>
+    public float TurnRoundSpeed;
+
     [Header("等级")]
     /// <summary>
     /// 当前等级

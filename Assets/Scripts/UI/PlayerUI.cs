@@ -67,9 +67,9 @@ public class PlayerUI : MonoBehaviour
         CharacterStats data = value as CharacterStats;
         if (data != GameManager.Instance.PlayerStats) return;
 
-        healthMaterial.SetFloat("_BloodVolume", data.MaxHealth);
+        healthMaterial.SetFloat("_BloodVolume", data.CharacterData.MaxHealth);
 
-        healthMaterial.SetFloat("_life", data.CurrentHealth / data.MaxHealth);
+        healthMaterial.SetFloat("_life", data.CharacterData.CurrentHealth / data.CharacterData.MaxHealth);
     }
 
     /// <summary>

@@ -80,7 +80,7 @@ public class Golem : EnemyController
     /// </summary>
     private void CalculateRockDamage()
     {
-        characterStats.IsCritical = Random.value <= characterStats.CriticalChance;
+        characterStats.IsCritical = Random.value <= characterStats.AttackData.CriticalChance;
 
         rock.GetComponent<Rock>().RockDamage = characterStats.GetRealDamage();
     }

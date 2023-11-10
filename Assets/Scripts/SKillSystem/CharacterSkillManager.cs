@@ -46,6 +46,9 @@ namespace RPG.Skill
         {
             //根据id查找技能
             SkillData skill = skillDatas.Find(s => s.skillID == skillID);
+
+            //TODO:添加判断条件，判断技能是否需要指定目标，若需要则鼠标必须在目标身上，且目标需要在技能范围内
+            //若技能不需要指定目标，则正常释放
             //判断条件
             if (skill != null && skill.coolRemain <= 0 && skill.costSP <= this.transform.GetComponent<CharacterStats>().CharacterData.SP)
                 return skill;
@@ -71,8 +74,8 @@ namespace RPG.Skill
             deployer.SkillData = data;
             deployer.DeploySkill();
 
-            if(data.attackTargets != null && data.attackTargets.Length > 0)
-                this.transform.LookAt(data.attackTargets[0]);
+            //if(data.attackTargets != null && data.attackTargets.Length > 0)
+            //    this.transform.LookAt(data.attackTargets[0]);
             //延迟销毁预制体
             //Destroy(skillObj, data.durationTime);
             GameObjectPool.Instance.CollectObject(skillObj, data.durationTime);

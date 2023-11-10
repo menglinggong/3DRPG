@@ -44,6 +44,10 @@ namespace RPG.Skill
         /// </summary>
         public float attackAngle;
         /// <summary>
+        /// 是否中断移动
+        /// </summary>
+        public bool IsInterruptMove = false;
+        /// <summary>
         /// 攻击目标的Tags
         /// </summary>
         public string[] attackTargetTags = { "Enemy" };

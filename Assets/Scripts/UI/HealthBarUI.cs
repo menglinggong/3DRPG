@@ -93,7 +93,7 @@ public class HealthBarUI : MonoBehaviour
         healthBarMaterial = Instantiate<Material>(temp);
         healthBar.transform.GetChild(0).GetComponent<Image>().material = healthBarMaterial;
         //ÉèÖÃ×ÜÑªÁ¿
-        healthBarMaterial.SetFloat("_BloodVolume", characterstats.MaxHealth);
+        healthBarMaterial.SetFloat("_BloodVolume", characterstats.CharacterData.MaxHealth);
 
         healthBar.SetActive(IsAlwaysVisble);
     }
@@ -141,9 +141,9 @@ public class HealthBarUI : MonoBehaviour
             return;
 
 
-        if (stats.CurrentHealth > 0)
+        if (stats.CharacterData.CurrentHealth > 0)
         {
-            healthBarMaterial.SetFloat("_life", stats.CurrentHealth / stats.MaxHealth);
+            healthBarMaterial.SetFloat("_life", stats.CharacterData.CurrentHealth / stats.CharacterData.MaxHealth);
 
             if (!IsAlwaysVisble)
             {

@@ -16,6 +16,9 @@ MonoBehaviour:
   CurrentHealth: 30
   BaseDefence: 2
   CurrentDefence: 2
+  SP: 0
+  MoveSpeed: 2.5
+  TurnRoundSpeed: 0.1
   CurrentLevel: 0
   MaxLevel: 0
   BaseExp: 0
