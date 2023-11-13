@@ -120,7 +120,7 @@ public class Rock : MonoBehaviour
                     CharacterStats targetStats = collision.gameObject.GetComponent<CharacterStats>();
                     targetStats.TakeDamage(this.RockDamage, targetStats);
                     rockState = RockStates.HitNothing;
-
+                    //TODO:目前改为玩家无法攻击石头反击石头人，以后在根据需求修改
                     Destroy(this.gameObject);
                 }
 
@@ -140,6 +140,9 @@ public class Rock : MonoBehaviour
 
                 break;
         }
+
+        //TODO:目前改为玩家无法攻击石头反击石头人，以后在根据需求修改
+        Destroy(this.gameObject);
     }
 
     /// <summary>

@@ -66,6 +66,8 @@ namespace RPG.Skill
             //GameObject skillObj = Instantiate(data.skillPrefab, transform.position, transform.rotation);
             if(data == null) return;
             GameObject skillObj = GameObjectPool.Instance.CreateObject(data.prefabName, data.skillPrefab, transform.position, transform.rotation);
+            //skillObj.transform.SetParent(data.owner.transform, false);
+
             //播放攻击动画，此处为测试代码
             //this.transform.GetComponent<Animator>().SetTrigger("IsAttack");
 

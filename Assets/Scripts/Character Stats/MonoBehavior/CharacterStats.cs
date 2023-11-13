@@ -83,6 +83,7 @@ public class CharacterStats : MonoBehaviour
         this.CharacterData.UpdateExp(exp);
         //发送消息，设置攻击者的经验条
         EventManager.Instance.Invoke(MessageConst.UpdateExp, this);
+        EventManager.Instance.Invoke(MessageConst.UpdateHealth, this);
     }
 
     /// <summary>

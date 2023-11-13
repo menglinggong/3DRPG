@@ -89,6 +89,7 @@ namespace Common
         {
             yield return new WaitForSeconds(delay);
             go.SetActive(false);
+            go.transform.SetParent(transform);
         }
 
         /// <summary>
