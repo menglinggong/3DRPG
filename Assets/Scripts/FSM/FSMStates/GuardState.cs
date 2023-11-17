@@ -17,7 +17,7 @@ namespace AI.FSM
         public override void OnEnterState(FSMBase fsmBase)
         {
             base.OnEnterState(fsmBase);
-            fsmBase.EnemyController.Guard();
+            fsmBase.EnemyController.EnterGuard();
         }
 
         public override void OnStayState(FSMBase fsmBase)

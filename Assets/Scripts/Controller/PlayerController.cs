@@ -77,6 +77,8 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
+    private Coroutine turnRoundCoroutine = null;
+
     private void Awake()
     {
         agent = this.GetComponent<NavMeshAgent>();
@@ -138,10 +140,16 @@ public class PlayerController : MonoBehaviour
             MouseManager.Instance.OnEnemyClicked -= EventAttack;
         }
 
-        //测试按Q放技能
+        //TODO测试按Q放技能
         if (Input.GetKeyDown(KeyCode.Q))
         {
             characterSkillSystem.AttackUseSkill(1, false);
+        }
+
+        //TODO：按N键打开背包
+        if(Input.GetKeyDown(KeyCode.N))
+        {
+            GameManager.Instance.inventoryUI.gameObject.SetActive(!GameManager.Instance.inventoryUI.gameObject.activeSelf);
         }
 
         Defence();
@@ -244,9 +252,15 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void Attack()
     {
+        //转向玩家
+        if (turnRoundCoroutine != null)
+            StopCoroutine(turnRoundCoroutine);
+
+        turnRoundCoroutine = StartCoroutine(transform.TurnRound(attackTarget.transform.position, characterStats.CharacterData.TurnRoundSpeed));
+
         //普通攻击不算技能，不使用技能系统的逻辑
         lastAttackTime = 1f / characterStats.CharacterData.AttackSpeed;
-
+        
         characterStats.CalculateCritical(characterStats);
         //若暴击了则播放暴击动画，否则播放普通攻击动画
         animator.SetBool("CriticalAttack", characterStats.IsCritical);

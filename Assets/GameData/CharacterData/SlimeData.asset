@@ -22,8 +22,8 @@ MonoBehaviour:
   CriticalChance: 0
   CriticalAddition: 1.2
   AttackSpeed: 0.7
-  MaxHealth: 300
-  CurrentHealth: 300
+  MaxHealth: 30
+  CurrentHealth: 30
   CurrentSP: 0
   MaxSP: 0
   ModerateResistance: 0

@@ -33,8 +33,29 @@ public class MouseManager : ISingleton<MouseManager>
 
     private void Update()
     {
+        if (CheckGuiRaycastObjects()) return;
         SetCursorTexture();
         MouseControl();
+    }
+
+    /// <summary>
+    /// 判断射线是否在可阻挡射线的界面上
+    /// </summary>
+    /// <returns></returns>
+    bool CheckGuiRaycastObjects()
+    {
+        if(EventSystem.current == null) return false;
+
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+        eventData.pressPosition = Input.mousePosition;
+        eventData.position = Input.mousePosition;
+
+        List<RaycastResult> list = new List<RaycastResult>();
+
+        EventSystem.current.RaycastAll(eventData, list);
+        var result = list.FindAll(a => a.gameObject.CompareTag("BlockRayUI"));
+
+        return result.Count > 0;
     }
 
     /// <summary>
@@ -97,11 +118,22 @@ public class MouseManager : ISingleton<MouseManager>
     /// <returns></returns>
     public Vector3 MousePosToWorld()
     {
-        if (hitInfo.collider != null)
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        var result = Physics.RaycastAll(ray, 10000,  1 << LayerMask.NameToLayer("Ground"));
+
+        if(result != null && result.Length > 0)
         {
-            return hitInfo.point;
+            return result[0].point;
         }
-        return Vector3.one * 10000;
+        else
+            return Vector3.one * 10000;
+
+        //if (hitInfo.collider != null)
+        //{
+        //    return hitInfo.point;
+        //}
+        //return Vector3.one * 10000;
     }
 }
 

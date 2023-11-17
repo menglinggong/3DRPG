@@ -17,6 +17,12 @@ public class GameManager : ISingleton<GameManager>
     private CinemachineFreeLook freeLookCamera;
 
     /// <summary>
+    /// 玩家背包界面
+    /// </summary>
+    [HideInInspector]
+    public InventoryUI inventoryUI;
+
+    /// <summary>
     /// 订阅游戏结束的订阅者
     /// </summary>
     List<IEndGameObserver> endGameObservers = new List<IEndGameObserver>();
@@ -36,6 +42,16 @@ public class GameManager : ISingleton<GameManager>
 
         freeLookCamera.Follow = PlayerStats.transform.Find("head");
         freeLookCamera.LookAt = PlayerStats.transform.Find("head");
+    }
+
+    /// <summary>
+    /// 添加玩家背包界面
+    /// </summary>
+    /// <param name="inventoryUI"></param>
+    public void RigisterInventoryUI(InventoryUI inventoryUI)
+    {
+        this.inventoryUI = inventoryUI;
+        this.inventoryUI.gameObject.SetActive(false);
     }
 
     /// <summary>

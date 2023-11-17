@@ -102,6 +102,11 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     /// </summary>
     public float LookAroundTime;
 
+    /// <summary>
+    /// 初始停止距离
+    /// </summary>
+    private float stopDistance;
+
     #endregion
 
     #region 动画的参数
@@ -152,6 +157,7 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
         
         collider = this.GetComponent<Collider>();
         speed = agent.speed;
+        stopDistance = agent.stoppingDistance;
 
         //设置敌人初始位置与巡逻位置
         enemyStartPoint = this.transform.position;
@@ -163,7 +169,7 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
         agent.speed = characterStats.CharacterData.MoveSpeed;
         GetNewWayPoint();
 
-        agent.stoppingDistance = characterStats.CharacterData.AttackRange;
+        //agent.stoppingDistance = characterStats.CharacterData.AttackRange;
         GameManager.Instance.AddEndGameObserver(this);
 
         characterStats.CharacterData.CurrentHealth = characterStats.CharacterData.MaxHealth;
@@ -255,10 +261,7 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     private void Attack()
     {
         //转向玩家
-        if(turnRoundCoroutine != null)
-            StopCoroutine(turnRoundCoroutine);
-
-        turnRoundCoroutine = StartCoroutine(transform.TurnRound(attackTarget.transform.position, characterStats.CharacterData.TurnRoundSpeed));
+        Turnround(attackTarget.transform.position);
 
         characterStats.CalculateCritical(characterStats);
 
@@ -350,9 +353,10 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     public void Patrol()
     {
         isChase = false;
+        isFollow = false;
         //设置巡逻时，敌人的速度为追击时的一半
         agent.speed = speed * 0.5f;
-
+        agent.stoppingDistance = stopDistance;
         //到巡逻点
         if (Vector3.Distance(transform.position, wayPoint) <= agent.stoppingDistance)
         {
@@ -363,7 +367,6 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
             {
                 //获取下一个巡逻点
                 GetNewWayPoint();
-
             }
             else
             {
@@ -373,11 +376,31 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
         }
         else
         {
-            //移动到巡逻点
-            isWalk = true;
-            agent.isStopped = false;
-            agent.destination = wayPoint;
+            //如果四处张望的时间到了
+            if (remainLookAroundTime <= 0)
+            {
+                isWalk = true;
+                agent.isStopped = false;
+                agent.destination = wayPoint;
+            }
+            else
+            {
+                isWalk = false;
+                agent.isStopped = true;
+                //敌人四处看看，同时计时
+                remainLookAroundTime -= Time.deltaTime;
+            }
         }
+    }
+
+    /// <summary>
+    /// 进入巡逻状态
+    /// </summary>
+    public void EnterPatrol()
+    {
+        remainLookAroundTime = LookAroundTime;
+        wayPoint = enemyStartPoint;
+        Patrol();
     }
 
     /// <summary>
@@ -386,24 +409,25 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     public void Guard()
     {
         isChase = false;
+        isFollow = false;
         //设置守卫时，敌人的速度为追击时的一半，使用乘法的消耗比除法小
         agent.speed = speed * 0.5f;
 
+        agent.stoppingDistance = stopDistance;
         //如果当前位置不是初始位置，则回到初始位置，此方法与Vector3.Distance作用一样，但开销更小
-        if (Vector3.SqrMagnitude(transform.position - enemyStartPoint) > agent.stoppingDistance)
+        if (Vector3.Distance(transform.position, enemyStartPoint) > stopDistance)
         {
-            isWalk = true;
-
             //如果四处张望的时间到了
             if (remainLookAroundTime <= 0)
             {
+                isWalk = true;
                 agent.isStopped = false;
                 agent.destination = enemyStartPoint;
-                remainLookAroundTime = LookAroundTime;
-
             }
             else
             {
+                isWalk = false;
+                agent.isStopped = true;
                 //敌人四处看看，同时计时
                 remainLookAroundTime -= Time.deltaTime;
             }
@@ -411,22 +435,21 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
         else
         {
             isWalk = false;
-
             if (this.transform.rotation != enemyStartQuaternion)
             {
-                if (remainLookAroundTime <= 0)
-                {
-                    //回到初始朝向
-                    this.transform.rotation = Quaternion.Lerp(this.transform.rotation, enemyStartQuaternion, 1f);
-                    remainLookAroundTime = LookAroundTime;
-                }
-                else
-                {
-                    //敌人四处看看，同时计时
-                    remainLookAroundTime -= Time.deltaTime;
-                }
+                Vector3 dir = enemyStartQuaternion * Vector3.forward;
+                Turnround(dir + this.transform.position);
             }
         }
+    }
+
+    /// <summary>
+    /// 进入守卫状态
+    /// </summary>
+    public void EnterGuard()
+    {
+        remainLookAroundTime = LookAroundTime;
+        Guard();
     }
 
     /// <summary>
@@ -459,7 +482,7 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
         isFollow = true;
         agent.isStopped = false;
         agent.destination = attackTarget.transform.position;
-        
+        agent.stoppingDistance = characterStats.CharacterData.AttackRange;
     }
 
     /// <summary>
@@ -491,6 +514,18 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
         isChase = false;
         isFollow = false;
         attackTarget = null;
+    }
+
+    /// <summary>
+    /// 转向
+    /// </summary>
+    /// <param name="targetPos"></param>
+    private void Turnround(Vector3 targetPos)
+    {
+        if (turnRoundCoroutine != null)
+            StopCoroutine(turnRoundCoroutine);
+
+        turnRoundCoroutine = StartCoroutine(transform.TurnRound(targetPos, characterStats.CharacterData.TurnRoundSpeed));
     }
 
     #endregion
