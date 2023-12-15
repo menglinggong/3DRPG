@@ -6,23 +6,67 @@ using UnityEngine;
 using static UnityEditor.Progress;
 
 /// <summary>
-/// 背包管理器
+/// 物品管理器
 /// </summary>
-public class InventoryManager : ISingleton<InventoryManager>
+public class ArticleManager : ISingleton<ArticleManager>
 {
+    /// <summary>
+    /// 拥有的所有物品信息
+    /// </summary>
+    [HideInInspector]
+    public List<ArticleInfoBase> ArticleInfos = new List<ArticleInfoBase>();
+
     /// <summary>
     /// 当前选中的物品
     /// </summary>
     [HideInInspector]
     public ArticleInfoBase CurrentArticle = null;
-    
+
+    /// <summary>
+    /// 测试用
+    /// </summary>
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.K))
+        {
+            ArticleInfo_Arrow info = new ArticleInfo_Arrow();
+            info.ID = 30011;
+            info.Name = "火箭";
+            info.Descrip = "蕴藏着火焰的力量，击中敌人后燃烧";
+            info.IconPath = "TTT";
+            info.PrefabPath = "RRRR";
+            info.ArrowKind = ArrowKind.FireArrow;
+            info.Count = 50;
+
+            AddArticle(info, false);
+        }
+
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            ArticleInfo_Arrow info = new ArticleInfo_Arrow();
+            info.ID = 30030;
+            RemoveArticle(info);
+        }
+
+        if(Input.GetKeyDown(KeyCode.L))
+        {
+            ArticleInfo_Arrow info = new ArticleInfo_Arrow();
+            info.ID = 30011;
+            info.Count = 50;
+
+            RemoveArticle(info, false);
+        }
+    }
+
+    #region 数据库增删改查功能--对外的方法
+
     /// <summary>
     /// 添加物品--加到数据库中
+    /// 无需检查数据库是否已有该物品，直接添加
     /// </summary>
     /// <param name="article"></param>
-    public void AddInventoryArticle(ArticleInfoBase articleInfo)
+    public void AddArticle(ArticleInfoBase articleInfo)
     {
-        //TODO,判断如果不是消耗品则直接添加，若是消耗品且数据库中已存在，则修改持有数量
         //保存到数据库中
         SQLManager.Instance.OpenSQLaAndConnect();
 
@@ -33,64 +77,145 @@ public class InventoryManager : ISingleton<InventoryManager>
         {
             columns[i] = fields[i].Name;
             columnValues[i] = fields[i].GetValue(articleInfo).ToString();
-            //Debug.Log($"{columns[i]} = {columnValues[i]}");
         }
 
         SQLManager.Instance.Insert(GetTableNameByID(articleInfo.ID), columns, columnValues);
 
         SQLManager.Instance.CloseSQLConnection();
-
-        
     }
 
     /// <summary>
-    /// 通过物品的id得到物品因该存放在那个数据库表内
+    /// 添加物品--加到数据库中
+    /// 需要检查数据库是否已有该物品，若有则修改数量，否则添加
     /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    public string GetTableNameByID(int id)
+    /// <param name="articleInfo"></param>
+    /// <param name="placeholder"></param>
+    public void AddArticle(ArticleInfoBase articleInfo, bool placeholder)
     {
-        int key = id / 10000;
+        string tableName = GetTableNameByID(articleInfo.ID);
+        SQLManager.Instance.OpenSQLaAndConnect();
 
-        string tableName = "";
+        var data = SQLManager.Instance.Select(tableName, null, new string[] { $"ID = {articleInfo.ID}" });
 
-        switch(key)
+        if (!data.Read())
         {
-            case 1:
-                tableName = SQLTableName.Article_Weapon;
-                break;
-            case 2:
-                tableName = SQLTableName.Article_Bow;
-                break;
-            case 3:
-                tableName = SQLTableName.Article_Arrow;
-                break;
-            case 4:
-                tableName = SQLTableName.Article_Shield;
-                break;
-            case 5:
-                tableName = SQLTableName.Article_Cloth;
-                break;
-            case 6:
-                tableName = SQLTableName.Article_SourceMaterial;
-                break;
-            case 7:
-                tableName = SQLTableName.Article_EndProduct;
-                break;
-            case 8:
-                tableName = SQLTableName.Article_Import;
-                break;
+            var fields = articleInfo.GetType().GetFields();
+            string[] columns = new string[fields.Length];
+            string[] columnValues = new string[fields.Length];
+            for (int i = 0; i < fields.Length; i++)
+            {
+                columns[i] = fields[i].Name;
+                columnValues[i] = fields[i].GetValue(articleInfo).ToString();
+            }
+
+            SQLManager.Instance.Insert(tableName, columns, columnValues);
+        }
+        else
+        {
+            var fields = articleInfo.GetType().GetFields();
+
+            for (int i = 0; i < fields.Length; i++)
+            {
+                if (fields[i].Name == "Count")
+                {
+                    int count = int.Parse(fields[i].GetValue(articleInfo).ToString());
+
+                    int sqlIndex = data.GetOrdinal("Count");
+                    int allCount = int.Parse(data.GetValue(sqlIndex).ToString());
+
+                    SQLManager.Instance.Updata(tableName, new string[] { "Count" }, new string[] { (allCount + count).ToString() }, new string[] { $"ID = {articleInfo.ID}" });
+                    break;
+                }
+            }
         }
 
-        return tableName;
+        SQLManager.Instance.CloseSQLConnection();
     }
+
+    /// <summary>
+    /// 从数据库移除物品
+    /// 直接移除，不需要管物品的数量
+    /// </summary>
+    /// <param name="articleInfo"></param>
+    public void RemoveArticle(ArticleInfoBase articleInfo)
+    {
+        SQLManager.Instance.OpenSQLaAndConnect();
+
+        SQLManager.Instance.Delete(GetTableNameByID(articleInfo.ID), new string[] { $"ID = {articleInfo.ID}" });
+
+        SQLManager.Instance.CloseSQLConnection();
+    }
+
+    /// <summary>
+    /// 从数据库移除
+    /// 根据移除的数量进行移除
+    /// </summary>
+    /// <param name="articleInfo"></param>
+    public void RemoveArticle(ArticleInfoBase articleInfo, bool placeholder)
+    {
+        string tableName = GetTableNameByID(articleInfo.ID);
+
+        SQLManager.Instance.OpenSQLaAndConnect();
+
+        var data = SQLManager.Instance.Select(tableName, null, new string[] { $"ID = {articleInfo.ID}" });
+
+        if (data.Read())
+        {
+            var fields = articleInfo.GetType().GetFields();
+
+            for (int i = 0; i < fields.Length; i++)
+            {
+                if (fields[i].Name == "Count")
+                {
+                    int count = int.Parse(fields[i].GetValue(articleInfo).ToString());
+
+                    int sqlIndex = data.GetOrdinal("Count");
+                    int allCount = int.Parse(data.GetValue(sqlIndex).ToString());
+
+                    if (count >= allCount)
+                    {
+                        SQLManager.Instance.Delete(GetTableNameByID(articleInfo.ID), new string[] { $"ID = {articleInfo.ID}" });
+                    }
+                    else
+                    {
+                        SQLManager.Instance.Updata(tableName, new string[] { "Count" }, new string[] { (allCount - count).ToString() }, new string[] { $"ID = {articleInfo.ID}" });
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        SQLManager.Instance.CloseSQLConnection();
+    }
+
+    /// <summary>
+    /// 通过表名，获取数据库数据（解析完成的）
+    /// </summary>
+    /// <param name="tableName"></param>
+    /// <returns></returns>
+    public List<ArticleInfoBase> SelectArticle(string tableName)
+    {
+        SQLManager.Instance.OpenSQLaAndConnect();
+
+        var data = SQLManager.Instance.Select(tableName);
+        var articleInfos = ArticleManager.Instance.AnalysisSQLData(data);
+
+        SQLManager.Instance.CloseSQLConnection();
+
+        return articleInfos;
+    }
+
+    #endregion
+
+    #region 解析数据库数据，得到各种物品的信息
 
     /// <summary>
     /// 解析数据库数据，根据id得到对应的物品信息
     /// </summary>
     /// <param name="data"></param>
     /// <returns></returns>
-    public List<ArticleInfoBase> AnalysisSQLData(SqliteDataReader data)
+    private List<ArticleInfoBase> AnalysisSQLData(SqliteDataReader data)
     {
         List<ArticleInfoBase> articleInfos = new List<ArticleInfoBase>();
         if(data != null)
@@ -277,87 +402,100 @@ public class InventoryManager : ISingleton<InventoryManager>
         return clothInfos;
     }
 
+    #endregion
 
-    ///// <summary>
-    ///// 丢弃物品--全部
-    ///// </summary>
-    ///// <param name="item"></param>
-    //public void RemoveInventoryItem(InventoryItem item)
-    //{
-    //    if (inventoryItemDict.ContainsKey(item.Id))
-    //    {
-    //        inventoryItemDict.Remove(item.Id);
-    //        currentInventoryItem = null;
-    //    }
-    //}
+    #region 内部方法
 
-    ///// <summary>
-    ///// 丢弃物品--单个
-    ///// </summary>
-    ///// <param name="id"></param>
-    //public void RemoveInventoryItem(int id)
-    //{
-    //    if (inventoryItemDict.ContainsKey(id))
-    //    {
-    //        inventoryItemDict[id].Count--;
+    /// <summary>
+    /// 通过物品的id得到物品因该存放在那个数据库表内
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    private string GetTableNameByID(int id)
+    {
+        int key = id / 10000;
 
-    //        if (inventoryItemDict[id].Count <= 0)
-    //        {
-    //            inventoryItemDict.Remove(id);
-    //            currentInventoryItem = null;
-    //        }
-    //    }
-    //}
+        string tableName = "";
 
-    ///// <summary>
-    ///// 丢弃物品--批量
-    ///// </summary>
-    ///// <param name="id"></param>
-    ///// <param name="count"></param>
-    //public void RemoveInventoryItem(int id, int count)
-    //{
-    //    if (inventoryItemDict.ContainsKey(id))
-    //    {
-    //        inventoryItemDict[id].Count -= count;
+        switch (key)
+        {
+            case 1:
+                tableName = SQLTableName.Article_Weapon;
+                break;
+            case 2:
+                tableName = SQLTableName.Article_Bow;
+                break;
+            case 3:
+                tableName = SQLTableName.Article_Arrow;
+                break;
+            case 4:
+                tableName = SQLTableName.Article_Shield;
+                break;
+            case 5:
+                tableName = SQLTableName.Article_Cloth;
+                break;
+            case 6:
+                tableName = SQLTableName.Article_SourceMaterial;
+                break;
+            case 7:
+                tableName = SQLTableName.Article_EndProduct;
+                break;
+            case 8:
+                tableName = SQLTableName.Article_Import;
+                break;
+        }
 
-    //        if (inventoryItemDict[id].Count <= 0)
-    //        {
-    //            inventoryItemDict.Remove(id);
-    //            currentInventoryItem = null;
-    //        }
-    //    }
-    //}
+        return tableName;
+    }
 
-    ///// <summary>
-    ///// 使用物品--全部用完
-    ///// </summary>
-    ///// <param name="item"></param>
-    //public void UseInventoryItem(InventoryItem item)
-    //{
-    //    //TODO:使用物品
+    #endregion
 
-    //    RemoveInventoryItem(item);
-    //}
+    #region 外部方法
 
-    ///// <summary>
-    ///// 使用物品--单个使用
-    ///// </summary>
-    ///// <param name="item"></param>
-    //public void UseInventoryItem(int id)
-    //{
-    //    //TODO:使用物品
+    /// <summary>
+    /// 使用物品，
+    /// </summary>
+    /// <param name="articleInfo"></param>
+    public void UseArticle(ArticleInfoBase articleInfo)
+    {
 
-    //    RemoveInventoryItem(id);
-    //}
+    }
 
-    ///// <summary>
-    ///// 使用物品--批量使用
-    ///// </summary>
-    ///// <param name="item"></param>
-    //public void UseInventoryItem(int id, int count)
-    //{
-    //    //TODO:使用物品
+    /// <summary>
+    /// 手持物品
+    /// </summary>
+    /// <param name="articleInfo"></param>
+    public void HoldArticle(ArticleInfoBase articleInfo)
+    {
 
-    //    RemoveInventoryItem(id, count);
-    //}
+    }
+
+    /// <summary>
+    /// 丢弃物品
+    /// </summary>
+    /// <param name="articleInfo"></param>
+    public void DropArticle(ArticleInfoBase articleInfo)
+    {
+
+    }
+
+    /// <summary>
+    /// 装备物品
+    /// </summary>
+    /// <param name="articleInfo"></param>
+    public void EquipArticle(ArticleInfoBase articleInfo)
+    {
+        string[] paths = articleInfo.PrefabPath.Split('/');
+        string name = paths[paths.Length -1];
+
+        GameObject article = ObjectPool.Instance.GetObject(name, articleInfo.PrefabPath);
+        article.SetActive(true);
+        //1.创建物品的实例
+        //2.调用玩家的装备物品的方法
+    }
+
+    #endregion
+
+
+
 }

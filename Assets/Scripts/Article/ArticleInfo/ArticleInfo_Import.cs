@@ -7,5 +7,5 @@ using UnityEngine;
 /// </summary>
 public class ArticleInfo_Import : ArticleInfoBase
 {
-    
+    //TODO，暂时不清楚怎么设计
 }

@@ -47,12 +47,7 @@ public class ArticleLabelData : LabelDataBase
     /// </summary>
     private void ShowArticles()
     {
-        SQLManager.Instance.OpenSQLaAndConnect();
-
-        var data = SQLManager.Instance.Select(TableName);
-        var articleInfos = InventoryManager.Instance.AnalysisSQLData(data);
-
-        SQLManager.Instance.CloseSQLConnection();
+        var articleInfos = ArticleManager.Instance.SelectArticle(TableName);
 
         foreach (var articleInfo in articleInfos)
         {
@@ -100,12 +95,12 @@ public class ArticleLabelData : LabelDataBase
     private void OnFrameSelected(ItemFrame item)
     {
         //取消上一个物品的选中
-        if (InventoryManager.Instance.CurrentArticle != null)
+        if (ArticleManager.Instance.CurrentArticle != null)
         {
-            itemFrames.Find(a => a.InventoryItem == InventoryManager.Instance.CurrentArticle)?.SetItemSelected(false);
+            itemFrames.Find(a => a.InventoryItem == ArticleManager.Instance.CurrentArticle)?.SetItemSelected(false);
         }
 
-        InventoryManager.Instance.CurrentArticle = item.InventoryItem;
+        ArticleManager.Instance.CurrentArticle = item.InventoryItem;
 
         EventManager.Instance.Invoke(MessageConst.ArticleConst.OnArticleUISelected, item.InventoryItem);
         

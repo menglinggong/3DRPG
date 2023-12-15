@@ -3,31 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 素材类物品的信息
-/// TODO:待优化
+/// 成品类物品的信息，比如药，烹饪的食物
 /// </summary>
-public class ArticleInfo_SourceMaterial : ArticleInfoBase
+public class ArticleInfo_EndProduct : ArticleInfoBase
 {
-    /// <summary>
-    /// 拥有的数量
-    /// </summary>
-    public int Count;
-
-    /// <summary>
-    /// 是否可以直接使用
-    /// </summary>
-    public bool IsCanDirectUse;
-
     /// <summary>
     /// 恢复血量的值
     /// </summary>
     public float HealthRecoverValue;
+
+    /// <summary>
+    /// 物品的特殊效果
+    /// </summary>
+    public EndProductEffect Effect;
+
+    /// <summary>
+    /// 特殊效果的值
+    /// </summary>
+    public float EffectValue;
+
+    /// <summary>
+    /// 特殊效果的持续时间
+    /// </summary>
+    public float EffectDuration;
 }
 
 /// <summary>
 /// 素材拥有的特殊效果
 /// </summary>
-public enum SourceMaterialEffect
+public enum EndProductEffect
 {
     Default,                    //无特殊效果
     AttackUp,                   //攻击力提升
@@ -39,7 +43,6 @@ public enum SourceMaterialEffect
     FireProof,                  //防火
     AntiElectricity,            //防电
     HeatResisting,              //耐热
-    SourceMaterialEffectUp,     //素材的特殊效果提升
     HealthRecoverComplete,      //血量完全恢复
     VigoeRecover,               //恢复精力
 }

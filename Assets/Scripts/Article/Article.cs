@@ -4,25 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 物品的影响效果及其数值
-/// </summary>
-[Serializable]
-public class ItemEffectType
-{
-    /// <summary>
-    /// 影响效果的名称
-    /// </summary>
-    public string name;
-    /// <summary>
-    /// 影响效果的值，不同类型的影响效果，值的意思不同
-    /// </summary>
-    public float value;
-}
-
-
-
-
-/// <summary>
 /// 物品
 /// </summary>
 public class Article : MonoBehaviour

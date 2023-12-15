@@ -155,6 +155,8 @@ public class PlayerController : MonoBehaviour
         Defence();
     }
 
+    #region 内部方法
+
     /// <summary>
     /// 玩家是否防御
     /// </summary>
@@ -267,6 +269,11 @@ public class PlayerController : MonoBehaviour
         animator.SetTrigger("Attack");
     }
 
+    #endregion
+
+
+    #region 外部方法
+
     /// <summary>
     /// 造成伤害，在播放动画时调用
     /// </summary>
@@ -295,4 +302,56 @@ public class PlayerController : MonoBehaviour
             targetStats.TakeDamage(characterStats, targetStats);
         }
     }
+
+    #endregion
+
+
+    #region 物品装备相关
+
+    private Transform weaponPoint;
+    private Transform shieldPoint;
+
+    /// <summary>
+    /// 通过物品id得到物品装备位置
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    private Transform GetArticlePoint(int id)
+    {
+        int key = id / 10000;
+        Transform articlePoint = null;
+        switch (key)
+        {
+            case 1:             //武器
+                articlePoint = weaponPoint;
+                break;
+            //case 2:
+            //    break;
+            case 4:             //盾牌
+                articlePoint = shieldPoint;
+                break;
+        }
+
+        return articlePoint;
+    }
+
+    /// <summary>
+    /// 装备物品
+    /// </summary>
+    /// <param name="articleInfo"></param>
+    /// <param name="article"></param>
+    public void EquipArticle(ArticleInfoBase articleInfo, GameObject article)
+    {
+        //1.判断要装备的物品的类型，即要装备到什么位置
+        Transform articlePoint = GetArticlePoint(articleInfo.ID);
+
+        //2.将原始的物品移入对象池，替换上新的物品
+        if(articlePoint.childCount != 0)
+        {
+            //ObjectPool.Instance.ReleaseObject()
+        }
+        //3.根据物品的属性对玩家的属性进行调整
+    }
+
+    #endregion
 }

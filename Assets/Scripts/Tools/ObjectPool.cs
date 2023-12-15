@@ -41,6 +41,34 @@ public class ObjectPool : ISingleton<ObjectPool>
     }
 
     /// <summary>
+    /// 获取对象池实例，若对象池没有则通过路径从Resources中加载一个
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    public GameObject GetObject(string name,string path)
+    {
+        GameObject go = null;
+        if (!pool.ContainsKey(name))
+        {
+            pool.Add(name, new List<GameObject>());
+        }
+
+        if (pool[name].Count > 0)
+        {
+            go = pool[name][0];
+            pool[name].Remove(go);
+        }
+        else
+        {
+            go = Resources.Load<GameObject>(path);
+            go.name = name;
+        }
+
+        return go;
+    }
+
+    /// <summary>
     /// 将物体放入对象池
     /// </summary>
     /// <param name="templateName"></param>

@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 盾牌类物品
+/// 武器类物品--具体物体模型
 /// </summary>
-public class Article_Shield : Article
+public class Article_Weapon : Article
 {
     [SerializeField]
-    private ArticleInfo_Shield articleInfo;
+    private ArticleInfo_Weapon articleInfo;
 
     public override void PickUp()
     {
-        InventoryManager.Instance.AddInventoryArticle(articleInfo);
+        ArticleManager.Instance.AddArticle(articleInfo);
         base.PickUp();
     }
 }
