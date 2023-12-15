@@ -33,7 +33,12 @@ public class MouseManager : ISingleton<MouseManager>
 
     private void Update()
     {
-        if (CheckGuiRaycastObjects()) return;
+        if (CheckGuiRaycastObjects())
+        {
+            Cursor.SetCursor(Arrow, Vector2.zero, CursorMode.Auto);
+            return;
+        }
+
         SetCursorTexture();
         MouseControl();
     }
@@ -92,6 +97,8 @@ public class MouseManager : ISingleton<MouseManager>
                     break;
             }
         }
+        else
+            Cursor.SetCursor(Arrow, Vector2.zero, CursorMode.Auto);
     }
 
     /// <summary>

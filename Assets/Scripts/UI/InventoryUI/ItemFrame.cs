@@ -34,14 +34,14 @@ public class ItemFrame : MonoBehaviour
     /// <summary>
     /// 物品
     /// </summary>
-    private InventoryItem inventoryItem;
+    private ArticleInfoBase inventoryItem;
 
     /// <summary>
     /// 按钮点击事件
     /// </summary>
-    public UnityAction<InventoryItem> OnBtnClickAction;
+    public UnityAction<ItemFrame> OnBtnClickAction;
 
-    public InventoryItem InventoryItem
+    public ArticleInfoBase InventoryItem
     {
         get { return inventoryItem; }
         set { inventoryItem = value; }
@@ -52,7 +52,8 @@ public class ItemFrame : MonoBehaviour
         clickBtn = GetComponent<Button>();
         clickBtn.onClick.AddListener(() =>
         {
-            OnBtnClickAction?.Invoke(inventoryItem);
+            OnBtnClickAction?.Invoke(this);
+            SetItemSelected(true);
         });
     }
 
@@ -61,9 +62,11 @@ public class ItemFrame : MonoBehaviour
     /// </summary>
     public void UpdateInfo()
     {
-        ItemInfo info = ItemData.GetItemInfo(inventoryItem.Id);
-        itemIcon.sprite = ItemData.GetItemIcon(inventoryItem.Id);
-        itemCount.text = inventoryItem.Count.ToString();
+        itemIcon.sprite = Resources.Load<Sprite>(inventoryItem.IconPath);
+        //TODO，增加物品后需要显示物品的持有数量，
+        //if(inventoryItem.GetType() == typeof())
+        //itemCount.text = inventoryItem.Count.ToString();
+        itemCount.text = "";
     }
 
     /// <summary>

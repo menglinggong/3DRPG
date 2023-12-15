@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AI.FSM
-{
+namespace AI.FSM{
     /// <summary>
     /// Ñ²Âß×´Ì¬
     /// </summary>
