@@ -147,14 +147,14 @@ namespace RPG.Skill
         /// </summary>
         private void LookAtMousePos()
         {
-            Vector3 pos = MouseManager.Instance.MousePosToWorld();
-            if (pos == Vector3.one * 10000)
-                return;
+            //Vector3 pos = MouseManager.Instance.MousePosToWorld();
+            //if (pos == Vector3.one * 10000)
+            //    return;
 
-            if(turnRoundCoroutine != null)
-                StopCoroutine(turnRoundCoroutine);
+            //if(turnRoundCoroutine != null)
+            //    StopCoroutine(turnRoundCoroutine);
 
-            turnRoundCoroutine = StartCoroutine(transform.TurnRound(pos, characterStats.CharacterData.TurnRoundSpeed));
+            //turnRoundCoroutine = StartCoroutine(transform.TurnRound(pos, characterStats.CharacterData.TurnRoundSpeed));
         }
     }
 }

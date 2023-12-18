@@ -11,136 +11,136 @@ using UnityEngine.EventSystems;
 /// </summary>
 public class MouseManager : ISingleton<MouseManager>
 {
-    /// <summary>
-    /// 鼠标贴图，分别为手指，传送门，攻击，目标位置，箭头
-    /// </summary>
-    public Texture2D Point, Doorway, Attack, Target, Arrow;
+    ///// <summary>
+    ///// 鼠标贴图，分别为手指，传送门，攻击，目标位置，箭头
+    ///// </summary>
+    //public Texture2D Point, Doorway, Attack, Target, Arrow;
 
-    /// <summary>
-    /// 鼠标点击事件（传一个三维位置点）
-    /// </summary>
-    public event Action<Vector3> OnMouseClicked;
+    ///// <summary>
+    ///// 鼠标点击事件（传一个三维位置点）
+    ///// </summary>
+    //public event Action<Vector3> OnMouseClicked;
 
-    /// <summary>
-    /// 点击敌人事件
-    /// </summary>
-    public event Action<GameObject> OnEnemyClicked;
+    ///// <summary>
+    ///// 点击敌人事件
+    ///// </summary>
+    //public event Action<GameObject> OnEnemyClicked;
 
-    /// <summary>
-    /// 射线
-    /// </summary>
-    RaycastHit hitInfo;
+    ///// <summary>
+    ///// 射线
+    ///// </summary>
+    //RaycastHit hitInfo;
 
-    private void Update()
-    {
-        if (CheckGuiRaycastObjects())
-        {
-            Cursor.SetCursor(Arrow, Vector2.zero, CursorMode.Auto);
-            return;
-        }
+    //private void Update()
+    //{
+    //    if (CheckGuiRaycastObjects())
+    //    {
+    //        Cursor.SetCursor(Arrow, Vector2.zero, CursorMode.Auto);
+    //        return;
+    //    }
 
-        SetCursorTexture();
-        MouseControl();
-    }
+    //    SetCursorTexture();
+    //    MouseControl();
+    //}
 
-    /// <summary>
-    /// 判断射线是否在可阻挡射线的界面上
-    /// </summary>
-    /// <returns></returns>
-    bool CheckGuiRaycastObjects()
-    {
-        if(EventSystem.current == null) return false;
+    ///// <summary>
+    ///// 判断射线是否在可阻挡射线的界面上
+    ///// </summary>
+    ///// <returns></returns>
+    //bool CheckGuiRaycastObjects()
+    //{
+    //    if(EventSystem.current == null) return false;
 
-        PointerEventData eventData = new PointerEventData(EventSystem.current);
-        eventData.pressPosition = Input.mousePosition;
-        eventData.position = Input.mousePosition;
+    //    PointerEventData eventData = new PointerEventData(EventSystem.current);
+    //    eventData.pressPosition = Input.mousePosition;
+    //    eventData.position = Input.mousePosition;
 
-        List<RaycastResult> list = new List<RaycastResult>();
+    //    List<RaycastResult> list = new List<RaycastResult>();
 
-        EventSystem.current.RaycastAll(eventData, list);
-        var result = list.FindAll(a => a.gameObject.CompareTag("BlockRayUI"));
+    //    EventSystem.current.RaycastAll(eventData, list);
+    //    var result = list.FindAll(a => a.gameObject.CompareTag("BlockRayUI"));
 
-        return result.Count > 0;
-    }
+    //    return result.Count > 0;
+    //}
 
-    /// <summary>
-    /// 设置鼠标显示贴图
-    /// </summary>
-    private void SetCursorTexture()
-    {
-        if (Camera.main == null)
-            return;
+    ///// <summary>
+    ///// 设置鼠标显示贴图
+    ///// </summary>
+    //private void SetCursorTexture()
+    //{
+    //    if (Camera.main == null)
+    //        return;
 
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+    //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        if (Physics.Raycast(ray, out hitInfo))
-        {
-            //设置鼠标显示贴图
-            switch(hitInfo.collider.gameObject.tag)
-            {
-                case "Ground":
-                    Cursor.SetCursor(Target, new Vector2(16,16), CursorMode.Auto);
-                    break;
-                case "Enemy":
-                    Cursor.SetCursor(Attack, new Vector2(16, 16), CursorMode.Auto);
-                    break;
-                case "AttackAble":
-                    Cursor.SetCursor(Attack, new Vector2(16, 16), CursorMode.Auto);
-                    break;
-                case "Portal":
-                    Cursor.SetCursor(Doorway, new Vector2(16, 16), CursorMode.Auto);
-                    break;
-                //case "Point":
-                //    break;
-                default:
-                    Cursor.SetCursor(Arrow, Vector2.zero, CursorMode.Auto);
-                    break;
-            }
-        }
-        else
-            Cursor.SetCursor(Arrow, Vector2.zero, CursorMode.Auto);
-    }
+    //    if (Physics.Raycast(ray, out hitInfo))
+    //    {
+    //        //设置鼠标显示贴图
+    //        switch(hitInfo.collider.gameObject.tag)
+    //        {
+    //            case "Ground":
+    //                Cursor.SetCursor(Target, new Vector2(16,16), CursorMode.Auto);
+    //                break;
+    //            case "Enemy":
+    //                Cursor.SetCursor(Attack, new Vector2(16, 16), CursorMode.Auto);
+    //                break;
+    //            case "AttackAble":
+    //                Cursor.SetCursor(Attack, new Vector2(16, 16), CursorMode.Auto);
+    //                break;
+    //            case "Portal":
+    //                Cursor.SetCursor(Doorway, new Vector2(16, 16), CursorMode.Auto);
+    //                break;
+    //            //case "Point":
+    //            //    break;
+    //            default:
+    //                Cursor.SetCursor(Arrow, Vector2.zero, CursorMode.Auto);
+    //                break;
+    //        }
+    //    }
+    //    else
+    //        Cursor.SetCursor(Arrow, Vector2.zero, CursorMode.Auto);
+    //}
 
-    /// <summary>
-    /// 鼠标控制，点击地面，执行事件
-    /// </summary>
-    private void MouseControl()
-    {
-        if(Input.GetMouseButtonDown(0) && hitInfo.collider != null)
-        {
-            if (hitInfo.collider.gameObject.CompareTag("Ground"))
-                OnMouseClicked?.Invoke(hitInfo.point);
-            else if (hitInfo.collider.gameObject.CompareTag("Enemy"))
-                OnEnemyClicked?.Invoke(hitInfo.collider.gameObject);
-            else if (hitInfo.collider.gameObject.CompareTag("AttackAble"))
-                OnEnemyClicked?.Invoke(hitInfo.collider.gameObject);
-            else if(hitInfo.collider.gameObject.CompareTag("Portal"))
-                OnMouseClicked?.Invoke(new Vector3(hitInfo.point.x, 0, hitInfo.point.z) + hitInfo.collider.transform.forward * 0.5f);
-        }
-    }
+    ///// <summary>
+    ///// 鼠标控制，点击地面，执行事件
+    ///// </summary>
+    //private void MouseControl()
+    //{
+    //    if(Input.GetMouseButtonDown(0) && hitInfo.collider != null)
+    //    {
+    //        if (hitInfo.collider.gameObject.CompareTag("Ground"))
+    //            OnMouseClicked?.Invoke(hitInfo.point);
+    //        else if (hitInfo.collider.gameObject.CompareTag("Enemy"))
+    //            OnEnemyClicked?.Invoke(hitInfo.collider.gameObject);
+    //        else if (hitInfo.collider.gameObject.CompareTag("AttackAble"))
+    //            OnEnemyClicked?.Invoke(hitInfo.collider.gameObject);
+    //        else if(hitInfo.collider.gameObject.CompareTag("Portal"))
+    //            OnMouseClicked?.Invoke(new Vector3(hitInfo.point.x, 0, hitInfo.point.z) + hitInfo.collider.transform.forward * 0.5f);
+    //    }
+    //}
 
-    /// <summary>
-    /// 获取鼠标在世界空间的位置
-    /// </summary>
-    /// <returns></returns>
-    public Vector3 MousePosToWorld()
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+    ///// <summary>
+    ///// 获取鼠标在世界空间的位置
+    ///// </summary>
+    ///// <returns></returns>
+    //public Vector3 MousePosToWorld()
+    //{
+    //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        var result = Physics.RaycastAll(ray, 10000,  1 << LayerMask.NameToLayer("Ground"));
+    //    var result = Physics.RaycastAll(ray, 10000,  1 << LayerMask.NameToLayer("Ground"));
 
-        if(result != null && result.Length > 0)
-        {
-            return result[0].point;
-        }
-        else
-            return Vector3.one * 10000;
+    //    if(result != null && result.Length > 0)
+    //    {
+    //        return result[0].point;
+    //    }
+    //    else
+    //        return Vector3.one * 10000;
 
-        //if (hitInfo.collider != null)
-        //{
-        //    return hitInfo.point;
-        //}
-        //return Vector3.one * 10000;
-    }
+    //    //if (hitInfo.collider != null)
+    //    //{
+    //    //    return hitInfo.point;
+    //    //}
+    //    //return Vector3.one * 10000;
+    //}
 }
 

@@ -95,8 +95,8 @@ public class PlayerController : MonoBehaviour
         agent.speed = characterStats.CharacterData.MoveSpeed;
         stopDistance = agent.stoppingDistance;
         //事件绑定
-        MouseManager.Instance.OnMouseClicked += MoveToTargetPos;
-        MouseManager.Instance.OnEnemyClicked += EventAttack;
+        //MouseManager.Instance.OnMouseClicked += MoveToTargetPos;
+        //MouseManager.Instance.OnEnemyClicked += EventAttack;
     }
 
     private void OnEnable()
@@ -114,8 +114,8 @@ public class PlayerController : MonoBehaviour
 
     private void OnDestroy()
     {
-        MouseManager.Instance.OnMouseClicked -= MoveToTargetPos;
-        MouseManager.Instance.OnEnemyClicked -= EventAttack;
+        //MouseManager.Instance.OnMouseClicked -= MoveToTargetPos;
+        //MouseManager.Instance.OnEnemyClicked -= EventAttack;
     }
 
     private void Update()
@@ -138,8 +138,8 @@ public class PlayerController : MonoBehaviour
             GameManager.Instance.NotifyObserver();
             //Destroy(this.gameObject, 2);
 
-            MouseManager.Instance.OnMouseClicked -= MoveToTargetPos;
-            MouseManager.Instance.OnEnemyClicked -= EventAttack;
+            //MouseManager.Instance.OnMouseClicked -= MoveToTargetPos;
+            //MouseManager.Instance.OnEnemyClicked -= EventAttack;
         }
 
         //TODO测试按Q放技能
