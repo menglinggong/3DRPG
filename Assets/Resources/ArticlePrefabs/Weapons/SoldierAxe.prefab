@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4775487551479692513}
   m_Layer: 0
   m_Name: SoldierAxe
-  m_TagString: Untagged
+  m_TagString: Article
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -125,8 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 309aae5cc73533843a5ddf54a1877415, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeTime: 10
-  radio: 2
+  Owner: {fileID: 0}
   articleInfo:
     ID: 10030
     Name: "\u58EB\u5175\u4E4B\u65A7"

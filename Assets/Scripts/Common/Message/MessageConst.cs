@@ -15,6 +15,9 @@ public partial class MessageConst
 {
     public class ArticleConst
     {
+        /// <summary>
+        /// 背包中，物品选中
+        /// </summary>
         public const string OnArticleUISelected = "OnArticleUISelected";
     }
     

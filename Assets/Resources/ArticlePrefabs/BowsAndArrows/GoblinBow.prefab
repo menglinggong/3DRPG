@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -2529731910623081526}
   m_Layer: 0
   m_Name: GoblinBow
-  m_TagString: Untagged
+  m_TagString: Article
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -95,8 +95,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.55170125, y: 1.3864355, z: 0.09911406}
-  m_Center: {x: -0.089225985, y: -0.014714688, z: 0.01759023}
+  m_Size: {x: 0.40418452, y: 1.3864355, z: 0.06074453}
+  m_Center: {x: -0.16298434, y: -0.014714718, z: 0.0003031157}
 --- !u!54 &-92385836307867218
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -125,8 +125,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c8c5122581fb1c40806c55a249db3e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeTime: 10
-  radio: 2
+  Owner: {fileID: 0}
+  infoBase:
+    ID: 0
+    Name: 
+    Descrip: 
+    IconPath: 
+    PrefabPath: 
   articleInfo:
     ID: 20030
     Name: "\u54E5\u5E03\u6797\u4E4B\u5F13"

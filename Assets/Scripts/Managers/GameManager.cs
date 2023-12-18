@@ -20,7 +20,13 @@ public class GameManager : ISingleton<GameManager>
     /// 玩家背包界面
     /// </summary>
     [HideInInspector]
-    public InventoryUI inventoryUI;
+    public InventoryUI InventoryUI;
+
+    /// <summary>
+    /// 显示可拾取物品信息的界面
+    /// </summary>
+    [HideInInspector]
+    public ArticleInfoUI ArticleInfoUI;
 
     /// <summary>
     /// 订阅游戏结束的订阅者
@@ -31,7 +37,7 @@ public class GameManager : ISingleton<GameManager>
     /// 在玩家创建时赋值
     /// </summary>
     /// <param name="player"></param>
-    public void RigisterPlayer(CharacterStats player)
+    public void RegisterPlayer(CharacterStats player)
     {
         PlayerStats = player;
 
@@ -48,10 +54,20 @@ public class GameManager : ISingleton<GameManager>
     /// 添加玩家背包界面
     /// </summary>
     /// <param name="inventoryUI"></param>
-    public void RigisterInventoryUI(InventoryUI inventoryUI)
+    public void RegisterInventoryUI(InventoryUI inventoryUI)
     {
-        this.inventoryUI = inventoryUI;
-        this.inventoryUI.gameObject.SetActive(false);
+        this.InventoryUI = inventoryUI;
+        this.InventoryUI.gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// 注册物品信息界面
+    /// </summary>
+    /// <param name="articleInfoUI"></param>
+    public void RegisterArticleInfoUI(ArticleInfoUI articleInfoUI)
+    {
+        this.ArticleInfoUI = articleInfoUI;
+        this.ArticleInfoUI.HideArticleInfo();
     }
 
     /// <summary>

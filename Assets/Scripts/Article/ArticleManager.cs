@@ -22,6 +22,12 @@ public class ArticleManager : ISingleton<ArticleManager>
     [HideInInspector]
     public ArticleInfoBase CurrentArticle = null;
 
+    public float force = 300f;
+
+    public float range = 3;
+
+    public Article TestArticle;
+
     /// <summary>
     /// 测试用
     /// </summary>
@@ -56,16 +62,39 @@ public class ArticleManager : ISingleton<ArticleManager>
 
             RemoveArticle(info, false);
         }
+
+        if(Input.GetKeyDown(KeyCode.F))
+        {
+            ArticleInfo_Weapon info = new ArticleInfo_Weapon();
+            info.ID = 10030;
+            info.Name = "士兵之斧";
+            info.Descrip = "一把双手持的重斧";
+            info.IconPath = "ArticleIcons/Weapons/SoldierAxe";
+            info.PrefabPath = "ArticlePrefabs/Weapons/SoldierAxe";
+            
+            EquipArticle(info);
+        }
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            TestArticle = GameObject.Find("KnightShield").GetComponent<Article>();
+            FallDownArticle(TestArticle);
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            FallDownArticle("ArticlePrefabs/SourceMaterials/Apple", TestArticle.transform.position);
+        }
     }
 
-    #region 数据库增删改查功能--对外的方法
+    #region 数据库增删改查功能
 
     /// <summary>
     /// 添加物品--加到数据库中
     /// 无需检查数据库是否已有该物品，直接添加
     /// </summary>
     /// <param name="article"></param>
-    public void AddArticle(ArticleInfoBase articleInfo)
+    private void AddArticle(ArticleInfoBase articleInfo)
     {
         //保存到数据库中
         SQLManager.Instance.OpenSQLaAndConnect();
@@ -90,7 +119,7 @@ public class ArticleManager : ISingleton<ArticleManager>
     /// </summary>
     /// <param name="articleInfo"></param>
     /// <param name="placeholder"></param>
-    public void AddArticle(ArticleInfoBase articleInfo, bool placeholder)
+    private void AddArticle(ArticleInfoBase articleInfo, bool placeholder)
     {
         string tableName = GetTableNameByID(articleInfo.ID);
         SQLManager.Instance.OpenSQLaAndConnect();
@@ -137,7 +166,7 @@ public class ArticleManager : ISingleton<ArticleManager>
     /// 直接移除，不需要管物品的数量
     /// </summary>
     /// <param name="articleInfo"></param>
-    public void RemoveArticle(ArticleInfoBase articleInfo)
+    private void RemoveArticle(ArticleInfoBase articleInfo)
     {
         SQLManager.Instance.OpenSQLaAndConnect();
 
@@ -151,7 +180,7 @@ public class ArticleManager : ISingleton<ArticleManager>
     /// 根据移除的数量进行移除
     /// </summary>
     /// <param name="articleInfo"></param>
-    public void RemoveArticle(ArticleInfoBase articleInfo, bool placeholder)
+    private void RemoveArticle(ArticleInfoBase articleInfo, bool placeholder)
     {
         string tableName = GetTableNameByID(articleInfo.ID);
 
@@ -453,6 +482,57 @@ public class ArticleManager : ISingleton<ArticleManager>
     #region 外部方法
 
     /// <summary>
+    /// 拾取物品
+    /// </summary>
+    /// <param name="articleInfo">物品信息</param>
+    /// <param name="article">物品的3维模型</param>
+    /// <param name="isWithCount">物品是否带有数量信息（例如箭和素材，这些是带有数量信息，同一id物品不能重复添加）</param>
+    public void PickUpArticle(ArticleInfoBase articleInfo, Article article, bool isWithCount = false)
+    {
+        if (isWithCount)
+            AddArticle(articleInfo, isWithCount);
+        else
+            AddArticle(articleInfo);
+
+        ObjectPool.Instance.ReleaseObject(article.gameObject.name, article.gameObject);
+    }
+
+    /// <summary>
+    /// 掉落物品
+    /// </summary>
+    /// <param name="article"></param>
+    public void FallDownArticle(Article article, bool isAddForce = true)
+    {
+        //1.把物品移到全局位置
+        article.transform.SetParent(this.transform, true);
+        //2.物品的持有者为空
+        article.Owner = null;
+        //3.给物品一个力，让它有一个飞起掉落的效果
+        if (isAddForce)
+        {
+            Rigidbody rd = article.GetComponent<Rigidbody>();
+            rd.AddExplosionForce(force, article.transform.position - Vector3.up, range);
+            float x = UnityEngine.Random.Range(-1, 1);
+            float z = UnityEngine.Random.Range(-1, 1);
+            rd.AddExplosionForce(force * 0.5f, article.transform.position + new Vector3(x, 0, z), range);
+        }
+    }
+
+    /// <summary>
+    /// 掉落物品
+    /// </summary>
+    /// <param name="articlePath">物品预制体的路径</param>
+    /// <param name="pos">物品生成的位置</param>
+    public void FallDownArticle(string articlePath, Vector3 pos)
+    {
+        string[] paths = articlePath.Split('/');
+        string name = paths[paths.Length - 1];
+        GameObject article = ObjectPool.Instance.GetObject(name, articlePath);
+        article.transform.position = pos;
+        FallDownArticle(article.GetComponent<Article>());
+    }
+
+    /// <summary>
     /// 使用物品，
     /// </summary>
     /// <param name="articleInfo"></param>
@@ -488,11 +568,17 @@ public class ArticleManager : ISingleton<ArticleManager>
         string[] paths = articleInfo.PrefabPath.Split('/');
         string name = paths[paths.Length -1];
 
-        GameObject article = ObjectPool.Instance.GetObject(name, articleInfo.PrefabPath);
-        article.SetActive(true);
         //1.创建物品的实例
+        GameObject article = ObjectPool.Instance.GetObject(name, articleInfo.PrefabPath);
+        article.GetComponent<Article>().Owner = GameManager.Instance.PlayerStats.transform;
+        article.GetComponent<Rigidbody>().useGravity = false;
+        article.SetActive(true);
+
         //2.调用玩家的装备物品的方法
+        GameManager.Instance.PlayerStats.GetComponent<PlayerController>().EquipArticle(articleInfo, article);
     }
+
+
 
     #endregion
 

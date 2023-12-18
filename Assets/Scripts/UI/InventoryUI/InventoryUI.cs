@@ -33,7 +33,7 @@ public class InventoryUI : MonoBehaviour
 
     private void Start()
     {
-        GameManager.Instance.RigisterInventoryUI(this);
+        GameManager.Instance.RegisterInventoryUI(this);
     }
 
     private void OnEnable()

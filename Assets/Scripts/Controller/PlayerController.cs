@@ -87,7 +87,7 @@ public class PlayerController : MonoBehaviour
         characterSkillSystem = this.GetComponent<CharacterSkillSystem>();
 
         defenceShield = this.transform.Find("Defence").gameObject;
-        GameManager.Instance.RigisterPlayer(characterStats);
+        GameManager.Instance.RegisterPlayer(characterStats);
     }
 
     private void Start()
@@ -122,6 +122,8 @@ public class PlayerController : MonoBehaviour
     {
         if (isDie) return;
 
+        SearchNearEstArticle();
+
         SwitchAnimation(); 
 
         //计算攻击间隔时间
@@ -149,7 +151,7 @@ public class PlayerController : MonoBehaviour
         //TODO：按N键打开背包
         if(Input.GetKeyDown(KeyCode.N))
         {
-            GameManager.Instance.inventoryUI.gameObject.SetActive(!GameManager.Instance.inventoryUI.gameObject.activeSelf);
+            GameManager.Instance.InventoryUI.gameObject.SetActive(!GameManager.Instance.InventoryUI.gameObject.activeSelf);
         }
 
         Defence();
@@ -312,6 +314,11 @@ public class PlayerController : MonoBehaviour
     private Transform shieldPoint;
 
     /// <summary>
+    /// 存储所有在可拾取范围内的物品
+    /// </summary>
+    private Dictionary<int, Transform> articles = new Dictionary<int, Transform>();
+    
+    /// <summary>
     /// 通过物品id得到物品装备位置
     /// </summary>
     /// <param name="id"></param>
@@ -323,16 +330,79 @@ public class PlayerController : MonoBehaviour
         switch (key)
         {
             case 1:             //武器
+                if (weaponPoint == null)
+                    weaponPoint = this.transform.Find("WeaponPoint");
                 articlePoint = weaponPoint;
                 break;
             //case 2:
             //    break;
             case 4:             //盾牌
+                if (shieldPoint == null)
+                    shieldPoint = this.transform.Find("ShieldPoint");
                 articlePoint = shieldPoint;
                 break;
         }
 
         return articlePoint;
+    }
+
+    /// <summary>
+    /// 进入触发器
+    /// </summary>
+    /// <param name="other"></param>
+    private void OnTriggerEnter(Collider other)
+    {
+        //判断是否为可拾取物品
+        if (other.CompareTag("Article"))
+        {
+            int key = other.GetInstanceID();
+
+            if(!articles.ContainsKey(key))
+            {
+                articles.Add(key, other.transform);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 离开触发器
+    /// </summary>
+    /// <param name="other"></param>
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Article"))
+        {
+            int key = other.GetInstanceID();
+            if (articles.ContainsKey(key))
+            {
+                articles.Remove(key);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 判断距离最近的物品并显示可拾取标记
+    /// </summary>
+    private void SearchNearEstArticle()
+    {
+        float minDistance = 5;
+        Transform nearestArticle = null;
+        foreach (var article in articles)
+        {
+            float dis = Vector3.Distance(this.transform.position, article.Value.position);
+            if(dis < minDistance)
+            {
+                minDistance = dis;
+                nearestArticle = article.Value;
+            }
+        }
+
+        if(nearestArticle != null)
+        {
+            GameManager.Instance.ArticleInfoUI.ShowArticleInfo(nearestArticle.GetComponent<Article>());
+        }
+        else
+            GameManager.Instance.ArticleInfoUI.HideArticleInfo();
     }
 
     /// <summary>
@@ -348,9 +418,13 @@ public class PlayerController : MonoBehaviour
         //2.将原始的物品移入对象池，替换上新的物品
         if(articlePoint.childCount != 0)
         {
-            //ObjectPool.Instance.ReleaseObject()
+            GameObject go = articlePoint.GetChild(0).gameObject;
+            ObjectPool.Instance.ReleaseObject(go.name, go);
         }
+        article.transform.SetParent(articlePoint, false);
+
         //3.根据物品的属性对玩家的属性进行调整
+        //TODO，
     }
 
     #endregion

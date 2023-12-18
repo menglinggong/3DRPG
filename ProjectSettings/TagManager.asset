@@ -9,6 +9,7 @@ TagManager:
   - AttackAble
   - Portal
   - BlockRayUI
+  - Article
   layers:
   - Default
   - TransparentFX

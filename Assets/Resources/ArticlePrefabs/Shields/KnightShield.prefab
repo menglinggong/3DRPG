@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 6199312830582249525}
   m_Layer: 0
   m_Name: KnightShield
-  m_TagString: Untagged
+  m_TagString: Article
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -95,8 +95,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.7720738, y: 0.7720736, z: 0.17195988}
-  m_Center: {x: 0.002646327, y: 0.00041984022, z: 0.018638149}
+  m_Size: {x: 0.7720738, y: 0.7720736, z: 0.06265119}
+  m_Center: {x: 0.002646327, y: 0.00041985512, z: -0.0020090472}
 --- !u!54 &-8679956276755418436
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -125,8 +125,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6295aed0d85d5b04082fb037b12215d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeTime: 10
-  radio: 2
+  Owner: {fileID: 0}
+  infoBase:
+    ID: 0
+    Name: 
+    Descrip: 
+    IconPath: 
+    PrefabPath: 
   articleInfo:
     ID: 40030
     Name: "\u9A91\u58EB\u4E4B\u76FE"

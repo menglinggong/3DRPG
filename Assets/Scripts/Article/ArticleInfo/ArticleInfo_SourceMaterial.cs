@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,7 @@ using UnityEngine;
 /// 素材类物品的信息
 /// TODO:待优化
 /// </summary>
+[Serializable]
 public class ArticleInfo_SourceMaterial : ArticleInfoBase
 {
     /// <summary>

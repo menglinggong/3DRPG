@@ -10,9 +10,13 @@ public class Article_Bow : Article
     [SerializeField]
     private ArticleInfo_Bow articleInfo;
 
+    public override void InitInfoBase()
+    {
+        base.infoBase = articleInfo;
+    }
+
     public override void PickUp()
     {
-        ArticleManager.Instance.AddArticle(articleInfo);
-        base.PickUp();
+        ArticleManager.Instance.PickUpArticle(articleInfo, this);
     }
 }
