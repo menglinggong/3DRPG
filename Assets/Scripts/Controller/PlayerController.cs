@@ -94,9 +94,6 @@ public class PlayerController : MonoBehaviour
     {
         agent.speed = characterStats.CharacterData.MoveSpeed;
         stopDistance = agent.stoppingDistance;
-        //事件绑定
-        //MouseManager.Instance.OnMouseClicked += MoveToTargetPos;
-        //MouseManager.Instance.OnEnemyClicked += EventAttack;
     }
 
     private void OnEnable()
@@ -112,11 +109,6 @@ public class PlayerController : MonoBehaviour
         SaveDataManager.Instance.SavePlayerData();
     }
 
-    private void OnDestroy()
-    {
-        //MouseManager.Instance.OnMouseClicked -= MoveToTargetPos;
-        //MouseManager.Instance.OnEnemyClicked -= EventAttack;
-    }
 
     private void Update()
     {
@@ -136,10 +128,6 @@ public class PlayerController : MonoBehaviour
             agent.enabled = false;
             animator.SetTrigger("Die");
             GameManager.Instance.NotifyObserver();
-            //Destroy(this.gameObject, 2);
-
-            //MouseManager.Instance.OnMouseClicked -= MoveToTargetPos;
-            //MouseManager.Instance.OnEnemyClicked -= EventAttack;
         }
 
         //TODO测试按Q放技能
@@ -428,4 +416,15 @@ public class PlayerController : MonoBehaviour
     }
 
     #endregion
+
+
+    /// <summary>
+    /// 玩家移动
+    /// </summary>
+    /// <param name="moveMent"></param>
+    public void Move(Vector3 moveMent)
+    {
+        Vector3 targetPos = this.transform.position + (moveMent * 2);
+        MoveToTargetPos(targetPos);
+    }
 }
