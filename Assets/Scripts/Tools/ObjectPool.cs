@@ -75,7 +75,6 @@ public class ObjectPool : ISingleton<ObjectPool>
     /// <param name="templateName"></param>
     public void ReleaseObject(string templateName, GameObject obj)
     {
-        Debug.Log("FFFF");
         if (!pool.ContainsKey(templateName))
         {
             pool.Add(templateName, new List<GameObject>());

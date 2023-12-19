@@ -9,60 +9,50 @@ using UnityEngine.UI;
 /// </summary>
 public class InventoryUI : MonoBehaviour
 {
+    #region 界面元素
+
+    /// <summary>
+    /// 背包背景
+    /// </summary>
+    [SerializeField]
+    private GameObject bagBG;
     /// <summary>
     /// 物品描述信息文本
     /// </summary>
     [SerializeField]
-    Text itemDescrip;
-    /// <summary>
-    /// 使用物品按钮
-    /// </summary>
-    [SerializeField]
-    Button useItemBtn;
-    /// <summary>
-    /// 丢弃物品按钮
-    /// </summary>
-    [SerializeField]
-    Button discardItemBtn;
+    private Text itemDescrip;
+
+    #endregion
+
+    #region 生命周期函数
 
     private void Awake()
     {
-        useItemBtn.onClick.AddListener(OnUseItemBtnClick);
-        discardItemBtn.onClick.AddListener(OnDiscardItemBtnClick);
+        
+        //useItemBtn.onClick.AddListener(OnUseItemBtnClick);
+        //discardItemBtn.onClick.AddListener(OnDiscardItemBtnClick);
     }
 
     private void Start()
     {
-        GameManager.Instance.RegisterInventoryUI(this);
+        HideBag();
     }
 
     private void OnEnable()
     {
-        Time.timeScale = 0;
-        ClearInventoryInfo();
         EventManager.Instance.AddListener(MessageConst.ArticleConst.OnArticleUISelected, OnArticleUISelected);
+        EventManager.Instance.AddListener(MessageConst.InputSystemConst.OnPlusPerformed, OnPlusPerformed);
     }
-
-    
 
     private void OnDisable()
     {
-        Time.timeScale = 1;
         EventManager.Instance.RemoveListener(MessageConst.ArticleConst.OnArticleUISelected, OnArticleUISelected);
+        EventManager.Instance.RemoveListener(MessageConst.InputSystemConst.OnPlusPerformed, OnPlusPerformed);
     }
 
-    /// <summary>
-    /// 物品选中
-    /// </summary>
-    /// <param name="arg0"></param>
-    /// <param name="arg1"></param>
-    /// <exception cref="NotImplementedException"></exception>
-    private void OnArticleUISelected(string arg0, object arg1)
-    {
-        ArticleInfoBase info = arg1 as ArticleInfoBase;
+    #endregion
 
-        itemDescrip.text = info.Descrip;
-    }
+    #region 内部方法
 
     /// <summary>
     /// 清空物品显示信息
@@ -71,7 +61,6 @@ public class InventoryUI : MonoBehaviour
     {
         itemDescrip.text = "--";
     }
-
 
     /// <summary>
     /// 丢弃物品按钮点击
@@ -101,5 +90,55 @@ public class InventoryUI : MonoBehaviour
         //InventoryManager.Instance.UseInventoryItem(InventoryManager.Instance.CurrentInventoryItem.Id);
 
         //UpdateUIDisplay();
+    }
+
+    #endregion
+
+    #region 事件监听
+
+    /// <summary>
+    /// +键点击（默认键盘P键），打开背包
+    /// </summary>
+    /// <param name="messageConst"></param>
+    /// <param name="data"></param>
+    private void OnPlusPerformed(string messageConst, object data)
+    {
+        if (!bagBG.activeSelf)
+            ShowBag();
+        else
+            HideBag();
+    }
+
+    /// <summary>
+    /// 物品选中
+    /// </summary>
+    /// <param name="arg0"></param>
+    /// <param name="arg1"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    private void OnArticleUISelected(string arg0, object arg1)
+    {
+        ArticleInfoBase info = arg1 as ArticleInfoBase;
+
+        itemDescrip.text = info.Descrip;
+    }
+
+    #endregion
+
+    /// <summary>
+    /// 打开背包界面
+    /// </summary>
+    private void ShowBag()
+    {
+        Time.timeScale = 0;
+        bagBG.SetActive(true);
+    }
+
+    /// <summary>
+    /// 关闭背包界面
+    /// </summary>
+    private void HideBag()
+    {
+        Time.timeScale = 1;
+        bagBG.SetActive(false);
     }
 }

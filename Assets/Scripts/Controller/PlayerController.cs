@@ -79,6 +79,8 @@ public class PlayerController : MonoBehaviour
 
     private Coroutine turnRoundCoroutine = null;
 
+    #region 生命周期函数
+
     private void Awake()
     {
         agent = this.GetComponent<NavMeshAgent>();
@@ -99,6 +101,9 @@ public class PlayerController : MonoBehaviour
     private void OnEnable()
     {
         SaveDataManager.Instance.LoadPlayerData();
+
+        EventManager.Instance.AddListener(MessageConst.InputSystemConst.OnAPerformed, OnAPerformed);
+        
         //玩家加载数据后发送消息，设置血条和经验条
         EventManager.Instance.Invoke(MessageConst.UpdateHealth, characterStats);
         EventManager.Instance.Invoke(MessageConst.UpdateExp, characterStats);
@@ -107,8 +112,8 @@ public class PlayerController : MonoBehaviour
     private void OnDisable()
     {
         SaveDataManager.Instance.SavePlayerData();
+        EventManager.Instance.RemoveListener(MessageConst.InputSystemConst.OnAPerformed, OnAPerformed);
     }
-
 
     private void Update()
     {
@@ -136,14 +141,10 @@ public class PlayerController : MonoBehaviour
             characterSkillSystem.AttackUseSkill(1, false);
         }
 
-        //TODO：按N键打开背包
-        if(Input.GetKeyDown(KeyCode.N))
-        {
-            GameManager.Instance.InventoryUI.gameObject.SetActive(!GameManager.Instance.InventoryUI.gameObject.activeSelf);
-        }
-
         Defence();
     }
+
+    #endregion
 
     #region 内部方法
 
@@ -177,30 +178,13 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// 移动到目标点
-    /// </summary>
-    /// <param name="targetpos"></param>
-    private void MoveToTargetPos(Vector3 targetpos)
-    {
-        //使玩家可移动
-        agent.isStopped = false;
-        //停止移动到敌人的协程
-        if (AttackCoroutine != null)
-            StopCoroutine(AttackCoroutine);
-        attackTarget = null;
-
-        agent.stoppingDistance = stopDistance;
-        agent.destination = targetpos;
-    }
-
-    /// <summary>
     /// 攻击目标
     /// </summary>
     /// <param name="target"></param>
     /// <exception cref="NotImplementedException"></exception>
     private void EventAttack(GameObject target)
     {
-        if(target != null)
+        if (target != null)
         {
             this.attackTarget = target;
 
@@ -252,7 +236,7 @@ public class PlayerController : MonoBehaviour
 
         //普通攻击不算技能，不使用技能系统的逻辑
         lastAttackTime = 1f / characterStats.CharacterData.AttackSpeed;
-        
+
         characterStats.CalculateCritical(characterStats);
         //若暴击了则播放暴击动画，否则播放普通攻击动画
         animator.SetBool("CriticalAttack", characterStats.IsCritical);
@@ -305,7 +289,12 @@ public class PlayerController : MonoBehaviour
     /// 存储所有在可拾取范围内的物品
     /// </summary>
     private Dictionary<int, Transform> articles = new Dictionary<int, Transform>();
-    
+
+    /// <summary>
+    /// 可拾取的物品
+    /// </summary>
+    private Transform pickUpArticle = null;
+
     /// <summary>
     /// 通过物品id得到物品装备位置
     /// </summary>
@@ -341,9 +330,9 @@ public class PlayerController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         //判断是否为可拾取物品
-        if (other.CompareTag("Article"))
+        if (other.CompareTag("Article") && other.gameObject.activeSelf)
         {
-            int key = other.GetInstanceID();
+            int key = other.gameObject.GetInstanceID();
 
             if(!articles.ContainsKey(key))
             {
@@ -358,9 +347,9 @@ public class PlayerController : MonoBehaviour
     /// <param name="other"></param>
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Article"))
+        if (other.CompareTag("Article") && other.gameObject.activeSelf)
         {
-            int key = other.GetInstanceID();
+            int key = other.gameObject.GetInstanceID();
             if (articles.ContainsKey(key))
             {
                 articles.Remove(key);
@@ -387,10 +376,14 @@ public class PlayerController : MonoBehaviour
 
         if(nearestArticle != null)
         {
-            GameManager.Instance.ArticleInfoUI.ShowArticleInfo(nearestArticle.GetComponent<Article>());
+            pickUpArticle = nearestArticle;
+            EventManager.Instance.Invoke(MessageConst.ArticleConst.OnShowHideArticleInfo, nearestArticle.GetComponent<Article>());
         }
         else
-            GameManager.Instance.ArticleInfoUI.HideArticleInfo();
+        {
+            pickUpArticle = null;
+            EventManager.Instance.Invoke(MessageConst.ArticleConst.OnShowHideArticleInfo, null);
+        }
     }
 
     /// <summary>
@@ -425,6 +418,47 @@ public class PlayerController : MonoBehaviour
     public void Move(Vector3 moveMent)
     {
         Vector3 targetPos = this.transform.position + (moveMent * 2);
-        MoveToTargetPos(targetPos);
+
+        //使玩家可移动
+        agent.isStopped = false;
+        ////停止移动到敌人的协程
+        //if (AttackCoroutine != null)
+        //    StopCoroutine(AttackCoroutine);
+        //attackTarget = null;
+
+        agent.stoppingDistance = stopDistance;
+        agent.destination = targetPos;
     }
+
+    #region 键盘和手柄按键的监听
+
+    /// <summary>
+    /// 按键A点击（默认键盘的U键），拾取物品
+    /// </summary>
+    /// <param name="messageConst"></param>
+    /// <param name="data"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    private void OnAPerformed(string messageConst, object data)
+    {
+        if (pickUpArticle != null)
+        {
+            pickUpArticle.GetComponent<Article>().PickUp();
+
+            int key = pickUpArticle.gameObject.GetInstanceID();
+            if (articles.ContainsKey(key))
+            {
+                articles.Remove(key);
+            }
+            pickUpArticle = null;
+
+            EventManager.Instance.Invoke(MessageConst.ArticleConst.OnShowHideArticleInfo, null);
+        }
+    }
+
+    
+
+    #endregion
+
+
+    
 }

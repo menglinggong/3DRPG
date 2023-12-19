@@ -1,4 +1,5 @@
 using Cinemachine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,8 +15,8 @@ public class InputSystemManager : ISingleton<InputSystemManager>
     private PlayerController playerController;
 
     private CinemachineFreeLook freeLook;
-    public float cameraYValue = 0;
-    public float cameraXValue = 0;
+    private float cameraYValue = 0;
+    private float cameraXValue = 0;
 
     protected override void Awake()
     {
@@ -24,7 +25,23 @@ public class InputSystemManager : ISingleton<InputSystemManager>
         inputAction = new InputController();
         inputAction.Enable();
 
-        inputAction.Keyboard.Jump.performed += Jump;
+        //inputAction.Keyboard.Jump.performed += Jump;
+        if(Keyboard.current != null)
+        {
+            inputAction.Keyboard.A.performed += OnAPerformed;
+            inputAction.Keyboard.Plus.performed += OnPlusPerformed;
+        }
+
+        if(Gamepad.current != null)
+        {
+            inputAction.GamePad.A.performed += OnAPerformed;
+            inputAction.GamePad.Plus.performed += OnPlusPerformed;
+        }
+    }
+
+    private void OnDisable()
+    {
+        inputAction.Disable();
     }
 
     private void Update()
@@ -42,7 +59,7 @@ public class InputSystemManager : ISingleton<InputSystemManager>
         if (playerController == null)
             return;
 
-        NewInputSystem();
+        KeyBoardInput();
         GamePadInput();
     }
 
@@ -51,10 +68,13 @@ public class InputSystemManager : ISingleton<InputSystemManager>
     }
 
     /// <summary>
-    /// 新输入系统
+    /// 键盘输入
     /// </summary>
-    private void NewInputSystem()
+    private void KeyBoardInput()
     {
+        if (Keyboard.current == null)
+            return;
+
         //相机移动
         Vector2 cameraMent = inputAction.Keyboard.Camera.ReadValue<Vector2>();
         CameraMove(cameraMent);
@@ -68,6 +88,9 @@ public class InputSystemManager : ISingleton<InputSystemManager>
     /// </summary>
     private void GamePadInput()
     {
+        if (Gamepad.current == null)
+            return;
+
         //相机移动
         Vector2 cameraMent = inputAction.GamePad.Camera.ReadValue<Vector2>();
         CameraMove(cameraMent);
@@ -101,5 +124,84 @@ public class InputSystemManager : ISingleton<InputSystemManager>
 
         moveValue = pianyi * moveValue;
         playerController.Move(moveValue);
+    }
+
+    /// <summary>
+    /// A键点击，键盘上默认对应U键
+    /// </summary>
+    /// <param name="context"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    private void OnAPerformed(InputAction.CallbackContext context)
+    {
+        EventManager.Instance.Invoke(MessageConst.InputSystemConst.OnAPerformed, null);
+    }
+
+    private void OnBPerformed(InputAction.CallbackContext context)
+    {
+
+    }
+
+    private void OnXPerformed(InputAction.CallbackContext context)
+    {
+
+    }
+
+    private void OnYPerformed(InputAction.CallbackContext context)
+    {
+
+    }
+
+    private void OnLPerformed(InputAction.CallbackContext context)
+    {
+
+    }
+
+    private void OnZLPerformed(InputAction.CallbackContext context)
+    {
+
+    }
+
+    private void OnRerformed(InputAction.CallbackContext context)
+    {
+
+    }
+
+    private void OnZRPerformed(InputAction.CallbackContext context)
+    {
+
+    }
+
+    private void OnUpPerformed(InputAction.CallbackContext context)
+    {
+
+    }
+
+    private void OnDownPerformed(InputAction.CallbackContext context)
+    {
+
+    }
+
+    private void OnLeftPerformed(InputAction.CallbackContext context)
+    {
+
+    }
+
+    private void OnRightPerformed(InputAction.CallbackContext context)
+    {
+
+    }
+
+    private void OnMinusPerformed(InputAction.CallbackContext context)
+    {
+
+    }
+
+    /// <summary>
+    /// +键点击
+    /// </summary>
+    /// <param name="context"></param>
+    private void OnPlusPerformed(InputAction.CallbackContext context)
+    {
+        EventManager.Instance.Invoke(MessageConst.InputSystemConst.OnPlusPerformed, null);
     }
 }

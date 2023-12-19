@@ -9,45 +9,73 @@ using UnityEngine.UI;
 /// </summary>
 public class ArticleInfoUI : MonoBehaviour
 {
+    #region 界面元素
+
+    /// <summary>
+    /// 背景
+    /// </summary>
+    [SerializeField]
+    private GameObject backGround;
     /// <summary>
     /// 显示物品信息的文本
     /// </summary>
     [SerializeField]
-    private Text infoText; 
+    private Text infoText;
+    /// <summary>
+    /// 可拾取提示
+    /// </summary>
+    [SerializeField]
+    private RectTransform pickUpInfo;
 
+    #endregion
+    
     private Transform article = null;
 
     private Camera mainCamera;
 
-    private Canvas canvas = null;
+    #region 生命周期函数
 
     private void Start()
     {
-        GameManager.Instance.RegisterArticleInfoUI(this);
+        HideArticleInfo();
+        EventManager.Instance.AddListener(MessageConst.ArticleConst.OnShowHideArticleInfo, ShowHideUI);
+    }
+
+    private void OnEnable()
+    {
+        
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.RemoveListener(MessageConst.ArticleConst.OnShowHideArticleInfo, ShowHideUI);
     }
 
     private void Update()
     {
         if (article == null) return;
 
-        transform.position = article.position + Vector3.up * 0.5f;
-        if(mainCamera == null)
+        Vector3 pos = article.position + Vector3.up * 0.5f;
+        if (mainCamera == null)
         {
             mainCamera = Camera.main;
-            canvas = this.transform.parent.GetComponent<Canvas>();
-            canvas.worldCamera = mainCamera;
         }
 
-        transform.forward = mainCamera.transform.forward;
+        infoText.rectTransform.anchoredPosition = mainCamera.WorldToScreenPoint(pos);
+        pickUpInfo.anchoredPosition = infoText.rectTransform.anchoredPosition - Vector2.up * infoText.rectTransform.rect.height * 0.5f;
     }
+
+    #endregion
+
+    #region 内部方法
 
     /// <summary>
     /// 显示物品信息
     /// </summary>
     /// <param name="article"></param>
-    public void ShowArticleInfo(Article article)
+    private void ShowArticleInfo(Article article)
     {
-        infoText.gameObject.SetActive(true);
+        backGround.SetActive(true);
 
         this.article = article.transform;
         infoText.text = article.infoBase.Name;
@@ -56,9 +84,28 @@ public class ArticleInfoUI : MonoBehaviour
     /// <summary>
     /// 隐藏物品信息界面
     /// </summary>
-    public void HideArticleInfo()
+    private void HideArticleInfo()
     {
         article = null;
-        infoText.gameObject.SetActive(false);
+        backGround.SetActive(false);
+    }
+
+    #endregion
+
+    /// <summary>
+    /// 显示/隐藏可拾取物品信息
+    /// </summary>
+    /// <param name="messageConst"></param>
+    /// <param name="article"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    private void ShowHideUI(string messageConst, object article)
+    {
+        if (article == null)
+            HideArticleInfo();
+        else
+        {
+            Article info = article as Article;
+            ShowArticleInfo(info);
+        }
     }
 }

@@ -66,8 +66,9 @@ public class EventManager : ISingleton<EventManager>
             thisEvent.Invoke(eventName, eventParams);
     }
 
-    private void OnDestroy()
+    protected override void OnDestory()
     {
+        base.OnDestory();
         golbalEventDictionary.Clear();
     }
 }

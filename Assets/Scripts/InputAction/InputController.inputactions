@@ -15,15 +15,6 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Jump",
-                    "type": "Button",
-                    "id": "44f86b3e-c6f4-4213-afb1-6d329458b367",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Camera",
                     "type": "Value",
                     "id": "9c350592-c900-4863-b7d0-3f125a2418da",
@@ -31,6 +22,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "A",
+                    "type": "Button",
+                    "id": "3903fa48-207b-414c-b226-77cc0d267145",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Plus",
+                    "type": "Button",
+                    "id": "b0f063a1-5c66-4045-8cb1-14fdb332efd5",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -90,17 +99,6 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "",
-                    "id": "22498da3-3a63-4252-8ab2-acb09692b158",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Jump",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
                     "name": "FreeLook",
                     "id": "2fbeb4c2-e3af-4856-bfa5-bb1005068f9c",
                     "path": "2DVector",
@@ -154,6 +152,28 @@
                     "action": "Camera",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "d93243eb-85ab-491a-95cb-87e9818d8f35",
+                    "path": "<Keyboard>/u",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "A",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f1f9a99c-4795-46dc-b894-e8fd01556e48",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Plus",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -178,6 +198,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "A",
+                    "type": "Button",
+                    "id": "84f01422-107e-40aa-b379-4a25e44fdaa4",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Plus",
+                    "type": "Button",
+                    "id": "5410d843-9523-4d6f-b8f3-fed2a1ba7ce0",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -290,6 +328,28 @@
                     "action": "Camera",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "e89422a7-fac0-4174-a666-5b6e31c8043e",
+                    "path": "<SwitchProControllerHID>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "A",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1ee47cb4-1cf0-4377-83cf-1bc6c99ba8b2",
+                    "path": "<SwitchProControllerHID>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Plus",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

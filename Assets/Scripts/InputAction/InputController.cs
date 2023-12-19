@@ -37,15 +37,6 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Jump"",
-                    ""type"": ""Button"",
-                    ""id"": ""44f86b3e-c6f4-4213-afb1-6d329458b367"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Camera"",
                     ""type"": ""Value"",
                     ""id"": ""9c350592-c900-4863-b7d0-3f125a2418da"",
@@ -53,6 +44,24 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""A"",
+                    ""type"": ""Button"",
+                    ""id"": ""3903fa48-207b-414c-b226-77cc0d267145"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Plus"",
+                    ""type"": ""Button"",
+                    ""id"": ""b0f063a1-5c66-4045-8cb1-14fdb332efd5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -112,17 +121,6 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""22498da3-3a63-4252-8ab2-acb09692b158"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Jump"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
                     ""name"": ""FreeLook"",
                     ""id"": ""2fbeb4c2-e3af-4856-bfa5-bb1005068f9c"",
                     ""path"": ""2DVector"",
@@ -176,6 +174,28 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""action"": ""Camera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d93243eb-85ab-491a-95cb-87e9818d8f35"",
+                    ""path"": ""<Keyboard>/u"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""A"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f1f9a99c-4795-46dc-b894-e8fd01556e48"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Plus"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -200,6 +220,24 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""A"",
+                    ""type"": ""Button"",
+                    ""id"": ""84f01422-107e-40aa-b379-4a25e44fdaa4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Plus"",
+                    ""type"": ""Button"",
+                    ""id"": ""5410d843-9523-4d6f-b8f3-fed2a1ba7ce0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -312,6 +350,28 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""action"": ""Camera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e89422a7-fac0-4174-a666-5b6e31c8043e"",
+                    ""path"": ""<SwitchProControllerHID>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""A"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1ee47cb4-1cf0-4377-83cf-1bc6c99ba8b2"",
+                    ""path"": ""<SwitchProControllerHID>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Plus"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -382,12 +442,15 @@ public partial class @InputController: IInputActionCollection2, IDisposable
         // Keyboard
         m_Keyboard = asset.FindActionMap("Keyboard", throwIfNotFound: true);
         m_Keyboard_Move = m_Keyboard.FindAction("Move", throwIfNotFound: true);
-        m_Keyboard_Jump = m_Keyboard.FindAction("Jump", throwIfNotFound: true);
         m_Keyboard_Camera = m_Keyboard.FindAction("Camera", throwIfNotFound: true);
+        m_Keyboard_A = m_Keyboard.FindAction("A", throwIfNotFound: true);
+        m_Keyboard_Plus = m_Keyboard.FindAction("Plus", throwIfNotFound: true);
         // GamePad
         m_GamePad = asset.FindActionMap("GamePad", throwIfNotFound: true);
         m_GamePad_Move = m_GamePad.FindAction("Move", throwIfNotFound: true);
         m_GamePad_Camera = m_GamePad.FindAction("Camera", throwIfNotFound: true);
+        m_GamePad_A = m_GamePad.FindAction("A", throwIfNotFound: true);
+        m_GamePad_Plus = m_GamePad.FindAction("Plus", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -450,15 +513,17 @@ public partial class @InputController: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Keyboard;
     private List<IKeyboardActions> m_KeyboardActionsCallbackInterfaces = new List<IKeyboardActions>();
     private readonly InputAction m_Keyboard_Move;
-    private readonly InputAction m_Keyboard_Jump;
     private readonly InputAction m_Keyboard_Camera;
+    private readonly InputAction m_Keyboard_A;
+    private readonly InputAction m_Keyboard_Plus;
     public struct KeyboardActions
     {
         private @InputController m_Wrapper;
         public KeyboardActions(@InputController wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Keyboard_Move;
-        public InputAction @Jump => m_Wrapper.m_Keyboard_Jump;
         public InputAction @Camera => m_Wrapper.m_Keyboard_Camera;
+        public InputAction @A => m_Wrapper.m_Keyboard_A;
+        public InputAction @Plus => m_Wrapper.m_Keyboard_Plus;
         public InputActionMap Get() { return m_Wrapper.m_Keyboard; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -471,12 +536,15 @@ public partial class @InputController: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
-            @Jump.started += instance.OnJump;
-            @Jump.performed += instance.OnJump;
-            @Jump.canceled += instance.OnJump;
             @Camera.started += instance.OnCamera;
             @Camera.performed += instance.OnCamera;
             @Camera.canceled += instance.OnCamera;
+            @A.started += instance.OnA;
+            @A.performed += instance.OnA;
+            @A.canceled += instance.OnA;
+            @Plus.started += instance.OnPlus;
+            @Plus.performed += instance.OnPlus;
+            @Plus.canceled += instance.OnPlus;
         }
 
         private void UnregisterCallbacks(IKeyboardActions instance)
@@ -484,12 +552,15 @@ public partial class @InputController: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
-            @Jump.started -= instance.OnJump;
-            @Jump.performed -= instance.OnJump;
-            @Jump.canceled -= instance.OnJump;
             @Camera.started -= instance.OnCamera;
             @Camera.performed -= instance.OnCamera;
             @Camera.canceled -= instance.OnCamera;
+            @A.started -= instance.OnA;
+            @A.performed -= instance.OnA;
+            @A.canceled -= instance.OnA;
+            @Plus.started -= instance.OnPlus;
+            @Plus.performed -= instance.OnPlus;
+            @Plus.canceled -= instance.OnPlus;
         }
 
         public void RemoveCallbacks(IKeyboardActions instance)
@@ -513,12 +584,16 @@ public partial class @InputController: IInputActionCollection2, IDisposable
     private List<IGamePadActions> m_GamePadActionsCallbackInterfaces = new List<IGamePadActions>();
     private readonly InputAction m_GamePad_Move;
     private readonly InputAction m_GamePad_Camera;
+    private readonly InputAction m_GamePad_A;
+    private readonly InputAction m_GamePad_Plus;
     public struct GamePadActions
     {
         private @InputController m_Wrapper;
         public GamePadActions(@InputController wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_GamePad_Move;
         public InputAction @Camera => m_Wrapper.m_GamePad_Camera;
+        public InputAction @A => m_Wrapper.m_GamePad_A;
+        public InputAction @Plus => m_Wrapper.m_GamePad_Plus;
         public InputActionMap Get() { return m_Wrapper.m_GamePad; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -534,6 +609,12 @@ public partial class @InputController: IInputActionCollection2, IDisposable
             @Camera.started += instance.OnCamera;
             @Camera.performed += instance.OnCamera;
             @Camera.canceled += instance.OnCamera;
+            @A.started += instance.OnA;
+            @A.performed += instance.OnA;
+            @A.canceled += instance.OnA;
+            @Plus.started += instance.OnPlus;
+            @Plus.performed += instance.OnPlus;
+            @Plus.canceled += instance.OnPlus;
         }
 
         private void UnregisterCallbacks(IGamePadActions instance)
@@ -544,6 +625,12 @@ public partial class @InputController: IInputActionCollection2, IDisposable
             @Camera.started -= instance.OnCamera;
             @Camera.performed -= instance.OnCamera;
             @Camera.canceled -= instance.OnCamera;
+            @A.started -= instance.OnA;
+            @A.performed -= instance.OnA;
+            @A.canceled -= instance.OnA;
+            @Plus.started -= instance.OnPlus;
+            @Plus.performed -= instance.OnPlus;
+            @Plus.canceled -= instance.OnPlus;
         }
 
         public void RemoveCallbacks(IGamePadActions instance)
@@ -609,12 +696,15 @@ public partial class @InputController: IInputActionCollection2, IDisposable
     public interface IKeyboardActions
     {
         void OnMove(InputAction.CallbackContext context);
-        void OnJump(InputAction.CallbackContext context);
         void OnCamera(InputAction.CallbackContext context);
+        void OnA(InputAction.CallbackContext context);
+        void OnPlus(InputAction.CallbackContext context);
     }
     public interface IGamePadActions
     {
         void OnMove(InputAction.CallbackContext context);
         void OnCamera(InputAction.CallbackContext context);
+        void OnA(InputAction.CallbackContext context);
+        void OnPlus(InputAction.CallbackContext context);
     }
 }

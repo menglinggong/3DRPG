@@ -26,65 +26,12 @@ public class ArticleManager : ISingleton<ArticleManager>
 
     public float range = 3;
 
-    public Article TestArticle;
-
     /// <summary>
     /// 测试用
     /// </summary>
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.K))
-        {
-            ArticleInfo_Arrow info = new ArticleInfo_Arrow();
-            info.ID = 30011;
-            info.Name = "火箭";
-            info.Descrip = "蕴藏着火焰的力量，击中敌人后燃烧";
-            info.IconPath = "TTT";
-            info.PrefabPath = "RRRR";
-            info.ArrowKind = ArrowKind.FireArrow;
-            info.Count = 50;
-
-            AddArticle(info, false);
-        }
-
-        if(Input.GetKeyDown(KeyCode.R))
-        {
-            ArticleInfo_Arrow info = new ArticleInfo_Arrow();
-            info.ID = 30030;
-            RemoveArticle(info);
-        }
-
-        if(Input.GetKeyDown(KeyCode.L))
-        {
-            ArticleInfo_Arrow info = new ArticleInfo_Arrow();
-            info.ID = 30011;
-            info.Count = 50;
-
-            RemoveArticle(info, false);
-        }
-
-        if(Input.GetKeyDown(KeyCode.F))
-        {
-            ArticleInfo_Weapon info = new ArticleInfo_Weapon();
-            info.ID = 10030;
-            info.Name = "士兵之斧";
-            info.Descrip = "一把双手持的重斧";
-            info.IconPath = "ArticleIcons/Weapons/SoldierAxe";
-            info.PrefabPath = "ArticlePrefabs/Weapons/SoldierAxe";
-            
-            EquipArticle(info);
-        }
-
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            TestArticle = GameObject.Find("KnightShield").GetComponent<Article>();
-            FallDownArticle(TestArticle);
-        }
-
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            FallDownArticle("ArticlePrefabs/SourceMaterials/Apple", TestArticle.transform.position);
-        }
+        
     }
 
     #region 数据库增删改查功能
@@ -247,7 +194,7 @@ public class ArticleManager : ISingleton<ArticleManager>
     private List<ArticleInfoBase> AnalysisSQLData(SqliteDataReader data)
     {
         List<ArticleInfoBase> articleInfos = new List<ArticleInfoBase>();
-        if(data != null)
+        if(!data.IsDBNull(0))
         {
             int id = int.Parse(data[0].ToString());
             int key = id / 10000;

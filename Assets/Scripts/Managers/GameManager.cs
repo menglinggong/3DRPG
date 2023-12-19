@@ -17,18 +17,6 @@ public class GameManager : ISingleton<GameManager>
     private CinemachineFreeLook freeLookCamera;
 
     /// <summary>
-    /// 玩家背包界面
-    /// </summary>
-    [HideInInspector]
-    public InventoryUI InventoryUI;
-
-    /// <summary>
-    /// 显示可拾取物品信息的界面
-    /// </summary>
-    [HideInInspector]
-    public ArticleInfoUI ArticleInfoUI;
-
-    /// <summary>
     /// 订阅游戏结束的订阅者
     /// </summary>
     List<IEndGameObserver> endGameObservers = new List<IEndGameObserver>();
@@ -48,26 +36,6 @@ public class GameManager : ISingleton<GameManager>
 
         freeLookCamera.Follow = PlayerStats.transform.Find("head");
         freeLookCamera.LookAt = PlayerStats.transform.Find("head");
-    }
-
-    /// <summary>
-    /// 添加玩家背包界面
-    /// </summary>
-    /// <param name="inventoryUI"></param>
-    public void RegisterInventoryUI(InventoryUI inventoryUI)
-    {
-        this.InventoryUI = inventoryUI;
-        this.InventoryUI.gameObject.SetActive(false);
-    }
-
-    /// <summary>
-    /// 注册物品信息界面
-    /// </summary>
-    /// <param name="articleInfoUI"></param>
-    public void RegisterArticleInfoUI(ArticleInfoUI articleInfoUI)
-    {
-        this.ArticleInfoUI = articleInfoUI;
-        this.ArticleInfoUI.HideArticleInfo();
     }
 
     /// <summary>
