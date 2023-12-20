@@ -45,11 +45,13 @@ public class ScenesManager : ISingleton<ScenesManager>
         if(transitionPoint.Type_Transition == TransitionPoint.TransitionType.SameScene)
         {
             //同场景传送
+            StopAllCoroutines();
             StartCoroutine(Transition(SceneManager.GetActiveScene().name, transitionPoint.Type_Destination));
         }
         else
         {
             //异场景传送
+            StopAllCoroutines();
             StartCoroutine(Transition(transitionPoint.SceneName, transitionPoint.Type_Destination));
         }
     }
@@ -81,9 +83,7 @@ public class ScenesManager : ISingleton<ScenesManager>
             //异场景传送，加载场景，创建玩家到指定位置
             //TODO:添加加载场景进度条
             yield return StartCoroutine(LoadSceneBySceneName(sceneName));
-            //yield return SceneManager.LoadSceneAsync(sceneName);
-            //AsyncOperation async;
-            //async.progress
+
             var endPoint = PortalManager.Instance.GetTransitionDestinationByType(destinationType);
             yield return Instantiate(PlayerPrefab, endPoint.transform.position, endPoint.transform.rotation);
 
@@ -97,6 +97,7 @@ public class ScenesManager : ISingleton<ScenesManager>
     /// <param name="sceneName"></param>
     public void LoadScene(string sceneName)
     {
+        StopAllCoroutines();
         StartCoroutine(LoadSceneBySceneName(sceneName));
     }
 
@@ -108,13 +109,6 @@ public class ScenesManager : ISingleton<ScenesManager>
         {
             AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
             operation.allowSceneActivation = true;
-
-            //实际加载进度
-            //while (operation.progress < 0.9f)
-            //{
-            //    Debug.Log(operation.progress);
-            //    LoadSceneViewe.OnProgressChanged.Invoke(operation.progress);
-            //}
 
             //不使用实际加载进度，太快看不见
             yield return new WaitForSeconds(1);
@@ -133,11 +127,5 @@ public class ScenesManager : ISingleton<ScenesManager>
             LoadSceneView.OnProgressDone.Invoke();
             yield return null;
         }
-
-        //if (!SceneManager.GetActiveScene().name.Equals(sceneName))
-        //{
-        //    yield return SceneManager.LoadSceneAsync(sceneName);
-        //}
-
     }
 }
