@@ -15,6 +15,15 @@ public class CameraController : MonoBehaviour
         freeLookCamera = this.GetComponent<CinemachineFreeLook>();
     }
 
+    private void Update()
+    {
+        if(freeLookCamera.LookAt == null && GameManager.Instance.PlayerStats != null)
+        {
+            freeLookCamera.Follow = GameManager.Instance.PlayerStats.transform.Find("head");
+            freeLookCamera.LookAt = GameManager.Instance.PlayerStats.transform.Find("head");
+        }
+    }
+
     private void OnEnable()
     {
         EventManager.Instance.AddListener(MessageConst.InputSystemConst.OnRightStick, OnRightStickInput);

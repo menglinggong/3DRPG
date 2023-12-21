@@ -129,7 +129,7 @@ public class InventoryUI : MonoBehaviour
     /// </summary>
     private void ShowBag()
     {
-        Time.timeScale = 0;
+        GameManager.Instance.GamePause();
         bagBG.SetActive(true);
     }
 
@@ -138,7 +138,7 @@ public class InventoryUI : MonoBehaviour
     /// </summary>
     private void HideBag()
     {
-        Time.timeScale = 1;
+        GameManager.Instance.GameContinue();
         bagBG.SetActive(false);
     }
 }

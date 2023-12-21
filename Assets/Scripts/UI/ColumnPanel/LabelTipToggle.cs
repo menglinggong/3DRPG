@@ -46,6 +46,7 @@ public class LabelTipToggle : MonoBehaviour
         labelText = GetComponentInChildren<Text>();
         images = GetComponentsInChildren<Image>();
         isOn = tipToggle.isOn;
+        labelText.gameObject.SetActive(isOn);
     }
 
     private void OnEnable()
@@ -58,6 +59,8 @@ public class LabelTipToggle : MonoBehaviour
         tipToggle.onValueChanged.AddListener((isOn) =>
         {
             if (isOn == this.isOn) return;
+
+            labelText.gameObject.SetActive(isOn);
 
             this.isOn = isOn;
             onValueChanged?.Invoke(this, isOn);

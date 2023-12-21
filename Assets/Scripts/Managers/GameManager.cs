@@ -14,7 +14,15 @@ public class GameManager : ISingleton<GameManager>
     [HideInInspector]
     public CharacterStats PlayerStats;
 
-    private CinemachineFreeLook freeLookCamera;
+    /// <summary>
+    /// 游戏是否暂停
+    /// </summary>
+    private bool isGamePaused;
+
+    public bool IsGamePaused
+    {
+        get { return isGamePaused; }
+    }
 
     /// <summary>
     /// 订阅游戏结束的订阅者
@@ -28,14 +36,6 @@ public class GameManager : ISingleton<GameManager>
     public void RegisterPlayer(CharacterStats player)
     {
         PlayerStats = player;
-
-        //设置相机跟踪对象
-        freeLookCamera = FindObjectOfType<CinemachineFreeLook>();
-        if (freeLookCamera == null)
-            return;
-
-        freeLookCamera.Follow = PlayerStats.transform.Find("head");
-        freeLookCamera.LookAt = PlayerStats.transform.Find("head");
     }
 
     /// <summary>
@@ -65,5 +65,23 @@ public class GameManager : ISingleton<GameManager>
         {
             observer.EndNotify();
         }
+    }
+
+    /// <summary>
+    /// 暂停游戏
+    /// </summary>
+    public void GamePause()
+    {
+        isGamePaused = true;
+        Time.timeScale = 0;
+    }
+
+    /// <summary>
+    /// 游戏继续
+    /// </summary>
+    public void GameContinue()
+    {
+        isGamePaused = false;
+        Time.timeScale = 1;
     }
 }

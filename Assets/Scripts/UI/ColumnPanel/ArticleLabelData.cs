@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 /// <summary>
 /// 物品的分栏数据
@@ -150,7 +151,8 @@ public class ArticleLabelData : LabelDataBase
     /// </summary>
     private void MoveAnimation()
     {
-        this.GetComponent<RectTransform>().anchoredPosition = new Vector2(-selectedPageIndex * (pageSize.x + horizontalLayoutGroup.spacing), 0);
+        this.GetComponent<RectTransform>().DOAnchorPosX(-selectedPageIndex * (pageSize.x + horizontalLayoutGroup.spacing), 0.5f).SetUpdate(true);
+        //this.GetComponent<RectTransform>().anchoredPosition = new Vector2(-selectedPageIndex * (pageSize.x + horizontalLayoutGroup.spacing), 0);
     }
 
     #endregion
@@ -204,9 +206,9 @@ public class ArticleLabelData : LabelDataBase
             }
             else
             {
-                //selectedIndex_X = (int)rowColumn.x - 1;
-                selectedIndex_X = 0;
-                selectedIndex_Y = 0;
+                selectedIndex_X = (int)rowColumn.x - 1;
+                //selectedIndex_X = 0;
+                //selectedIndex_Y = 0;
             }
         }
         else if(selectedIndex_X >= rowColumn.x)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 public class ArticlePage : MonoBehaviour
 {
@@ -10,6 +11,10 @@ public class ArticlePage : MonoBehaviour
 
     [SerializeField]
     private ToggleGroup toggleGroup;
+
+    private GridLayoutGroup gridLayoutGroup;
+
+    private RectTransform rectTransform;
 
     #endregion
 
@@ -40,6 +45,8 @@ public class ArticlePage : MonoBehaviour
         rowCount = row;
         columnCount = column;
         itemFrames = new ItemFrame[row, column];
+
+        SetLayoutGroup();
     }
 
     /// <summary>
@@ -91,6 +98,32 @@ public class ArticlePage : MonoBehaviour
     }
 
     #endregion
+
+    /// <summary>
+    /// 设置网格
+    /// </summary>
+    private void SetLayoutGroup()
+    {
+        gridLayoutGroup = this.GetComponent<GridLayoutGroup>();
+        rectTransform = this.GetComponent<RectTransform>();
+        float spaceX = gridLayoutGroup.spacing.x;
+        float spaceY = gridLayoutGroup.spacing.y;
+        float width = rectTransform.rect.width - gridLayoutGroup.padding.left - gridLayoutGroup.padding.right + spaceX;
+        float height = rectTransform.rect.height - gridLayoutGroup.padding.top - gridLayoutGroup.padding.bottom + spaceY;
+        float cellSizeWidth = (width / rowCount) - spaceX;
+        float cellSizeHeight = (height / columnCount) - spaceY;
+        float value = Mathf.Abs(cellSizeWidth - cellSizeHeight);
+        if (cellSizeHeight > cellSizeWidth)
+        {
+            gridLayoutGroup.cellSize = new Vector2(cellSizeWidth, cellSizeWidth);
+            gridLayoutGroup.spacing = new Vector2(spaceX, spaceY + value);
+        }
+        else
+        {
+            gridLayoutGroup.cellSize = new Vector2(cellSizeHeight, cellSizeHeight);
+            gridLayoutGroup.spacing = new Vector2(spaceX + value, spaceY);
+        }
+    }
 
     /// <summary>
     /// 创建一个物品ui

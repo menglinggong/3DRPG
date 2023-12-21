@@ -127,7 +127,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (isDie) return;
+        if (isDie || GameManager.Instance.IsGamePaused) return;
 
         SearchNearEstArticle();
 
@@ -431,6 +431,8 @@ public class PlayerController : MonoBehaviour
     /// <exception cref="NotImplementedException"></exception>
     private void OnAPerformed(string messageConst, object data)
     {
+        if (GameManager.Instance.IsGamePaused) return;
+
         if (pickUpArticle != null)
         {
             pickUpArticle.GetComponent<Article>().PickUp();
@@ -453,9 +455,10 @@ public class PlayerController : MonoBehaviour
     /// <param name="data"></param>
     private void OnLeftStickInput(string messageConst, object data)
     {
+        if (GameManager.Instance.IsGamePaused) return;
+
         Vector2 value = (Vector2)data;
-        if (value == Vector2.zero)
-            return;
+        if (value == Vector2.zero) return;
 
         Vector3 moveValue = new Vector3(value.x, 0, value.y);
         Quaternion pianyi = Quaternion.Euler(0, cameraXValue, 0);
