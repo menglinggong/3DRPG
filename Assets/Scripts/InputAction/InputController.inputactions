@@ -6,7 +6,7 @@
             "id": "65be09cb-1ec2-446f-bcb5-13ae362419b6",
             "actions": [
                 {
-                    "name": "Move",
+                    "name": "LeftStick",
                     "type": "Value",
                     "id": "211df7f5-d2f1-412c-a796-833b74f2ed37",
                     "expectedControlType": "Vector2",
@@ -15,7 +15,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Camera",
+                    "name": "RightStick",
                     "type": "Value",
                     "id": "9c350592-c900-4863-b7d0-3f125a2418da",
                     "expectedControlType": "Vector2",
@@ -50,7 +50,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "LeftStick",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -61,7 +61,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "LeftStick",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -72,7 +72,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "LeftStick",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -83,7 +83,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "LeftStick",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -94,18 +94,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "LeftStick",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "FreeLook",
+                    "name": "Arrow",
                     "id": "2fbeb4c2-e3af-4856-bfa5-bb1005068f9c",
                     "path": "2DVector",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Camera",
+                    "action": "RightStick",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -116,7 +116,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Camera",
+                    "action": "RightStick",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -127,7 +127,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Camera",
+                    "action": "RightStick",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -138,7 +138,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Camera",
+                    "action": "RightStick",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -149,7 +149,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Camera",
+                    "action": "RightStick",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -182,7 +182,7 @@
             "id": "8aacbccc-c536-48b8-adc5-a15f1b931dc2",
             "actions": [
                 {
-                    "name": "Move",
+                    "name": "LeftStick",
                     "type": "Value",
                     "id": "5f560298-7085-45f8-ab71-d89453f87bd0",
                     "expectedControlType": "Vector2",
@@ -191,7 +191,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Camera",
+                    "name": "RightStick",
                     "type": "Value",
                     "id": "27748ee5-cf69-4c70-8853-9eeedab77994",
                     "expectedControlType": "Vector2",
@@ -220,13 +220,13 @@
             ],
             "bindings": [
                 {
-                    "name": "move",
+                    "name": "LeftStick",
                     "id": "ddac6628-9e52-4fe5-8f7e-b4778f622fa8",
                     "path": "2DVector",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "LeftStick",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -237,7 +237,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "LeftStick",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -248,7 +248,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "LeftStick",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -259,7 +259,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "LeftStick",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -270,18 +270,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "LeftStick",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "FreeLook",
+                    "name": "RightStick",
                     "id": "47d29a02-233d-46f3-9a09-15cd6f8e166f",
                     "path": "2DVector",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Camera",
+                    "action": "RightStick",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -292,7 +292,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Camera",
+                    "action": "RightStick",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -303,7 +303,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Camera",
+                    "action": "RightStick",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -314,7 +314,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Camera",
+                    "action": "RightStick",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -325,7 +325,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Camera",
+                    "action": "RightStick",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },

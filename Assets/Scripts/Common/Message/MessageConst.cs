@@ -9,6 +9,10 @@ public partial class MessageConst
 {
     public const string UpdateExp = "UpdateExp";
     public const string UpdateHealth = "UpdateHealth";
+    /// <summary>
+    /// Ïà»úÒÆ¶¯
+    /// </summary>
+    public const string OnCameraMove = "OnCameraMove";
 }
 
 public partial class MessageConst
@@ -25,7 +29,6 @@ public partial class MessageConst
         /// </summary>
         public const string OnShowHideArticleInfo = "OnShowHideArticleInfo";
     }
-    
 }
 
 public partial class MessageConst
@@ -59,3 +62,4 @@ public partial class MessageConst
 
     }
 }
+

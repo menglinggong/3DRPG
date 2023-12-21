@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 
@@ -12,20 +13,23 @@ using UnityEngine.Rendering;
 public class InputSystemManager : ISingleton<InputSystemManager>
 {
     private InputController inputAction;
-    private PlayerController playerController;
 
-    private CinemachineFreeLook freeLook;
-    private float cameraYValue = 0;
-    private float cameraXValue = 0;
+    [SerializeField]
+    private EventSystem m_eventSystem;
+
+    private GameObject lastSelectedObj = null;
+
+    #region 生命周期函数
 
     protected override void Awake()
     {
         base.Awake();
 
+        //SetMouseInvalid();
+
         inputAction = new InputController();
         inputAction.Enable();
 
-        //inputAction.Keyboard.Jump.performed += Jump;
         if(Keyboard.current != null)
         {
             inputAction.Keyboard.A.performed += OnAPerformed;
@@ -46,26 +50,16 @@ public class InputSystemManager : ISingleton<InputSystemManager>
 
     private void Update()
     {
-        //视角移动
-        if (freeLook == null)
-            freeLook = GameObject.FindObjectOfType<CinemachineFreeLook>();
-
-        if (freeLook == null)
-            return;
-
-        if (playerController == null && GameManager.Instance.PlayerStats != null)
-            playerController = GameManager.Instance.PlayerStats.GetComponent<PlayerController>();
-
-        if (playerController == null)
-            return;
+        if (lastSelectedObj != null)
+            SetMouseClickInvalid();
 
         KeyBoardInput();
         GamePadInput();
     }
 
-    public void Jump(InputAction.CallbackContext context)
-    {
-    }
+    #endregion
+
+    #region 内部方法
 
     /// <summary>
     /// 键盘输入
@@ -75,12 +69,13 @@ public class InputSystemManager : ISingleton<InputSystemManager>
         if (Keyboard.current == null)
             return;
 
-        //相机移动
-        Vector2 cameraMent = inputAction.Keyboard.Camera.ReadValue<Vector2>();
-        CameraMove(cameraMent);
-        //玩家移动
-        Vector2 moveMent = inputAction.Keyboard.Move.ReadValue<Vector2>();
-        PlayerMove(moveMent);
+        //左方向键输入
+        Vector2 leftStick = inputAction.Keyboard.LeftStick.ReadValue<Vector2>();
+        EventManager.Instance.Invoke(MessageConst.InputSystemConst.OnLeftStick, leftStick);
+
+        //右方向键输入
+        Vector2 rightStick = inputAction.Keyboard.RightStick.ReadValue<Vector2>();
+        EventManager.Instance.Invoke(MessageConst.InputSystemConst.OnRightStick, rightStick);
     }
 
     /// <summary>
@@ -91,40 +86,38 @@ public class InputSystemManager : ISingleton<InputSystemManager>
         if (Gamepad.current == null)
             return;
 
-        //相机移动
-        Vector2 cameraMent = inputAction.GamePad.Camera.ReadValue<Vector2>();
-        CameraMove(cameraMent);
-        //玩家移动
-        Vector2 moveMent = inputAction.GamePad.Move.ReadValue<Vector2>();
-        PlayerMove(moveMent);
+        //左方向键输入
+        Vector2 leftStick = inputAction.GamePad.LeftStick.ReadValue<Vector2>();
+        EventManager.Instance.Invoke(MessageConst.InputSystemConst.OnLeftStick, leftStick);
+
+        //右方向键输入
+        Vector2 rightStick = inputAction.GamePad.RightStick.ReadValue<Vector2>();
+        EventManager.Instance.Invoke(MessageConst.InputSystemConst.OnRightStick, rightStick);
     }
 
     /// <summary>
-    /// 相机视角转动
+    /// 设置鼠标不可用
     /// </summary>
-    /// <param name="value"></param>
-    private void CameraMove(Vector2 value)
+    private void SetMouseInvalid()
     {
-        cameraYValue += value.y * Time.deltaTime;
-        cameraYValue = Mathf.Clamp(cameraYValue, 0, 1);
-
-        freeLook.m_YAxis.Value = cameraYValue;
-        freeLook.m_XAxis.m_InputAxisValue = value.x;
-        cameraXValue = freeLook.m_XAxis.Value;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     /// <summary>
-    /// 玩家移动，随着视角的变动，玩家前进方向也会改变
+    /// 设置鼠标点击后，依旧选中最后的界面元素
     /// </summary>
-    /// <param name="value"></param>
-    private void PlayerMove(Vector2 value)
+    private void SetMouseClickInvalid()
     {
-        Vector3 moveValue = new Vector3(value.x, 0, value.y);
-        Quaternion pianyi = Quaternion.Euler(0, cameraXValue, 0);
-
-        moveValue = pianyi * moveValue;
-        playerController.Move(moveValue);
+        if(m_eventSystem.currentSelectedGameObject != null)
+            lastSelectedObj = m_eventSystem.currentSelectedGameObject;
+        else
+            m_eventSystem.SetSelectedGameObject(lastSelectedObj);
     }
+
+    #endregion
+
+    #region 按键功能，发送消息
 
     /// <summary>
     /// A键点击，键盘上默认对应U键
@@ -204,4 +197,37 @@ public class InputSystemManager : ISingleton<InputSystemManager>
     {
         EventManager.Instance.Invoke(MessageConst.InputSystemConst.OnPlusPerformed, null);
     }
+
+    #endregion
+
+    #region 外部方法
+
+    /// <summary>
+    /// 设置界面元素当前选中的元素
+    /// </summary>
+    /// <param name="obj"></param>
+    public void SetCurrentSelectedObj(GameObject obj)
+    {
+        m_eventSystem.SetSelectedGameObject(obj);
+    }
+
+    /// <summary>
+    /// 获取界面中当前选中的元素
+    /// </summary>
+    /// <returns></returns>
+    public GameObject GetCurrentSelectedObj()
+    {
+        return m_eventSystem.currentSelectedGameObject;
+    }
+
+    /// <summary>
+    /// 设置界面最后选中的元素
+    /// </summary>
+    /// <param name="obj"></param>
+    public void SetLastSelectedObj(GameObject obj)
+    {
+        lastSelectedObj = obj;
+    }
+
+    #endregion
 }

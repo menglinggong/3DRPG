@@ -74,7 +74,7 @@ public class SQLManager
         this.command = null;
         this.reader = null;
         this.connection = null;
-        Debug.Log("已经断开数据库连接");
+        //Debug.Log("已经断开数据库连接");
     }
 
     /// <summary>

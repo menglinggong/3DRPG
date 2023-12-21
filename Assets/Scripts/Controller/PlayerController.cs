@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.Rendering.DebugUI;
 
 /// <summary>
 /// 玩家控制器
@@ -79,6 +80,11 @@ public class PlayerController : MonoBehaviour
 
     private Coroutine turnRoundCoroutine = null;
 
+    /// <summary>
+    /// 相机水平方向的角度
+    /// </summary>
+    private float cameraXValue;
+
     #region 生命周期函数
 
     private void Awake()
@@ -103,6 +109,8 @@ public class PlayerController : MonoBehaviour
         SaveDataManager.Instance.LoadPlayerData();
 
         EventManager.Instance.AddListener(MessageConst.InputSystemConst.OnAPerformed, OnAPerformed);
+        EventManager.Instance.AddListener(MessageConst.InputSystemConst.OnLeftStick, OnLeftStickInput);
+        EventManager.Instance.AddListener(MessageConst.OnCameraMove, OnCameraMove);
         
         //玩家加载数据后发送消息，设置血条和经验条
         EventManager.Instance.Invoke(MessageConst.UpdateHealth, characterStats);
@@ -113,6 +121,8 @@ public class PlayerController : MonoBehaviour
     {
         SaveDataManager.Instance.SavePlayerData();
         EventManager.Instance.RemoveListener(MessageConst.InputSystemConst.OnAPerformed, OnAPerformed);
+        EventManager.Instance.RemoveListener(MessageConst.InputSystemConst.OnLeftStick, OnLeftStickInput);
+        EventManager.Instance.RemoveListener(MessageConst.OnCameraMove, OnCameraMove);
     }
 
     private void Update()
@@ -411,25 +421,6 @@ public class PlayerController : MonoBehaviour
     #endregion
 
 
-    /// <summary>
-    /// 玩家移动
-    /// </summary>
-    /// <param name="moveMent"></param>
-    public void Move(Vector3 moveMent)
-    {
-        Vector3 targetPos = this.transform.position + (moveMent * 2);
-
-        //使玩家可移动
-        agent.isStopped = false;
-        ////停止移动到敌人的协程
-        //if (AttackCoroutine != null)
-        //    StopCoroutine(AttackCoroutine);
-        //attackTarget = null;
-
-        agent.stoppingDistance = stopDistance;
-        agent.destination = targetPos;
-    }
-
     #region 键盘和手柄按键的监听
 
     /// <summary>
@@ -455,10 +446,43 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    
+    /// <summary>
+    /// 手柄左摇杆/键盘左方向键输入
+    /// </summary>
+    /// <param name="messageConst"></param>
+    /// <param name="data"></param>
+    private void OnLeftStickInput(string messageConst, object data)
+    {
+        Vector2 value = (Vector2)data;
+        if (value == Vector2.zero)
+            return;
+
+        Vector3 moveValue = new Vector3(value.x, 0, value.y);
+        Quaternion pianyi = Quaternion.Euler(0, cameraXValue, 0);
+        moveValue = pianyi * moveValue;
+
+        Vector3 targetPos = this.transform.position + (moveValue * 2);
+
+        //使玩家可移动
+        agent.isStopped = false;
+        
+        agent.stoppingDistance = stopDistance;
+        agent.destination = targetPos;
+    }
+
+    /// <summary>
+    /// 相机视角转动
+    /// </summary>
+    /// <param name="messageConst"></param>
+    /// <param name="data"></param>
+    private void OnCameraMove(string messageConst, object data)
+    {
+        cameraXValue = (float)data;
+    }
+
 
     #endregion
 
 
-    
+
 }

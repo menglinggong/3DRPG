@@ -10,16 +10,14 @@ using UnityEngine.UI;
 /// </summary>
 public class ItemFrame : MonoBehaviour
 {
+    #region 界面元素
+
     /// <summary>
     /// 物品图标
     /// </summary>
     [SerializeField]
     Image itemIcon;
-    /// <summary>
-    /// 选中
-    /// </summary>
-    [SerializeField]
-    Image selectedImage;
+    
     /// <summary>
     /// 物品数量
     /// </summary>
@@ -27,19 +25,16 @@ public class ItemFrame : MonoBehaviour
     Text itemCount;
 
     /// <summary>
-    /// 按钮
+    /// 勾选
     /// </summary>
-    private Button clickBtn;
+    private Toggle toggle;
+
+    #endregion
 
     /// <summary>
     /// 物品
     /// </summary>
     private ArticleInfoBase inventoryItem;
-
-    /// <summary>
-    /// 按钮点击事件
-    /// </summary>
-    public UnityAction<ItemFrame> OnBtnClickAction;
 
     public ArticleInfoBase InventoryItem
     {
@@ -47,15 +42,30 @@ public class ItemFrame : MonoBehaviour
         set { inventoryItem = value; }
     }
 
+    /// <summary>
+    /// 选中事件
+    /// </summary>
+    public UnityAction<ItemFrame> OnSelected;
+
+    private bool isOn;
+
     private void Awake()
     {
-        clickBtn = GetComponent<Button>();
-        clickBtn.onClick.AddListener(() =>
+        toggle = GetComponent<Toggle>();
+        toggle.onValueChanged.AddListener((isOn) =>
         {
-            OnBtnClickAction?.Invoke(this);
-            SetItemSelected(true);
+            if (isOn == this.isOn) return;
+
+            this.isOn = isOn;
+
+            if(isOn)
+            {
+                OnSelected?.Invoke(this);
+            }
         });
     }
+
+    #region 外部方法
 
     /// <summary>
     /// 设置物品界面显示
@@ -70,11 +80,31 @@ public class ItemFrame : MonoBehaviour
     }
 
     /// <summary>
-    /// 设置物品是否选中
+    /// 设置ToggleGroup
     /// </summary>
-    /// <param name="isSelected"></param>
-    public void SetItemSelected(bool isSelected)
+    /// <param name="toggleGroup"></param>
+    public void SetToggleGroup(ToggleGroup toggleGroup)
     {
-        selectedImage.gameObject.SetActive(isSelected);
+        toggle.group = toggleGroup;
     }
+
+    /// <summary>
+    /// 设置选中
+    /// </summary>
+    public void SetToggleSelected()
+    {
+        toggle.isOn = true;
+    }
+
+    /// <summary>
+    /// 移回对象池前
+    /// </summary>
+    public void Release()
+    {
+        toggle.isOn = false;
+        toggle.group = null;
+        inventoryItem = null;
+    }
+
+    #endregion
 }

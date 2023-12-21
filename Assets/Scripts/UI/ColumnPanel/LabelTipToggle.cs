@@ -116,5 +116,13 @@ public class LabelTipToggle : MonoBehaviour
         bindngData = data;
     }
 
+    /// <summary>
+    /// …Ë÷√toggle—°÷–
+    /// </summary>
+    public void SetToggleSelected()
+    {
+        tipToggle.isOn = true;
+    }
+
     #endregion
 }

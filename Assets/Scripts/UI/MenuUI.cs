@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 游戏主界面
 /// </summary>
-public class MenuUI : MonoBehaviour
+public class MenuUI : UIBase
 {
     /// <summary>
     /// 新游戏
@@ -36,6 +36,9 @@ public class MenuUI : MonoBehaviour
         newGameBtn.onClick.AddListener(OnNewGameBtnClick);
         continueGameBtn.onClick.AddListener(OnContinueGameBtnClick);
         quitBtn.onClick.AddListener(OnQuitBtnClick);
+
+        base.DefaultSelectedObj = newGameBtn.gameObject;
+        base.OnShow();
     }
 
     /// <summary>

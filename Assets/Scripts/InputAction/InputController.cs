@@ -28,7 +28,7 @@ public partial class @InputController: IInputActionCollection2, IDisposable
             ""id"": ""65be09cb-1ec2-446f-bcb5-13ae362419b6"",
             ""actions"": [
                 {
-                    ""name"": ""Move"",
+                    ""name"": ""LeftStick"",
                     ""type"": ""Value"",
                     ""id"": ""211df7f5-d2f1-412c-a796-833b74f2ed37"",
                     ""expectedControlType"": ""Vector2"",
@@ -37,7 +37,7 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Camera"",
+                    ""name"": ""RightStick"",
                     ""type"": ""Value"",
                     ""id"": ""9c350592-c900-4863-b7d0-3f125a2418da"",
                     ""expectedControlType"": ""Vector2"",
@@ -72,7 +72,7 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""LeftStick"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -83,7 +83,7 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""LeftStick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -94,7 +94,7 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""LeftStick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -105,7 +105,7 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""LeftStick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -116,18 +116,18 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""LeftStick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""FreeLook"",
+                    ""name"": ""Arrow"",
                     ""id"": ""2fbeb4c2-e3af-4856-bfa5-bb1005068f9c"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Camera"",
+                    ""action"": ""RightStick"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -138,7 +138,7 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Camera"",
+                    ""action"": ""RightStick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -149,7 +149,7 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Camera"",
+                    ""action"": ""RightStick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -160,7 +160,7 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Camera"",
+                    ""action"": ""RightStick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -171,7 +171,7 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Camera"",
+                    ""action"": ""RightStick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -204,7 +204,7 @@ public partial class @InputController: IInputActionCollection2, IDisposable
             ""id"": ""8aacbccc-c536-48b8-adc5-a15f1b931dc2"",
             ""actions"": [
                 {
-                    ""name"": ""Move"",
+                    ""name"": ""LeftStick"",
                     ""type"": ""Value"",
                     ""id"": ""5f560298-7085-45f8-ab71-d89453f87bd0"",
                     ""expectedControlType"": ""Vector2"",
@@ -213,7 +213,7 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Camera"",
+                    ""name"": ""RightStick"",
                     ""type"": ""Value"",
                     ""id"": ""27748ee5-cf69-4c70-8853-9eeedab77994"",
                     ""expectedControlType"": ""Vector2"",
@@ -242,13 +242,13 @@ public partial class @InputController: IInputActionCollection2, IDisposable
             ],
             ""bindings"": [
                 {
-                    ""name"": ""move"",
+                    ""name"": ""LeftStick"",
                     ""id"": ""ddac6628-9e52-4fe5-8f7e-b4778f622fa8"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""LeftStick"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -259,7 +259,7 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""LeftStick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -270,7 +270,7 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""LeftStick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -281,7 +281,7 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""LeftStick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -292,18 +292,18 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""LeftStick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""FreeLook"",
+                    ""name"": ""RightStick"",
                     ""id"": ""47d29a02-233d-46f3-9a09-15cd6f8e166f"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Camera"",
+                    ""action"": ""RightStick"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -314,7 +314,7 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Camera"",
+                    ""action"": ""RightStick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -325,7 +325,7 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Camera"",
+                    ""action"": ""RightStick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -336,7 +336,7 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Camera"",
+                    ""action"": ""RightStick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -347,7 +347,7 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Camera"",
+                    ""action"": ""RightStick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -441,14 +441,14 @@ public partial class @InputController: IInputActionCollection2, IDisposable
 }");
         // Keyboard
         m_Keyboard = asset.FindActionMap("Keyboard", throwIfNotFound: true);
-        m_Keyboard_Move = m_Keyboard.FindAction("Move", throwIfNotFound: true);
-        m_Keyboard_Camera = m_Keyboard.FindAction("Camera", throwIfNotFound: true);
+        m_Keyboard_LeftStick = m_Keyboard.FindAction("LeftStick", throwIfNotFound: true);
+        m_Keyboard_RightStick = m_Keyboard.FindAction("RightStick", throwIfNotFound: true);
         m_Keyboard_A = m_Keyboard.FindAction("A", throwIfNotFound: true);
         m_Keyboard_Plus = m_Keyboard.FindAction("Plus", throwIfNotFound: true);
         // GamePad
         m_GamePad = asset.FindActionMap("GamePad", throwIfNotFound: true);
-        m_GamePad_Move = m_GamePad.FindAction("Move", throwIfNotFound: true);
-        m_GamePad_Camera = m_GamePad.FindAction("Camera", throwIfNotFound: true);
+        m_GamePad_LeftStick = m_GamePad.FindAction("LeftStick", throwIfNotFound: true);
+        m_GamePad_RightStick = m_GamePad.FindAction("RightStick", throwIfNotFound: true);
         m_GamePad_A = m_GamePad.FindAction("A", throwIfNotFound: true);
         m_GamePad_Plus = m_GamePad.FindAction("Plus", throwIfNotFound: true);
     }
@@ -512,16 +512,16 @@ public partial class @InputController: IInputActionCollection2, IDisposable
     // Keyboard
     private readonly InputActionMap m_Keyboard;
     private List<IKeyboardActions> m_KeyboardActionsCallbackInterfaces = new List<IKeyboardActions>();
-    private readonly InputAction m_Keyboard_Move;
-    private readonly InputAction m_Keyboard_Camera;
+    private readonly InputAction m_Keyboard_LeftStick;
+    private readonly InputAction m_Keyboard_RightStick;
     private readonly InputAction m_Keyboard_A;
     private readonly InputAction m_Keyboard_Plus;
     public struct KeyboardActions
     {
         private @InputController m_Wrapper;
         public KeyboardActions(@InputController wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Move => m_Wrapper.m_Keyboard_Move;
-        public InputAction @Camera => m_Wrapper.m_Keyboard_Camera;
+        public InputAction @LeftStick => m_Wrapper.m_Keyboard_LeftStick;
+        public InputAction @RightStick => m_Wrapper.m_Keyboard_RightStick;
         public InputAction @A => m_Wrapper.m_Keyboard_A;
         public InputAction @Plus => m_Wrapper.m_Keyboard_Plus;
         public InputActionMap Get() { return m_Wrapper.m_Keyboard; }
@@ -533,12 +533,12 @@ public partial class @InputController: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_KeyboardActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_KeyboardActionsCallbackInterfaces.Add(instance);
-            @Move.started += instance.OnMove;
-            @Move.performed += instance.OnMove;
-            @Move.canceled += instance.OnMove;
-            @Camera.started += instance.OnCamera;
-            @Camera.performed += instance.OnCamera;
-            @Camera.canceled += instance.OnCamera;
+            @LeftStick.started += instance.OnLeftStick;
+            @LeftStick.performed += instance.OnLeftStick;
+            @LeftStick.canceled += instance.OnLeftStick;
+            @RightStick.started += instance.OnRightStick;
+            @RightStick.performed += instance.OnRightStick;
+            @RightStick.canceled += instance.OnRightStick;
             @A.started += instance.OnA;
             @A.performed += instance.OnA;
             @A.canceled += instance.OnA;
@@ -549,12 +549,12 @@ public partial class @InputController: IInputActionCollection2, IDisposable
 
         private void UnregisterCallbacks(IKeyboardActions instance)
         {
-            @Move.started -= instance.OnMove;
-            @Move.performed -= instance.OnMove;
-            @Move.canceled -= instance.OnMove;
-            @Camera.started -= instance.OnCamera;
-            @Camera.performed -= instance.OnCamera;
-            @Camera.canceled -= instance.OnCamera;
+            @LeftStick.started -= instance.OnLeftStick;
+            @LeftStick.performed -= instance.OnLeftStick;
+            @LeftStick.canceled -= instance.OnLeftStick;
+            @RightStick.started -= instance.OnRightStick;
+            @RightStick.performed -= instance.OnRightStick;
+            @RightStick.canceled -= instance.OnRightStick;
             @A.started -= instance.OnA;
             @A.performed -= instance.OnA;
             @A.canceled -= instance.OnA;
@@ -582,16 +582,16 @@ public partial class @InputController: IInputActionCollection2, IDisposable
     // GamePad
     private readonly InputActionMap m_GamePad;
     private List<IGamePadActions> m_GamePadActionsCallbackInterfaces = new List<IGamePadActions>();
-    private readonly InputAction m_GamePad_Move;
-    private readonly InputAction m_GamePad_Camera;
+    private readonly InputAction m_GamePad_LeftStick;
+    private readonly InputAction m_GamePad_RightStick;
     private readonly InputAction m_GamePad_A;
     private readonly InputAction m_GamePad_Plus;
     public struct GamePadActions
     {
         private @InputController m_Wrapper;
         public GamePadActions(@InputController wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Move => m_Wrapper.m_GamePad_Move;
-        public InputAction @Camera => m_Wrapper.m_GamePad_Camera;
+        public InputAction @LeftStick => m_Wrapper.m_GamePad_LeftStick;
+        public InputAction @RightStick => m_Wrapper.m_GamePad_RightStick;
         public InputAction @A => m_Wrapper.m_GamePad_A;
         public InputAction @Plus => m_Wrapper.m_GamePad_Plus;
         public InputActionMap Get() { return m_Wrapper.m_GamePad; }
@@ -603,12 +603,12 @@ public partial class @InputController: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_GamePadActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_GamePadActionsCallbackInterfaces.Add(instance);
-            @Move.started += instance.OnMove;
-            @Move.performed += instance.OnMove;
-            @Move.canceled += instance.OnMove;
-            @Camera.started += instance.OnCamera;
-            @Camera.performed += instance.OnCamera;
-            @Camera.canceled += instance.OnCamera;
+            @LeftStick.started += instance.OnLeftStick;
+            @LeftStick.performed += instance.OnLeftStick;
+            @LeftStick.canceled += instance.OnLeftStick;
+            @RightStick.started += instance.OnRightStick;
+            @RightStick.performed += instance.OnRightStick;
+            @RightStick.canceled += instance.OnRightStick;
             @A.started += instance.OnA;
             @A.performed += instance.OnA;
             @A.canceled += instance.OnA;
@@ -619,12 +619,12 @@ public partial class @InputController: IInputActionCollection2, IDisposable
 
         private void UnregisterCallbacks(IGamePadActions instance)
         {
-            @Move.started -= instance.OnMove;
-            @Move.performed -= instance.OnMove;
-            @Move.canceled -= instance.OnMove;
-            @Camera.started -= instance.OnCamera;
-            @Camera.performed -= instance.OnCamera;
-            @Camera.canceled -= instance.OnCamera;
+            @LeftStick.started -= instance.OnLeftStick;
+            @LeftStick.performed -= instance.OnLeftStick;
+            @LeftStick.canceled -= instance.OnLeftStick;
+            @RightStick.started -= instance.OnRightStick;
+            @RightStick.performed -= instance.OnRightStick;
+            @RightStick.canceled -= instance.OnRightStick;
             @A.started -= instance.OnA;
             @A.performed -= instance.OnA;
             @A.canceled -= instance.OnA;
@@ -695,15 +695,15 @@ public partial class @InputController: IInputActionCollection2, IDisposable
     }
     public interface IKeyboardActions
     {
-        void OnMove(InputAction.CallbackContext context);
-        void OnCamera(InputAction.CallbackContext context);
+        void OnLeftStick(InputAction.CallbackContext context);
+        void OnRightStick(InputAction.CallbackContext context);
         void OnA(InputAction.CallbackContext context);
         void OnPlus(InputAction.CallbackContext context);
     }
     public interface IGamePadActions
     {
-        void OnMove(InputAction.CallbackContext context);
-        void OnCamera(InputAction.CallbackContext context);
+        void OnLeftStick(InputAction.CallbackContext context);
+        void OnRightStick(InputAction.CallbackContext context);
         void OnA(InputAction.CallbackContext context);
         void OnPlus(InputAction.CallbackContext context);
     }
