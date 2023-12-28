@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 4241671058949543818}
   - component: {fileID: 4241671058949543819}
   - component: {fileID: 4241671058949543821}
-  - component: {fileID: 4241671058949543823}
   - component: {fileID: -2297221338177016606}
   m_Layer: 5
   m_Name: ArticlePage
@@ -91,8 +90,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 200
-    m_Right: 200
+    m_Left: 0
+    m_Right: 0
     m_Top: 20
     m_Bottom: 20
   m_ChildAlignment: 0
@@ -102,19 +101,6 @@ MonoBehaviour:
   m_Spacing: {x: 20, y: 20}
   m_Constraint: 0
   m_ConstraintCount: 2
---- !u!114 &4241671058949543823
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4241671058949543817}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fafe2cfe61f6974895a912c3755e8f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AllowSwitchOff: 0
 --- !u!114 &-2297221338177016606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,4 +113,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcc6574bb300f3642bb13a74065bbfcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  toggleGroup: {fileID: 4241671058949543823}
+  toggleGroup: {fileID: 0}

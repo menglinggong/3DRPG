@@ -12,11 +12,11 @@ public class ArticleInfo_Shield : ArticleInfoBase
     /// <summary>
     /// 防御力
     /// </summary>
-    public float Defense;
+    public int Defense;
     /// <summary>
     /// 耐久度
     /// </summary>
-    public float Durability;
+    public int Durability;
     /// <summary>
     /// 附魔效果
     /// </summary>
@@ -24,7 +24,7 @@ public class ArticleInfo_Shield : ArticleInfoBase
     /// <summary>
     /// 附魔的值
     /// </summary>
-    public float EnchantValue;
+    public int EnchantValue;
     /// <summary>
     /// 材质类型
     /// </summary>

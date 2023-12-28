@@ -12,11 +12,11 @@ public class ArticleInfo_Bow : ArticleInfoBase
     /// <summary>
     /// 攻击力
     /// </summary>
-    public float Aggressivity;
+    public int Aggressivity;
     /// <summary>
     /// 耐久度
     /// </summary>
-    public float Durability;
+    public int Durability;
     /// <summary>
     /// 弓的类型，与物品的附魔效果不冲突
     /// </summary>
@@ -28,7 +28,7 @@ public class ArticleInfo_Bow : ArticleInfoBase
     /// <summary>
     /// 射程
     /// </summary>
-    public float Range;
+    public int Range;
     /// <summary>
     /// 附魔效果
     /// </summary>
@@ -36,7 +36,7 @@ public class ArticleInfo_Bow : ArticleInfoBase
     /// <summary>
     /// 附魔的值
     /// </summary>
-    public float EnchantValue;
+    public int EnchantValue;
 }
 
 /// <summary>

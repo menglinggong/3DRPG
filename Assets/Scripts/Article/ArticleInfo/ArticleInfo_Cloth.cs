@@ -18,7 +18,7 @@ public class ArticleInfo_Cloth : ArticleInfoBase
     /// <summary>
     /// 防御力
     /// </summary>
-    public float Defense;
+    public int Defense;
     /// <summary>
     /// 服饰的特殊效果
     /// </summary>

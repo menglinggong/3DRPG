@@ -217,7 +217,7 @@ public class ArticleManager : ISingleton<ArticleManager>
                     articleInfos = AnalysisSQLData_Cloth(data);
                     break;
                 case 6:
-                    //articleInfos = AnalysisSQLData_Weapon(data);
+                    articleInfos = AnalysisSQLData_SourceMaterial(data);
                     break;
                 case 7:
                     //articleInfos = AnalysisSQLData_Weapon(data);
@@ -248,10 +248,10 @@ public class ArticleManager : ISingleton<ArticleManager>
             info.Descrip = data[2].ToString();
             info.IconPath = data[3].ToString();
             info.PrefabPath = data[4].ToString();
-            info.Aggressivity = float.Parse(data[5].ToString());
-            info.Durability = float.Parse(data[6].ToString());
+            info.Aggressivity = int.Parse(data[5].ToString());
+            info.Durability = int.Parse(data[6].ToString());
             info.Enchant = (ArticleEnchanting)Enum.Parse(typeof(ArticleEnchanting), data[7].ToString());
-            info.EnchantValue = float.Parse(data[8].ToString());
+            info.EnchantValue = int.Parse(data[8].ToString());
             info.WeaponKind = (WeaponKind)Enum.Parse(typeof(WeaponKind), data[9].ToString());
             info.HandKind = (WeaponKind_Hand)Enum.Parse(typeof(WeaponKind_Hand), data[10].ToString());
             info.MaterialKind = (ArticleKind_Material)Enum.Parse(typeof(ArticleKind_Material), data[11].ToString());
@@ -280,13 +280,13 @@ public class ArticleManager : ISingleton<ArticleManager>
             info.Descrip = data[2].ToString();
             info.IconPath = data[3].ToString();
             info.PrefabPath = data[4].ToString();
-            info.Aggressivity = float.Parse(data[5].ToString());
-            info.Durability = float.Parse(data[6].ToString());
+            info.Aggressivity = int.Parse(data[5].ToString());
+            info.Durability = int.Parse(data[6].ToString());
             info.BowKind = (BowKind)Enum.Parse(typeof(BowKind), data[7].ToString());
             info.MaterialKind = (ArticleKind_Material)Enum.Parse(typeof(ArticleKind_Material), data[8].ToString());
-            info.Range = float.Parse(data[9].ToString());
+            info.Range = int.Parse(data[9].ToString());
             info.Enchant = (ArticleEnchanting)Enum.Parse(typeof(ArticleEnchanting), data[10].ToString());
-            info.EnchantValue = float.Parse(data[11].ToString());
+            info.EnchantValue = int.Parse(data[11].ToString());
             
             bowInfos.Add(info);
         }
@@ -337,10 +337,10 @@ public class ArticleManager : ISingleton<ArticleManager>
             info.Descrip = data[2].ToString();
             info.IconPath = data[3].ToString();
             info.PrefabPath = data[4].ToString();
-            info.Defense = float.Parse(data[5].ToString());
-            info.Durability = float.Parse(data[6].ToString());
+            info.Defense = int.Parse(data[5].ToString());
+            info.Durability = int.Parse(data[6].ToString());
             info.Enchant = (ArticleEnchanting)Enum.Parse(typeof(ArticleEnchanting), data[7].ToString());
-            info.EnchantValue = float.Parse(data[8].ToString());
+            info.EnchantValue = int.Parse(data[8].ToString());
             info.MaterialKind = (ArticleKind_Material)Enum.Parse(typeof(ArticleKind_Material), data[9].ToString());
 
             shieldInfos.Add(info);
@@ -368,9 +368,38 @@ public class ArticleManager : ISingleton<ArticleManager>
             info.PrefabPath = data[4].ToString();
             info.ClothKind = (ClothKind)Enum.Parse(typeof(ClothKind), data[5].ToString());
             info.ClothLevel = (ClothLevel)Enum.Parse(typeof(ClothLevel), data[6].ToString());
-            info.Defense = float.Parse(data[7].ToString());
+            info.Defense = int.Parse(data[7].ToString());
             info.ClothEffect = (ClothEffect)Enum.Parse(typeof(ClothEffect), data[8].ToString());
             info.ClothEffectLevel = (ClothEffectLevel)Enum.Parse(typeof(ClothEffectLevel), data[9].ToString());
+
+            clothInfos.Add(info);
+        }
+
+        return clothInfos;
+    }
+
+    /// <summary>
+    /// 解析数据库数据，得到素材数据
+    /// </summary>
+    /// <param name="data"></param>
+    /// <returns></returns>
+    private List<ArticleInfoBase> AnalysisSQLData_SourceMaterial(SqliteDataReader data)
+    {
+        List<ArticleInfoBase> clothInfos = new List<ArticleInfoBase>();
+        while (data.Read())
+        {
+            ArticleInfo_SourceMaterial info = new ArticleInfo_SourceMaterial();
+
+            info.ID = int.Parse(data[0].ToString());
+            info.Name = data[1].ToString();
+            info.Descrip = data[2].ToString();
+            info.IconPath = data[3].ToString();
+            info.PrefabPath = data[4].ToString();
+            info.Count = int.Parse(data[5].ToString());
+            info.HealthRecoverValue = float.Parse(data[6].ToString());
+            info.Effect = (SourceMaterialEffect)Enum.Parse(typeof(SourceMaterialEffect), data[7].ToString());
+            info.EffectValue = float.Parse(data[8].ToString());
+            info.EffectDuration = float.Parse(data[9].ToString());
 
             clothInfos.Add(info);
         }

@@ -12,11 +12,11 @@ public class ArticleInfo_Weapon : ArticleInfoBase
     /// <summary>
     /// 攻击力
     /// </summary>
-    public float Aggressivity;
+    public int Aggressivity;
     /// <summary>
     /// 耐久度
     /// </summary>
-    public float Durability;
+    public int Durability;
     /// <summary>
     /// 附魔效果
     /// </summary>
@@ -24,7 +24,7 @@ public class ArticleInfo_Weapon : ArticleInfoBase
     /// <summary>
     /// 附魔的值
     /// </summary>
-    public float EnchantValue;
+    public int EnchantValue;
 
     /// <summary>
     /// 武器类型
