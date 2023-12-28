@@ -26,4 +26,14 @@ public class LabelDataBase : MonoBehaviour
     {
         this.gameObject.SetActive(isShow);
     }
+
+    public virtual void AddListener()
+    {
+
+    }
+
+    public virtual void RemoveListener()
+    {
+
+    }
 }

@@ -1,8 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 using static UnityEngine.Rendering.DebugUI;
 using static UnityEngine.Rendering.DebugUI.Table;
 
@@ -119,6 +122,8 @@ public class ArticlePage : MonoBehaviour
     /// </summary>
     public void Release()
     {
+        ArticleManager.Instance.CurrentArticle = null;
+        EventManager.Instance.Invoke(MessageConst.ArticleConst.OnArticleUISelected, null);
         ClearArticles();
         itemFramePrefab = null;
     }
@@ -187,6 +192,20 @@ public class ArticlePage : MonoBehaviour
     /// <param name="item"></param>
     private void OnFrameSelected(ItemFrame item)
     {
+        Type type = item.InventoryItem.GetType();
+
+        var fields = type.GetFields();
+
+        foreach (var field in fields )
+        {
+            if(field.Name == "Count")
+            {
+                field.SetValue(item.InventoryItem, 1);
+                break;
+            }
+        }
+
+        ArticleManager.Instance.CurrentArticle = item.InventoryItem;
         EventManager.Instance.Invoke(MessageConst.ArticleConst.OnArticleUISelected, item.InventoryItem);
     }
 

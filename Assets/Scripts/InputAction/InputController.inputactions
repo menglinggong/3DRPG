@@ -40,6 +40,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "B",
+                    "type": "Button",
+                    "id": "55bcd25c-db74-4ee0-a223-9ccbf527dcc3",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -174,6 +183,17 @@
                     "action": "Plus",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "301aeb9f-e8f8-4166-ad96-def1d7ca1605",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "B",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -212,6 +232,15 @@
                     "name": "Plus",
                     "type": "Button",
                     "id": "5410d843-9523-4d6f-b8f3-fed2a1ba7ce0",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "B",
+                    "type": "Button",
+                    "id": "b5dc4ade-fa61-4dd6-a6be-0dfe6b4641d3",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -348,6 +377,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Plus",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1e8396ba-a107-4a49-b704-1094a6243fee",
+                    "path": "<SwitchProControllerHID>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "B",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

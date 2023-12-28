@@ -11,15 +11,29 @@ public class BagUI : MonoBehaviour
 {
     #region 界面元素
 
-    /// <summary>
-    /// 背包背景
-    /// </summary>
+    [Header("背包背景")]
     [SerializeField]
     private GameObject bagBG;
-    
+
+    [Header("物品分栏界面")]
+    [SerializeField]
+    private ColumnPanel columnPanel;
+
+    [Header("物品功能按钮界面")]
+    [SerializeField]
+    private Bag_ArticleBtns articleBtnsView;
+
     #endregion
 
     #region 生命周期函数
+
+    private void Awake()
+    {
+        articleBtnsView.OnPanelClose += () =>
+        {
+            AddListener();
+        };
+    }
 
     private void Start()
     {
@@ -28,13 +42,11 @@ public class BagUI : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.Instance.AddListener(MessageConst.ArticleConst.OnArticleUISelected, OnArticleUISelected);
         EventManager.Instance.AddListener(MessageConst.InputSystemConst.OnPlusPerformed, OnPlusPerformed);
     }
 
     private void OnDisable()
     {
-        EventManager.Instance.RemoveListener(MessageConst.ArticleConst.OnArticleUISelected, OnArticleUISelected);
         EventManager.Instance.RemoveListener(MessageConst.InputSystemConst.OnPlusPerformed, OnPlusPerformed);
     }
 
@@ -55,16 +67,31 @@ public class BagUI : MonoBehaviour
             HideBag();
     }
 
-    /// <summary>
-    /// 物品选中
-    /// </summary>
-    /// <param name="arg0"></param>
-    /// <param name="arg1"></param>
-    /// <exception cref="NotImplementedException"></exception>
-    private void OnArticleUISelected(string arg0, object arg1)
-    {
-        ArticleInfoBase info = arg1 as ArticleInfoBase;
+    ///// <summary>
+    ///// 物品选中
+    ///// </summary>
+    ///// <param name="messageConst"></param>
+    ///// <param name="data"></param>
+    ///// <exception cref="NotImplementedException"></exception>
+    //private void OnArticleUISelected(string messageConst, object data)
+    //{
+    //    ArticleInfoBase info = data as ArticleInfoBase;
 
+    //}
+
+    /// <summary>
+    /// 显示物品功能按钮界面
+    /// </summary>
+    /// <param name="messageConst"></param>
+    /// <param name="data"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    private void OnShowArticleBtns(string messageConst, object data)
+    {
+        if (articleBtnsView.gameObject.activeSelf || ArticleManager.Instance.CurrentArticle == null)
+            return;
+
+        RemoveListener();
+        articleBtnsView.Show();
     }
 
     #endregion
@@ -76,6 +103,7 @@ public class BagUI : MonoBehaviour
     {
         GameManager.Instance.GamePause();
         bagBG.SetActive(true);
+        AddListener();
     }
 
     /// <summary>
@@ -84,6 +112,24 @@ public class BagUI : MonoBehaviour
     private void HideBag()
     {
         GameManager.Instance.GameContinue();
+        articleBtnsView.Hide();
+        RemoveListener();
         bagBG.SetActive(false);
+    }
+
+    private void AddListener()
+    {
+        //EventManager.Instance.AddListener(MessageConst.ArticleConst.OnArticleUISelected, OnArticleUISelected);
+        EventManager.Instance.AddListener(MessageConst.InputSystemConst.OnAPerformed, OnShowArticleBtns);
+
+        columnPanel.AddListener();
+    }
+
+    private void RemoveListener()
+    {
+        //EventManager.Instance.RemoveListener(MessageConst.ArticleConst.OnArticleUISelected, OnArticleUISelected);
+        EventManager.Instance.RemoveListener(MessageConst.InputSystemConst.OnAPerformed, OnShowArticleBtns);
+
+        columnPanel.RemoveListener();
     }
 }

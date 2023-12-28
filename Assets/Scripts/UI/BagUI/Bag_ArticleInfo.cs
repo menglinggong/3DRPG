@@ -38,15 +38,23 @@ public class Bag_ArticleInfo : MonoBehaviour
     /// <summary>
     /// 物品选中
     /// </summary>
-    /// <param name="arg0"></param>
-    /// <param name="arg1"></param>
+    /// <param name="messageConst"></param>
+    /// <param name="data"></param>
     /// <exception cref="NotImplementedException"></exception>
-    private void OnArticleUISelected(string arg0, object arg1)
+    private void OnArticleUISelected(string messageConst, object data)
     {
-        ArticleInfoBase info = arg1 as ArticleInfoBase;
+        if(data == null)
+        {
+            SetShowName(string.Empty);
+            SetShowDescrip(string.Empty);
+        }
+        else
+        {
+            ArticleInfoBase info = data as ArticleInfoBase;
 
-        SetShowName(info.Name);
-        SetShowDescrip(info.Descrip);
+            SetShowName(info.Name);
+            SetShowDescrip(info.Descrip);
+        }
     }
 
 

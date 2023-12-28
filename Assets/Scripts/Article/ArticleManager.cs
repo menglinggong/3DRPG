@@ -509,24 +509,6 @@ public class ArticleManager : ISingleton<ArticleManager>
     }
 
     /// <summary>
-    /// 使用物品，
-    /// </summary>
-    /// <param name="articleInfo"></param>
-    public void UseArticle(ArticleInfoBase articleInfo)
-    {
-
-    }
-
-    /// <summary>
-    /// 手持物品
-    /// </summary>
-    /// <param name="articleInfo"></param>
-    public void HoldArticle(ArticleInfoBase articleInfo)
-    {
-
-    }
-
-    /// <summary>
     /// 丢弃物品
     /// </summary>
     /// <param name="articleInfo"></param>
@@ -554,7 +536,63 @@ public class ArticleManager : ISingleton<ArticleManager>
         GameManager.Instance.PlayerStats.GetComponent<PlayerController>().EquipArticle(articleInfo, article);
     }
 
+    /// <summary>
+    /// 卸下物品
+    /// </summary>
+    /// <param name="articleInfo"></param>
+    public void DisboardArticle(ArticleInfoBase articleInfo)
+    {
 
+    }
+
+    /// <summary>
+    /// 丢弃物品
+    /// </summary>
+    /// <param name="articleInfo"></param>
+    public void DiscardArticle(List<ArticleInfoBase> articleInfos)
+    {
+
+    }
+
+    /// <summary>
+    /// 使用物品
+    /// </summary>
+    /// <param name="articleInfo"></param>
+    public void UseArticle(ArticleInfoBase articleInfo)
+    {
+        Type type = articleInfo.GetType();
+
+        var fields = type.GetFields();
+
+        foreach (var field in fields)
+        {
+            if (field.Name == "Count")
+            {
+                RemoveArticle(articleInfo, true);
+                return;
+            }
+        }
+
+        RemoveArticle(articleInfo);
+    }
+
+    /// <summary>
+    /// 手持物品
+    /// </summary>
+    /// <param name="articleInfo"></param>
+    public void HoldArticle(List<ArticleInfoBase> articleInfos)
+    {
+
+    }
+
+    /// <summary>
+    /// 查看物品
+    /// </summary>
+    /// <param name="articleInfo"></param>
+    public void CheckArticle(ArticleInfoBase articleInfo)
+    {
+
+    }
 
     #endregion
 

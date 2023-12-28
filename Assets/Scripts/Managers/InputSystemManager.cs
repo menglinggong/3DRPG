@@ -33,12 +33,14 @@ public class InputSystemManager : ISingleton<InputSystemManager>
         if(Keyboard.current != null)
         {
             inputAction.Keyboard.A.performed += OnAPerformed;
+            inputAction.Keyboard.B.performed += OnBPerformed;
             inputAction.Keyboard.Plus.performed += OnPlusPerformed;
         }
 
         if(Gamepad.current != null)
         {
             inputAction.GamePad.A.performed += OnAPerformed;
+            inputAction.Keyboard.B.performed += OnBPerformed;
             inputAction.GamePad.Plus.performed += OnPlusPerformed;
         }
     }
@@ -129,9 +131,13 @@ public class InputSystemManager : ISingleton<InputSystemManager>
         EventManager.Instance.Invoke(MessageConst.InputSystemConst.OnAPerformed, null);
     }
 
+    /// <summary>
+    /// B键点击，键盘上默认对应I键
+    /// </summary>
+    /// <param name="context"></param>
     private void OnBPerformed(InputAction.CallbackContext context)
     {
-
+        EventManager.Instance.Invoke(MessageConst.InputSystemConst.OnBPerformed, null);
     }
 
     private void OnXPerformed(InputAction.CallbackContext context)

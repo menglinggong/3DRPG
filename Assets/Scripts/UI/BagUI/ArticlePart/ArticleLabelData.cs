@@ -89,16 +89,6 @@ public class ArticleLabelData : LabelDataBase
         pageSize -= new Vector2(pageContentDefaultXPos * 2, 0);
     }
 
-    private void OnEnable()
-    {
-        EventManager.Instance.AddListener(MessageConst.InputSystemConst.OnLeftStick, OnLeftStick);
-    }
-
-    private void OnDisable()
-    {
-        EventManager.Instance.RemoveListener(MessageConst.InputSystemConst.OnLeftStick, OnLeftStick);
-    }
-
     private void Update()
     {
         if (timeCount > 0)
@@ -210,8 +200,21 @@ public class ArticleLabelData : LabelDataBase
         }
         else
         {
+
             ClearArticlePages();
         }
+    }
+
+    public override void AddListener()
+    {
+        base.AddListener();
+        EventManager.Instance.AddListener(MessageConst.InputSystemConst.OnLeftStick, OnLeftStick);
+    }
+
+    public override void RemoveListener()
+    {
+        base.RemoveListener();
+        EventManager.Instance.RemoveListener(MessageConst.InputSystemConst.OnLeftStick, OnLeftStick);
     }
 
     /// <summary>
@@ -224,7 +227,7 @@ public class ArticleLabelData : LabelDataBase
     {
         Vector2 offset = (Vector2)data;
 
-        if (offset == Vector2.zero || timeCount > 0) return;
+        if (offset == Vector2.zero || timeCount > 0 || !this.gameObject.activeSelf) return;
 
         timeCount = reactionTime;
 

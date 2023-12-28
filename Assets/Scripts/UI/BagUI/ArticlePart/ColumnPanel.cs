@@ -42,16 +42,6 @@ public class ColumnPanel : MonoBehaviour
         Init();
     }
 
-    private void OnEnable()
-    {
-        EventManager.Instance.AddListener(MessageConst.InputSystemConst.OnRightStick, OnRightStickInput);
-    }
-
-    private void OnDisable()
-    {
-        EventManager.Instance.RemoveListener(MessageConst.InputSystemConst.OnRightStick, OnRightStickInput);
-    }
-
     private void Update()
     {
         if (timeCount > 0)
@@ -97,6 +87,24 @@ public class ColumnPanel : MonoBehaviour
         currentSelectedIndex = Mathf.Clamp(currentSelectedIndex, 0, labelTipToggles.Count - 1);
 
         labelTipToggles[currentSelectedIndex].SetToggleSelected();
+    }
+
+    public void AddListener()
+    {
+        EventManager.Instance.AddListener(MessageConst.InputSystemConst.OnRightStick, OnRightStickInput);
+        foreach (var item in labelDatas)
+        {
+            item.AddListener();
+        }
+    }
+
+    public void RemoveListener()
+    {
+        EventManager.Instance.RemoveListener(MessageConst.InputSystemConst.OnRightStick, OnRightStickInput);
+        foreach (var item in labelDatas)
+        {
+            item.RemoveListener();
+        }
     }
 }
 

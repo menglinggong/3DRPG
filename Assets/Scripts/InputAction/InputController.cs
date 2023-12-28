@@ -62,6 +62,15 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""B"",
+                    ""type"": ""Button"",
+                    ""id"": ""55bcd25c-db74-4ee0-a223-9ccbf527dcc3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -196,6 +205,17 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""action"": ""Plus"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""301aeb9f-e8f8-4166-ad96-def1d7ca1605"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""B"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -234,6 +254,15 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""name"": ""Plus"",
                     ""type"": ""Button"",
                     ""id"": ""5410d843-9523-4d6f-b8f3-fed2a1ba7ce0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""B"",
+                    ""type"": ""Button"",
+                    ""id"": ""b5dc4ade-fa61-4dd6-a6be-0dfe6b4641d3"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -372,6 +401,17 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""action"": ""Plus"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1e8396ba-a107-4a49-b704-1094a6243fee"",
+                    ""path"": ""<SwitchProControllerHID>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""B"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -445,12 +485,14 @@ public partial class @InputController: IInputActionCollection2, IDisposable
         m_Keyboard_RightStick = m_Keyboard.FindAction("RightStick", throwIfNotFound: true);
         m_Keyboard_A = m_Keyboard.FindAction("A", throwIfNotFound: true);
         m_Keyboard_Plus = m_Keyboard.FindAction("Plus", throwIfNotFound: true);
+        m_Keyboard_B = m_Keyboard.FindAction("B", throwIfNotFound: true);
         // GamePad
         m_GamePad = asset.FindActionMap("GamePad", throwIfNotFound: true);
         m_GamePad_LeftStick = m_GamePad.FindAction("LeftStick", throwIfNotFound: true);
         m_GamePad_RightStick = m_GamePad.FindAction("RightStick", throwIfNotFound: true);
         m_GamePad_A = m_GamePad.FindAction("A", throwIfNotFound: true);
         m_GamePad_Plus = m_GamePad.FindAction("Plus", throwIfNotFound: true);
+        m_GamePad_B = m_GamePad.FindAction("B", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -516,6 +558,7 @@ public partial class @InputController: IInputActionCollection2, IDisposable
     private readonly InputAction m_Keyboard_RightStick;
     private readonly InputAction m_Keyboard_A;
     private readonly InputAction m_Keyboard_Plus;
+    private readonly InputAction m_Keyboard_B;
     public struct KeyboardActions
     {
         private @InputController m_Wrapper;
@@ -524,6 +567,7 @@ public partial class @InputController: IInputActionCollection2, IDisposable
         public InputAction @RightStick => m_Wrapper.m_Keyboard_RightStick;
         public InputAction @A => m_Wrapper.m_Keyboard_A;
         public InputAction @Plus => m_Wrapper.m_Keyboard_Plus;
+        public InputAction @B => m_Wrapper.m_Keyboard_B;
         public InputActionMap Get() { return m_Wrapper.m_Keyboard; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -545,6 +589,9 @@ public partial class @InputController: IInputActionCollection2, IDisposable
             @Plus.started += instance.OnPlus;
             @Plus.performed += instance.OnPlus;
             @Plus.canceled += instance.OnPlus;
+            @B.started += instance.OnB;
+            @B.performed += instance.OnB;
+            @B.canceled += instance.OnB;
         }
 
         private void UnregisterCallbacks(IKeyboardActions instance)
@@ -561,6 +608,9 @@ public partial class @InputController: IInputActionCollection2, IDisposable
             @Plus.started -= instance.OnPlus;
             @Plus.performed -= instance.OnPlus;
             @Plus.canceled -= instance.OnPlus;
+            @B.started -= instance.OnB;
+            @B.performed -= instance.OnB;
+            @B.canceled -= instance.OnB;
         }
 
         public void RemoveCallbacks(IKeyboardActions instance)
@@ -586,6 +636,7 @@ public partial class @InputController: IInputActionCollection2, IDisposable
     private readonly InputAction m_GamePad_RightStick;
     private readonly InputAction m_GamePad_A;
     private readonly InputAction m_GamePad_Plus;
+    private readonly InputAction m_GamePad_B;
     public struct GamePadActions
     {
         private @InputController m_Wrapper;
@@ -594,6 +645,7 @@ public partial class @InputController: IInputActionCollection2, IDisposable
         public InputAction @RightStick => m_Wrapper.m_GamePad_RightStick;
         public InputAction @A => m_Wrapper.m_GamePad_A;
         public InputAction @Plus => m_Wrapper.m_GamePad_Plus;
+        public InputAction @B => m_Wrapper.m_GamePad_B;
         public InputActionMap Get() { return m_Wrapper.m_GamePad; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -615,6 +667,9 @@ public partial class @InputController: IInputActionCollection2, IDisposable
             @Plus.started += instance.OnPlus;
             @Plus.performed += instance.OnPlus;
             @Plus.canceled += instance.OnPlus;
+            @B.started += instance.OnB;
+            @B.performed += instance.OnB;
+            @B.canceled += instance.OnB;
         }
 
         private void UnregisterCallbacks(IGamePadActions instance)
@@ -631,6 +686,9 @@ public partial class @InputController: IInputActionCollection2, IDisposable
             @Plus.started -= instance.OnPlus;
             @Plus.performed -= instance.OnPlus;
             @Plus.canceled -= instance.OnPlus;
+            @B.started -= instance.OnB;
+            @B.performed -= instance.OnB;
+            @B.canceled -= instance.OnB;
         }
 
         public void RemoveCallbacks(IGamePadActions instance)
@@ -699,6 +757,7 @@ public partial class @InputController: IInputActionCollection2, IDisposable
         void OnRightStick(InputAction.CallbackContext context);
         void OnA(InputAction.CallbackContext context);
         void OnPlus(InputAction.CallbackContext context);
+        void OnB(InputAction.CallbackContext context);
     }
     public interface IGamePadActions
     {
@@ -706,5 +765,6 @@ public partial class @InputController: IInputActionCollection2, IDisposable
         void OnRightStick(InputAction.CallbackContext context);
         void OnA(InputAction.CallbackContext context);
         void OnPlus(InputAction.CallbackContext context);
+        void OnB(InputAction.CallbackContext context);
     }
 }
