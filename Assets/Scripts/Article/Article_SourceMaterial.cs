@@ -17,6 +17,6 @@ public class Article_SourceMaterial : Article
 
     public override void PickUp()
     {
-        ArticleManager.Instance.PickUpArticle(articleInfo, this);
+        ArticleManager.Instance.PickUpArticle(articleInfo, this, true);
     }
 }

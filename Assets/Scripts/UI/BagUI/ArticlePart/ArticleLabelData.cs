@@ -231,6 +231,9 @@ public class ArticleLabelData : LabelDataBase
 
         timeCount = reactionTime;
 
+        int tempX = selectedIndex_X;
+        int tempY = selectedIndex_Y;
+
         selectedIndex_X = Mathf.CeilToInt((selectedIndex_X + offset.x));
         selectedIndex_Y = Mathf.CeilToInt((selectedIndex_Y - offset.y));
 
@@ -266,8 +269,12 @@ public class ArticleLabelData : LabelDataBase
             }
         }
 
-        articlePages[selectedPageIndex].GetItemFrameNoNull(offset, ref selectedIndex_X, ref selectedIndex_Y);
-
+        if(articlePages[selectedPageIndex].IsItemFramNull(selectedIndex_X, selectedIndex_Y))
+        {
+            selectedIndex_X = tempX;
+            selectedIndex_Y = tempY;
+        }
+        
         articlePages[selectedPageIndex].SetItemFrameSelected(selectedIndex_X, selectedIndex_Y);
         MoveAnimation();
     }

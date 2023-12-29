@@ -90,20 +90,17 @@ public class ArticlePage : MonoBehaviour
     }
 
     /// <summary>
-    /// 获取非空的格子
+    /// 判断目标格子是否为空
     /// </summary>
-    /// <param name="offset"></param>
     /// <param name="x"></param>
     /// <param name="y"></param>
-    public void GetItemFrameNoNull(Vector2 offset, ref int x, ref int y)
+    /// <returns></returns>
+    public bool IsItemFramNull(int x, int y)
     {
         if (itemFrames[x, y] != null)
-            return;
+            return false;
 
-        x = Mathf.CeilToInt(x - offset.x);
-        x = Mathf.Clamp(x, 0, rowCount - 1);
-        y = Mathf.CeilToInt(y + offset.y);
-        y = Mathf.Clamp(y, 0, columnCount - 1);
+        return true;
     }
 
     /// <summary>

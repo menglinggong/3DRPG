@@ -464,7 +464,7 @@ public class PlayerController : MonoBehaviour
         Quaternion pianyi = Quaternion.Euler(0, cameraXValue, 0);
         moveValue = pianyi * moveValue;
 
-        Vector3 targetPos = this.transform.position + (moveValue * 2);
+        Vector3 targetPos = this.transform.position + (moveValue * (stopDistance + 0.2f));
 
         //使玩家可移动
         agent.isStopped = false;
