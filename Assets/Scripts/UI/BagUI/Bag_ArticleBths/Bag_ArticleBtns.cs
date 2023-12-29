@@ -223,11 +223,11 @@ public class Bag_ArticleBtns : MonoBehaviour
     /// </summary>
     public void OnEatBtnClick()
     {
-        Debug.Log("食用");
         //修改数据库数据
         ArticleManager.Instance.UseArticle(ArticleManager.Instance.CurrentArticle);
-        //TODO刷新背包界面
-
+        //刷新物品格子
+        ArticleManager.Instance.CurrentItemFram.Refresh();
+        //TODO实现物品的效果
         Hide();
     }
 

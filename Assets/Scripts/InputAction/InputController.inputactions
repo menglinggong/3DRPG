@@ -165,7 +165,7 @@
                 {
                     "name": "",
                     "id": "d93243eb-85ab-491a-95cb-87e9818d8f35",
-                    "path": "<Keyboard>/u",
+                    "path": "<Keyboard>/enter",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -187,7 +187,7 @@
                 {
                     "name": "",
                     "id": "301aeb9f-e8f8-4166-ad96-def1d7ca1605",
-                    "path": "<Keyboard>/i",
+                    "path": "<Keyboard>/b",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

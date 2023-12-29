@@ -45,7 +45,7 @@ public class SQLManager
     /// <summary>
     /// 开启连接数据库
     /// </summary>
-    public void OpenSQLaAndConnect()
+    public void OpenSQLAndConnect()
     {
         this.connection = new SqliteConnection("data source=" + Application.streamingAssetsPath + "/SQLite/3DRPG.db");
         this.connection.Open();

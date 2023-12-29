@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using DG.Tweening.Core;
 using System.Text;
+using static UnityEditor.Progress;
 
 /// <summary>
 /// 物品界面元素
@@ -180,5 +181,78 @@ public class ItemFrame : MonoBehaviour
         inventoryItem = null;
     }
 
+    /// <summary>
+    /// 物品是否有带有数量数据
+    /// </summary>
+    /// <returns></returns>
+    public bool IsArticleWithCount()
+    {
+        Type type = inventoryItem.GetType();
+
+        var fields = type.GetFields();
+
+        foreach (var field in fields)
+        {
+            if (field.Name == "Count")
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// 刷新格子
+    /// </summary>
+    public void Refresh()
+    {
+        if(IsArticleWithCount())
+        {
+            Refresh_Count();
+        }
+        else
+        {
+            Refresh_Clear();
+        }
+    }
+
     #endregion
+
+    /// <summary>
+    /// 减少数量的刷新
+    /// </summary>
+    private void Refresh_Count()
+    {
+        Type type = inventoryItem.GetType();
+
+        var fields = type.GetFields();
+
+        foreach (var field in fields)
+        {
+            if (field.Name == "Count")
+            {
+                int count = int.Parse(field.GetValue(inventoryItem).ToString());
+                count -= 1;
+                if (count <= 0)
+                    Refresh_Clear();
+                else
+                {
+                    field.SetValue(inventoryItem, count);
+                    UpdateInfo();
+                }
+
+                return;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 清空所有显示的刷新
+    /// </summary>
+    private void Refresh_Clear()
+    {
+        itemIcon.sprite = null;
+        itemCount.text = string.Empty;
+    }
 }

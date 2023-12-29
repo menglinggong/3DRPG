@@ -26,6 +26,25 @@ public class ArticleInfo_EndProduct : ArticleInfoBase
     /// 特殊效果的持续时间
     /// </summary>
     public float EffectDuration;
+
+    public ArticleInfo_EndProduct(ArticleInfo_EndProduct info) : base(info)
+    {
+        this.HealthRecoverValue = info.HealthRecoverValue;
+        this.Effect = info.Effect;
+        this.EffectValue = info.EffectValue;
+        this.EffectDuration = info.EffectDuration;
+    }
+
+    public ArticleInfo_EndProduct()
+    {
+
+    }
+
+    public override ArticleInfoBase Copy()
+    {
+        ArticleInfo_EndProduct info = new ArticleInfo_EndProduct(this);
+        return info;
+    }
 }
 
 /// <summary>

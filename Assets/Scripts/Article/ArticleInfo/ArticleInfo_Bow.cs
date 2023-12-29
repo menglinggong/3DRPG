@@ -37,6 +37,28 @@ public class ArticleInfo_Bow : ArticleInfoBase
     /// 附魔的值
     /// </summary>
     public int EnchantValue;
+
+    public ArticleInfo_Bow(ArticleInfo_Bow info) : base(info)
+    {
+        this.Aggressivity = info.Aggressivity;
+        this.Durability = info.Durability;
+        this.BowKind = info.BowKind;
+        this.MaterialKind = info.MaterialKind;
+        this.Range = info.Range;
+        this.Enchant = info.Enchant;
+        this.EnchantValue = info.EnchantValue;
+    }
+
+    public ArticleInfo_Bow()
+    {
+
+    }
+
+    public override ArticleInfoBase Copy()
+    {
+        ArticleInfo_Bow info = new ArticleInfo_Bow(this);
+        return info;
+    }
 }
 
 /// <summary>
@@ -52,6 +74,23 @@ public class ArticleInfo_Arrow : ArticleInfoBase
     /// 持有的数量
     /// </summary>
     public int Count;
+
+    public ArticleInfo_Arrow(ArticleInfo_Arrow info) : base(info)
+    {
+        this.ArrowKind = info.ArrowKind;
+        this.Count = info.Count;
+    }
+
+    public ArticleInfo_Arrow()
+    {
+
+    }
+
+    public override ArticleInfoBase Copy()
+    {
+        ArticleInfo_Arrow info = new ArticleInfo_Arrow(this);
+        return info;
+    }
 }
 
 

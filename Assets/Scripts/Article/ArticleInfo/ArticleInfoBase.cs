@@ -29,6 +29,30 @@ public class ArticleInfoBase
     /// 预制体模型路径
     /// </summary>
     public string PrefabPath;
+
+    public ArticleInfoBase(ArticleInfoBase info)
+    {
+        this.ID = info.ID;
+        this.Name = info.Name;
+        this.Descrip = info.Descrip;
+        this.IconPath = info.IconPath;
+        this.PrefabPath = info.PrefabPath;
+    }
+
+    public ArticleInfoBase()
+    {
+
+    }
+
+    /// <summary>
+    /// 复制
+    /// </summary>
+    /// <returns></returns>
+    public virtual ArticleInfoBase Copy()
+    {
+        ArticleInfoBase info = new ArticleInfoBase(this);
+        return info;
+    }
 }
 
 /// <summary>

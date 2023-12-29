@@ -120,6 +120,7 @@ public class ArticlePage : MonoBehaviour
     public void Release()
     {
         ArticleManager.Instance.CurrentArticle = null;
+        ArticleManager.Instance.CurrentItemFram = null;
         EventManager.Instance.Invoke(MessageConst.ArticleConst.OnArticleUISelected, null);
         ClearArticles();
         itemFramePrefab = null;
@@ -189,20 +190,22 @@ public class ArticlePage : MonoBehaviour
     /// <param name="item"></param>
     private void OnFrameSelected(ItemFrame item)
     {
-        Type type = item.InventoryItem.GetType();
+        ArticleInfoBase info = item.InventoryItem.Copy();
 
+        Type type = info.GetType();
         var fields = type.GetFields();
 
-        foreach (var field in fields )
+        foreach (var field in fields)
         {
-            if(field.Name == "Count")
+            if (field.Name == "Count")
             {
-                field.SetValue(item.InventoryItem, 1);
+                field.SetValue(info, 1);
                 break;
             }
         }
 
-        ArticleManager.Instance.CurrentArticle = item.InventoryItem;
+        ArticleManager.Instance.CurrentArticle = info;
+        ArticleManager.Instance.CurrentItemFram = item;
         EventManager.Instance.Invoke(MessageConst.ArticleConst.OnArticleUISelected, item.InventoryItem);
     }
 

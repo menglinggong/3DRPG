@@ -27,6 +27,26 @@ public class ArticleInfo_Cloth : ArticleInfoBase
     /// 服饰特殊效果等级
     /// </summary>
     public ClothEffectLevel ClothEffectLevel;
+
+    public ArticleInfo_Cloth(ArticleInfo_Cloth info) : base(info)
+    {
+        this.ClothKind = info.ClothKind;
+        this.ClothLevel = info.ClothLevel;
+        this.Defense = info.Defense;
+        this.ClothEffect = info.ClothEffect;
+        this.ClothEffectLevel = info.ClothEffectLevel;
+    }
+
+    public ArticleInfo_Cloth()
+    {
+
+    }
+
+    public override ArticleInfoBase Copy()
+    {
+        ArticleInfo_Cloth info = new ArticleInfo_Cloth(this);
+        return info;
+    }
 }
 
 /// <summary>

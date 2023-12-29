@@ -29,4 +29,24 @@ public class ArticleInfo_Shield : ArticleInfoBase
     /// ≤ƒ÷ ¿‡–Õ
     /// </summary>
     public ArticleKind_Material MaterialKind;
+
+    public ArticleInfo_Shield(ArticleInfo_Shield info) : base(info)
+    {
+        this.Defense = info.Defense;
+        this.Durability = info.Durability;
+        this.Enchant = info.Enchant;
+        this.EnchantValue = info.EnchantValue;
+        this.MaterialKind = info.MaterialKind;
+    }
+
+    public ArticleInfo_Shield()
+    {
+
+    }
+
+    public override ArticleInfoBase Copy()
+    {
+        ArticleInfo_Shield info = new ArticleInfo_Shield(this);
+        return info;
+    }
 }

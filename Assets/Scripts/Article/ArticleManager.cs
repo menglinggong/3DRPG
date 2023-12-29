@@ -2,8 +2,12 @@ using Mono.Data.Sqlite;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using UnityEditor.ShaderGraph.Serialization;
 using UnityEngine;
 using static UnityEditor.Progress;
+using static UnityEngine.ParticleSystem;
+using Newtonsoft.Json;
 
 /// <summary>
 /// 物品管理器
@@ -14,13 +18,19 @@ public class ArticleManager : ISingleton<ArticleManager>
     /// 拥有的所有物品信息
     /// </summary>
     [HideInInspector]
-    public List<ArticleInfoBase> ArticleInfos = new List<ArticleInfoBase>();
+    public List<ArticlesData> articles = new List<ArticlesData>();
 
     /// <summary>
     /// 当前选中的物品
     /// </summary>
     [HideInInspector]
     public ArticleInfoBase CurrentArticle = null;
+
+    /// <summary>
+    /// 当前选中的物品格子
+    /// </summary>
+    [HideInInspector]
+    public ItemFrame CurrentItemFram = null;
 
     public float force = 300f;
 
@@ -31,7 +41,10 @@ public class ArticleManager : ISingleton<ArticleManager>
     /// </summary>
     private void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.Z))
+        {
+            SerializeArticles();
+        }
     }
 
     #region 数据库增删改查功能
@@ -44,7 +57,7 @@ public class ArticleManager : ISingleton<ArticleManager>
     private void AddArticle(ArticleInfoBase articleInfo)
     {
         //保存到数据库中
-        SQLManager.Instance.OpenSQLaAndConnect();
+        SQLManager.Instance.OpenSQLAndConnect();
 
         var fields = articleInfo.GetType().GetFields();
         string[] columns = new string[fields.Length];
@@ -69,7 +82,7 @@ public class ArticleManager : ISingleton<ArticleManager>
     private void AddArticle(ArticleInfoBase articleInfo, bool placeholder)
     {
         string tableName = GetTableNameByID(articleInfo.ID);
-        SQLManager.Instance.OpenSQLaAndConnect();
+        SQLManager.Instance.OpenSQLAndConnect();
 
         var data = SQLManager.Instance.Select(tableName, null, new string[] { $"ID = {articleInfo.ID}" });
 
@@ -115,8 +128,9 @@ public class ArticleManager : ISingleton<ArticleManager>
     /// <param name="articleInfo"></param>
     private void RemoveArticle(ArticleInfoBase articleInfo)
     {
-        SQLManager.Instance.OpenSQLaAndConnect();
+        SQLManager.Instance.OpenSQLAndConnect();
 
+        //TODO需要修改，不然相同id的武器不同属性会删错
         SQLManager.Instance.Delete(GetTableNameByID(articleInfo.ID), new string[] { $"ID = {articleInfo.ID}" });
 
         SQLManager.Instance.CloseSQLConnection();
@@ -131,7 +145,7 @@ public class ArticleManager : ISingleton<ArticleManager>
     {
         string tableName = GetTableNameByID(articleInfo.ID);
 
-        SQLManager.Instance.OpenSQLaAndConnect();
+        SQLManager.Instance.OpenSQLAndConnect();
 
         var data = SQLManager.Instance.Select(tableName, null, new string[] { $"ID = {articleInfo.ID}" });
 
@@ -172,10 +186,12 @@ public class ArticleManager : ISingleton<ArticleManager>
     /// <returns></returns>
     public List<ArticleInfoBase> SelectArticle(string tableName)
     {
-        SQLManager.Instance.OpenSQLaAndConnect();
+        SQLManager.Instance.OpenSQLAndConnect();
 
         var data = SQLManager.Instance.Select(tableName);
         var articleInfos = ArticleManager.Instance.AnalysisSQLData(data);
+
+        Add(articleInfos);
 
         SQLManager.Instance.CloseSQLConnection();
 
@@ -597,5 +613,51 @@ public class ArticleManager : ISingleton<ArticleManager>
     #endregion
 
 
+    public void Add(List<ArticleInfoBase> articleInfos)
+    {
+        if (articleInfos == null || articleInfos.Count <= 0) return;
 
+        Type type = articleInfos[0].GetType();
+
+        var data = articles.Find(a => a.Type == type.Name);
+
+        if (data == null)
+        {
+            ArticlesData articlesData = new ArticlesData();
+            articlesData.Type = type.Name;
+            articlesData.ArticleInfos = new List<ArticleInfoBase>();
+            articlesData.ArticleInfos.AddRange(articleInfos);
+            articles.Add(articlesData);
+        }
+        else
+        {
+            data.ArticleInfos.AddRange(articleInfos);
+        }
+    }
+
+    public void SerializeArticles()
+    {
+        string filePath = Application.streamingAssetsPath + "/Articles/Articles.Json";
+
+        if(!File.Exists(filePath))
+        {
+            File.Create(filePath);
+        }
+        string value = JsonConvert.SerializeObject(articles);
+
+        File.WriteAllText(filePath, value);
+
+    }
+
+    public void DeserializeArticles()
+    {
+
+    }
+}
+
+[Serializable]
+public class ArticlesData
+{
+    public string Type;
+    public List<ArticleInfoBase> ArticleInfos;
 }

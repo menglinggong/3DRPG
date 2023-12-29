@@ -42,6 +42,29 @@ public class ArticleInfo_Weapon : ArticleInfoBase
     /// 武器类型-特殊效果
     /// </summary>
     public WeaponKind_Effect EffectKind;
+
+    public ArticleInfo_Weapon(ArticleInfo_Weapon info) : base(info)
+    {
+        this.Aggressivity = info.Aggressivity;
+        this.Durability = info.Durability;
+        this.Enchant = info.Enchant;
+        this.EnchantValue = info.EnchantValue;
+        this.WeaponKind = info.WeaponKind;
+        this.HandKind = info.HandKind;
+        this.MaterialKind = info.MaterialKind;
+        this.EffectKind = info.EffectKind;
+    }
+
+    public ArticleInfo_Weapon()
+    {
+
+    }
+
+    public override ArticleInfoBase Copy()
+    {
+        ArticleInfo_Weapon info = new ArticleInfo_Weapon(this);
+        return info;
+    }
 }
 
 /// <summary>

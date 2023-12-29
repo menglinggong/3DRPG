@@ -34,6 +34,26 @@ public class ArticleInfo_SourceMaterial : ArticleInfoBase
     /// 特殊效果持续时长
     /// </summary>
     public float EffectDuration;
+
+    public ArticleInfo_SourceMaterial(ArticleInfo_SourceMaterial info) : base(info)
+    {
+        this.Count = info.Count;
+        this.HealthRecoverValue = info.HealthRecoverValue;
+        this.Effect = info.Effect;
+        this.EffectValue = info.EffectValue;
+        this.EffectDuration = info.EffectDuration;
+    }
+
+    public ArticleInfo_SourceMaterial()
+    {
+
+    }
+
+    public override ArticleInfoBase Copy()
+    {
+        ArticleInfo_SourceMaterial info = new ArticleInfo_SourceMaterial(this);
+        return info;
+    }
 }
 
 /// <summary>
