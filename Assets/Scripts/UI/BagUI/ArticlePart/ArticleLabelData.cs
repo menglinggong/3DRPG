@@ -39,6 +39,11 @@ public class ArticleLabelData : LabelDataBase
     public string TableName;
 
     /// <summary>
+    /// 物品类型
+    /// </summary>
+    public ArticleInfoType ArticleType;
+
+    /// <summary>
     /// 物品ui预制体
     /// </summary>
     [SerializeField]
@@ -106,7 +111,10 @@ public class ArticleLabelData : LabelDataBase
     /// </summary>
     private void ShowArticles()
     {
-        var articleInfos = ArticleManager.Instance.SelectArticle(TableName);
+        //var articleInfos = ArticleManager.Instance.SelectArticle(TableName);
+        var articleInfos = ArticleManager.Instance.GetArticles(ArticleType.ToString());
+
+        if (articleInfos == null || articleInfos.Count <= 0) return;
 
         int itemCount = (int)rowColumn.x * (int)rowColumn.y;
         int pageCount = articleInfos.Count == itemCount ? (articleInfos.Count / itemCount) : (articleInfos.Count / itemCount) + 1;
@@ -227,7 +235,7 @@ public class ArticleLabelData : LabelDataBase
     {
         Vector2 offset = (Vector2)data;
 
-        if (offset == Vector2.zero || timeCount > 0 || !this.gameObject.activeSelf) return;
+        if (offset == Vector2.zero || timeCount > 0 || !this.gameObject.activeSelf || articlePages.Count <= 0) return;
 
         timeCount = reactionTime;
 
@@ -269,7 +277,7 @@ public class ArticleLabelData : LabelDataBase
             }
         }
 
-        if(articlePages[selectedPageIndex].IsItemFramNull(selectedIndex_X, selectedIndex_Y))
+        if (articlePages[selectedPageIndex].IsItemFramNull(selectedIndex_X, selectedIndex_Y))
         {
             selectedIndex_X = tempX;
             selectedIndex_Y = tempY;

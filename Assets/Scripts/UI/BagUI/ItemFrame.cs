@@ -44,12 +44,12 @@ public class ItemFrame : MonoBehaviour
     /// <summary>
     /// ŒÔ∆∑
     /// </summary>
-    private ArticleInfoBase inventoryItem;
+    private ArticleInfoBase articleInfo;
 
     public ArticleInfoBase InventoryItem
     {
-        get { return inventoryItem; }
-        set { inventoryItem = value; }
+        get { return articleInfo; }
+        set { articleInfo = value; }
     }
 
     /// <summary>
@@ -93,9 +93,9 @@ public class ItemFrame : MonoBehaviour
     /// </summary>
     public void UpdateInfo()
     {
-        itemIcon.sprite = Resources.Load<Sprite>(inventoryItem.IconPath);
+        itemIcon.sprite = Resources.Load<Sprite>(articleInfo.IconPath);
 
-        int key = inventoryItem.ID / 10000;
+        int key = articleInfo.ID / 10000;
 
         string text = "";
         bool isInLeft = true;
@@ -104,30 +104,30 @@ public class ItemFrame : MonoBehaviour
         switch(key)
         {
             case 1:
-                text = (inventoryItem as ArticleInfo_Weapon).Aggressivity.ToString();
+                text = (articleInfo as ArticleInfo_Weapon).Aggressivity.ToString();
                 isInLeft = false;
                 break; 
             case 2:
-                text = (inventoryItem as ArticleInfo_Bow).Aggressivity.ToString();
+                text = (articleInfo as ArticleInfo_Bow).Aggressivity.ToString();
                 isInLeft = false;
                 break;
             case 3:
                 str.Append("x");
-                str.Append((inventoryItem as ArticleInfo_Arrow).Count.ToString());
+                str.Append((articleInfo as ArticleInfo_Arrow).Count.ToString());
                 text = str.ToString();
                 isInLeft = true;
                 break;
             case 4:
-                text = (inventoryItem as ArticleInfo_Shield).Defense.ToString();
+                text = (articleInfo as ArticleInfo_Shield).Defense.ToString();
                 isInLeft = false;
                 break;
             case 5:
-                text = (inventoryItem as ArticleInfo_Cloth).Defense.ToString();
+                text = (articleInfo as ArticleInfo_Cloth).Defense.ToString();
                 isInLeft = false;
                 break;
             case 6:
                 str.Append("x");
-                str.Append((inventoryItem as ArticleInfo_SourceMaterial).Count.ToString());
+                str.Append((articleInfo as ArticleInfo_SourceMaterial).Count.ToString());
                 text = str.ToString();
                 isInLeft = true;
                 break;
@@ -178,7 +178,7 @@ public class ItemFrame : MonoBehaviour
     {
         toggle.isOn = false;
         toggle.group = null;
-        inventoryItem = null;
+        articleInfo = null;
     }
 
     /// <summary>
@@ -187,7 +187,7 @@ public class ItemFrame : MonoBehaviour
     /// <returns></returns>
     public bool IsArticleWithCount()
     {
-        Type type = inventoryItem.GetType();
+        Type type = articleInfo.GetType();
 
         var fields = type.GetFields();
 
@@ -195,7 +195,11 @@ public class ItemFrame : MonoBehaviour
         {
             if (field.Name == "Count")
             {
-                return true;
+                int count = int.Parse(field.GetValue(articleInfo).ToString());
+                if (count > 0)
+                    return true;
+                else
+                    return false;
             }
         }
 
@@ -207,7 +211,7 @@ public class ItemFrame : MonoBehaviour
     /// </summary>
     public void Refresh()
     {
-        if(IsArticleWithCount())
+        if (IsArticleWithCount())
         {
             Refresh_Count();
         }
@@ -224,27 +228,7 @@ public class ItemFrame : MonoBehaviour
     /// </summary>
     private void Refresh_Count()
     {
-        Type type = inventoryItem.GetType();
-
-        var fields = type.GetFields();
-
-        foreach (var field in fields)
-        {
-            if (field.Name == "Count")
-            {
-                int count = int.Parse(field.GetValue(inventoryItem).ToString());
-                count -= 1;
-                if (count <= 0)
-                    Refresh_Clear();
-                else
-                {
-                    field.SetValue(inventoryItem, count);
-                    UpdateInfo();
-                }
-
-                return;
-            }
-        }
+        UpdateInfo();
     }
 
     /// <summary>
@@ -254,5 +238,7 @@ public class ItemFrame : MonoBehaviour
     {
         itemIcon.sprite = null;
         itemCount.text = string.Empty;
+        articleInfo = null;
+        ArticleManager.Instance.CurrentArticle = null;
     }
 }

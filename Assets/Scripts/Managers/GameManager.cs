@@ -36,6 +36,7 @@ public class GameManager : ISingleton<GameManager>
     public void RegisterPlayer(CharacterStats player)
     {
         PlayerStats = player;
+        ArticleManager.Instance.DeserializeArticles();
     }
 
     /// <summary>
@@ -83,5 +84,13 @@ public class GameManager : ISingleton<GameManager>
     {
         isGamePaused = false;
         Time.timeScale = 1;
+    }
+
+    /// <summary>
+    /// 保存当前进度
+    /// </summary>
+    public void SaveGame()
+    {
+
     }
 }

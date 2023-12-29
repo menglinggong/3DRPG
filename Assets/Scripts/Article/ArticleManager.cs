@@ -8,6 +8,9 @@ using UnityEngine;
 using static UnityEditor.Progress;
 using static UnityEngine.ParticleSystem;
 using Newtonsoft.Json;
+using System.Runtime.Serialization;
+using Newtonsoft.Json.Linq;
+using System.Linq;
 
 /// <summary>
 /// 物品管理器
@@ -41,13 +44,13 @@ public class ArticleManager : ISingleton<ArticleManager>
     /// </summary>
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Z))
+        if(Input.GetKeyDown(KeyCode.RightAlt))
         {
             SerializeArticles();
         }
     }
 
-    #region 数据库增删改查功能
+    #region 数据库增删改查功能---目前不使用，使用本地json文件保存物品数据
 
     /// <summary>
     /// 添加物品--加到数据库中
@@ -191,8 +194,6 @@ public class ArticleManager : ISingleton<ArticleManager>
         var data = SQLManager.Instance.Select(tableName);
         var articleInfos = ArticleManager.Instance.AnalysisSQLData(data);
 
-        Add(articleInfos);
-
         SQLManager.Instance.CloseSQLConnection();
 
         return articleInfos;
@@ -200,7 +201,164 @@ public class ArticleManager : ISingleton<ArticleManager>
 
     #endregion
 
-    #region 解析数据库数据，得到各种物品的信息
+
+    #region 本地文件形式的物品数据
+
+    /// <summary>
+    /// 添加物品
+    /// </summary>
+    /// <param name="articleInfo"></param>
+    private void AddArticle_Local(ArticleInfoBase articleInfo)
+    {
+        Type type = articleInfo.GetType();
+        var data = articles.Find(a => a.Type == type.Name);
+
+        if (data == null)
+        {
+            ArticlesData articlesData = new ArticlesData();
+            articlesData.Type = type.Name;
+            articlesData.ArticleInfos = new List<ArticleInfoBase>();
+            articlesData.ArticleInfos.Add(articleInfo);
+            articles.Add(articlesData);
+        }
+        else
+        {
+            data.ArticleInfos.Add(articleInfo);
+        }
+    }
+
+    /// <summary>
+    /// 添加物品--带有数量数据的
+    /// </summary>
+    /// <param name="articleInfo"></param>
+    /// <param name="isWithCount"></param>
+    private void AddArticle_Local(ArticleInfoBase articleInfo, bool isWithCount)
+    {
+        Type type = articleInfo.GetType();
+        var data = articles.Find(a => a.Type == type.Name);
+
+        if (data == null)
+        {
+            ArticlesData articlesData = new ArticlesData();
+            articlesData.Type = type.Name;
+            articlesData.ArticleInfos = new List<ArticleInfoBase>();
+            articlesData.ArticleInfos.Add(articleInfo);
+            articles.Add(articlesData);
+        }
+        else
+        {
+            var info = data.ArticleInfos.Find(a=>a.ID ==  articleInfo.ID);
+            if (info == null)
+                data.ArticleInfos.Add(articleInfo);
+            else
+            {
+                var fields = info.GetType().GetFields();
+
+                foreach (var item in fields)
+                {
+                    if(item.Name == "Count")
+                    {
+                        int count = int.Parse(item.GetValue(info).ToString());
+                        int addCount = int.Parse(item.GetValue(articleInfo).ToString());
+
+                        item.SetValue(info, count + addCount);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 移除物品
+    /// </summary>
+    /// <param name="articleInfo"></param>
+    private void RemoveArticle_Local(ArticleInfoBase articleInfo)
+    {
+        Type type = articleInfo.GetType();
+        var data = articles.Find(a => a.Type == type.Name);
+
+        if (data != null)
+        {
+            var info = data.ArticleInfos.Find(a => a.ID == articleInfo.ID);
+            if(info != null)
+                data.ArticleInfos.Remove(info);
+            else
+                Debug.LogError("出错，不存在该物品数据！");
+        }
+        else
+        {
+            Debug.LogError("出错，不存在该物品数据！");
+        }
+    }
+
+    /// <summary>
+    /// 移除物品--按数量移除
+    /// </summary>
+    /// <param name="articleInfo"></param>
+    /// <param name="isWithCount"></param>
+    private void RemoveArticle_Local(ArticleInfoBase articleInfo, bool isWithCount)
+    {
+        Type type = articleInfo.GetType();
+        var data = articles.Find(a => a.Type == type.Name);
+
+        if (data != null)
+        {
+            var info = data.ArticleInfos.Find(a => a.ID == articleInfo.ID);
+            if (info != null)
+            {
+                var fields = info.GetType().GetFields();
+
+                foreach (var item in fields)
+                {
+                    if (item.Name == "Count")
+                    {
+                        int count = int.Parse(item.GetValue(info).ToString());
+                        int removeCount = int.Parse(item.GetValue(articleInfo).ToString());
+
+                        int value = count - removeCount;
+                        if(value < 0)
+                        {
+                            Debug.LogError("出错，物品数量不够！");
+                        }
+                        else if(value == 0)
+                        {
+                            data.ArticleInfos.Remove(info);
+                            item.SetValue(info, value);
+                        }
+                        else
+                            item.SetValue(info, value);
+
+                        break;
+                    }
+                }
+            }
+            else
+                Debug.LogError("出错，不存在该物品数据！");
+        }
+        else
+        {
+            Debug.LogError("出错，不存在该物品数据！");
+        }
+    }
+
+    /// <summary>
+    /// 获取指定类型的物品数据
+    /// </summary>
+    /// <param name="type"></param>
+    public List<ArticleInfoBase> GetArticles(string type)
+    {
+        var data = articles.Find(a => a.Type == type);
+        if(data == null)
+            return null;
+        else
+            return data.ArticleInfos;
+    }
+
+    #endregion
+
+
+    #region 解析数据库数据，得到各种物品的信息---目前不使用
 
     /// <summary>
     /// 解析数据库数据，根据id得到对应的物品信息
@@ -482,9 +640,9 @@ public class ArticleManager : ISingleton<ArticleManager>
     public void PickUpArticle(ArticleInfoBase articleInfo, Article article, bool isWithCount = false)
     {
         if (isWithCount)
-            AddArticle(articleInfo, isWithCount);
+            AddArticle_Local(articleInfo, isWithCount);
         else
-            AddArticle(articleInfo);
+            AddArticle_Local(articleInfo);
 
         ObjectPool.Instance.ReleaseObject(article.gameObject.name, article.gameObject);
     }
@@ -584,12 +742,12 @@ public class ArticleManager : ISingleton<ArticleManager>
         {
             if (field.Name == "Count")
             {
-                RemoveArticle(articleInfo, true);
+                RemoveArticle_Local(articleInfo, true);
                 return;
             }
         }
 
-        RemoveArticle(articleInfo);
+        RemoveArticle_Local(articleInfo);
     }
 
     /// <summary>
@@ -610,54 +768,104 @@ public class ArticleManager : ISingleton<ArticleManager>
 
     }
 
-    #endregion
-
-
-    public void Add(List<ArticleInfoBase> articleInfos)
-    {
-        if (articleInfos == null || articleInfos.Count <= 0) return;
-
-        Type type = articleInfos[0].GetType();
-
-        var data = articles.Find(a => a.Type == type.Name);
-
-        if (data == null)
-        {
-            ArticlesData articlesData = new ArticlesData();
-            articlesData.Type = type.Name;
-            articlesData.ArticleInfos = new List<ArticleInfoBase>();
-            articlesData.ArticleInfos.AddRange(articleInfos);
-            articles.Add(articlesData);
-        }
-        else
-        {
-            data.ArticleInfos.AddRange(articleInfos);
-        }
-    }
-
+    /// <summary>
+    /// 序列化物品数据到本地json文件
+    /// </summary>
     public void SerializeArticles()
     {
         string filePath = Application.streamingAssetsPath + "/Articles/Articles.Json";
 
-        if(!File.Exists(filePath))
+        if (!File.Exists(filePath))
         {
             File.Create(filePath);
         }
         string value = JsonConvert.SerializeObject(articles);
 
+        Debug.Log("序列化成功");
         File.WriteAllText(filePath, value);
-
     }
 
+    /// <summary>
+    /// 反序列化物品数据
+    /// </summary>
     public void DeserializeArticles()
     {
+        var settings = new JsonSerializerSettings();
+        settings.Converters.Add(new ArticleInfoConverter());
 
+        string filePath = Application.streamingAssetsPath + "/Articles/Articles.Json";
+
+        if (File.Exists(filePath))
+        {
+            string data = File.ReadAllText(filePath);
+            Debug.Log("反序列化成功");
+            articles = JsonConvert.DeserializeObject<List<ArticlesData>>(data, settings);
+        }
     }
+
+    #endregion
+
+
 }
 
+/// <summary>
+/// 存储不同物品类型及其数据列表
+/// </summary>
 [Serializable]
 public class ArticlesData
 {
     public string Type;
     public List<ArticleInfoBase> ArticleInfos;
+}
+
+/// <summary>
+/// 物品信息的序列化与反序列化转化器
+/// </summary>
+public class ArticleInfoConverter : JsonConverter
+{
+    public override bool CanConvert(Type objectType)
+    {
+        return objectType == typeof(List<ArticlesData>);
+    }
+
+    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+    {
+        List<ArticlesData> datas = new List<ArticlesData>();
+
+        if (reader.TokenType == JsonToken.StartArray)
+        {
+            while (reader.Read())
+            {
+                if (reader.TokenType == JsonToken.EndArray)
+                    break;
+
+                if (reader.TokenType == JsonToken.StartObject)
+                {
+                    ArticlesData data = new ArticlesData();
+                    JObject obj = JObject.Load(reader);
+                    data.Type = obj["Type"].ToString();
+                    Type type = Type.GetType(data.Type);
+
+                    data.ArticleInfos = new List<ArticleInfoBase>();
+
+                    JToken[] infos = obj["ArticleInfos"].ToArray();
+                    
+                    foreach (var info in infos)
+                    {
+                        ArticleInfoBase articleInfo = info.ToObject(type) as ArticleInfoBase;
+                        data.ArticleInfos.Add(articleInfo);
+                    }
+
+                    datas.Add(data);
+                }
+            }
+        }
+
+        return datas;
+    }
+
+    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -1010,6 +1010,7 @@ MonoBehaviour:
   leftArrow: {fileID: 464366074}
   pageContent: {fileID: 168639658}
   TableName: Article_SourceMaterial
+  ArticleType: 5
   itemFramePrefab: {fileID: 912366494445729445, guid: 803e7c0051944af408f7fcd66dfd62d7, type: 3}
   articlePagePrefab: {fileID: -2297221338177016606, guid: d4824ccdce113a1488b6af796912f2ee, type: 3}
 --- !u!222 &189926467
@@ -1063,13 +1064,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74e19525eeb844d44955bfe58da46400, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArticleInfos: []
+  articles: []
   CurrentArticle:
     ID: 0
     Name: 
     Descrip: 
     IconPath: 
     PrefabPath: 
+  CurrentItemFram: {fileID: 0}
   force: 300
   range: 3
 --- !u!1 &197977377
@@ -2883,6 +2885,7 @@ MonoBehaviour:
   leftArrow: {fileID: 35441932}
   pageContent: {fileID: 1685908512}
   TableName: Article_Shield
+  ArticleType: 4
   itemFramePrefab: {fileID: 912366494445729445, guid: 803e7c0051944af408f7fcd66dfd62d7, type: 3}
   articlePagePrefab: {fileID: -2297221338177016606, guid: d4824ccdce113a1488b6af796912f2ee, type: 3}
 --- !u!222 &653526987
@@ -3454,6 +3457,7 @@ MonoBehaviour:
   leftArrow: {fileID: 1721819700}
   pageContent: {fileID: 885461627}
   TableName: Article_Cloth
+  ArticleType: 1
   itemFramePrefab: {fileID: 912366494445729445, guid: 803e7c0051944af408f7fcd66dfd62d7, type: 3}
   articlePagePrefab: {fileID: -2297221338177016606, guid: d4824ccdce113a1488b6af796912f2ee, type: 3}
 --- !u!222 &740599995
@@ -7628,6 +7632,7 @@ MonoBehaviour:
   leftArrow: {fileID: 1463318917}
   pageContent: {fileID: 1948116274}
   TableName: Article_EndProduct
+  ArticleType: 2
   itemFramePrefab: {fileID: 912366494445729445, guid: 803e7c0051944af408f7fcd66dfd62d7, type: 3}
   articlePagePrefab: {fileID: -2297221338177016606, guid: d4824ccdce113a1488b6af796912f2ee, type: 3}
 --- !u!222 &1807845861
@@ -8084,6 +8089,7 @@ MonoBehaviour:
   leftArrow: {fileID: 1061308953}
   pageContent: {fileID: 1572823116}
   TableName: Article_Bow
+  ArticleType: 0
   itemFramePrefab: {fileID: 912366494445729445, guid: 803e7c0051944af408f7fcd66dfd62d7, type: 3}
   articlePagePrefab: {fileID: -2297221338177016606, guid: d4824ccdce113a1488b6af796912f2ee, type: 3}
 --- !u!222 &1869607298
@@ -8933,6 +8939,7 @@ MonoBehaviour:
   leftArrow: {fileID: 848342203}
   pageContent: {fileID: 1699220243}
   TableName: Article_Import
+  ArticleType: 3
   itemFramePrefab: {fileID: 912366494445729445, guid: 803e7c0051944af408f7fcd66dfd62d7, type: 3}
   articlePagePrefab: {fileID: -2297221338177016606, guid: d4824ccdce113a1488b6af796912f2ee, type: 3}
 --- !u!222 &2108291421
@@ -13030,6 +13037,7 @@ MonoBehaviour:
   leftArrow: {fileID: 572539142}
   pageContent: {fileID: 525811755}
   TableName: Article_Weapon
+  ArticleType: 6
   itemFramePrefab: {fileID: 912366494445729445, guid: 803e7c0051944af408f7fcd66dfd62d7, type: 3}
   articlePagePrefab: {fileID: -2297221338177016606, guid: d4824ccdce113a1488b6af796912f2ee, type: 3}
 --- !u!1 &3612866825836171941

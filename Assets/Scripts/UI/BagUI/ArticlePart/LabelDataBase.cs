@@ -37,3 +37,17 @@ public class LabelDataBase : MonoBehaviour
 
     }
 }
+
+/// <summary>
+/// 物品类型---与物品数据类名一致
+/// </summary>
+public enum ArticleInfoType
+{
+    ArticleInfo_Bow,
+    ArticleInfo_Cloth,
+    ArticleInfo_EndProduct,
+    ArticleInfo_Import,
+    ArticleInfo_Shield,
+    ArticleInfo_SourceMaterial,
+    ArticleInfo_Weapon,
+}
